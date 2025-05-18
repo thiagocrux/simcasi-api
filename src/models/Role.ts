@@ -8,7 +8,14 @@ const schema = new Schema(
       unique: true,
       required: true,
     },
-    permissions: [{ type: Schema.Types.ObjectId, ref: 'Permission' }],
+    permissions: [
+      {
+        type: String,
+        ref: 'Permission',
+        foreignField: 'code',
+        localField: 'permissions',
+      },
+    ],
   },
   { timestamps: true }
 );
