@@ -1,11 +1,22 @@
+import 'dotenv/config';
 import express from 'express';
+import mongoose from 'mongoose';
 
 import { logger } from './utils';
 
+const PORT = 3001;
+const DB_URI = 'mongodb://localhost:27018/simcasi';
+
 const app = express();
 
-app.use(express.json());
+mongoose
+  .connect(DB_URI)
+  .then(() => {
+    app.use(express.json());
 
-app.listen(3001, () => {
-  logger.info(`Server running on http://localhost:3001`);
-});
+    app.listen(PORT, () => {
+      logger.info(`Database running on ${DB_URI}`);
+      logger.info(`Server running on http://localhost:${PORT}`);
+    });
+  })
+  .catch((error) => logger.error(`[mongodb] Error: `, error));
