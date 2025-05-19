@@ -2,7 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import mongoose from 'mongoose';
 
-import { corsMiddleware } from './middlewares';
+import { corsMiddleware, errorHandlerMiddleware } from './middlewares';
 import { logger } from './utils';
 
 const PORT = 3001;
@@ -15,6 +15,7 @@ mongoose
   .then(() => {
     app.use(express.json());
     app.use(corsMiddleware);
+    app.use(errorHandlerMiddleware);
 
     app.listen(PORT, () => {
       logger.info(`Database running on ${DB_URI}`);
