@@ -1,6 +1,10 @@
 import type { NextFunction, Request, Response } from 'express';
 
-export function cors(request: Request, response: Response, next: NextFunction) {
+export function corsMiddleware(
+  request: Request,
+  response: Response,
+  next: NextFunction
+) {
   const allowedOrigins = ['http://localhost:5173', 'http://127.0.0.1:5173'];
   const origin = request.header('Origin');
 

@@ -1,1 +1,1 @@
-export { cors } from './cors';
+export { corsMiddleware } from './corsMiddleware';
