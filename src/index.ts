@@ -3,6 +3,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 
 import { corsMiddleware, errorHandlerMiddleware } from './middlewares';
+import { router } from './router';
 import { logger } from './utils';
 
 const PORT = 3001;
@@ -15,6 +16,7 @@ mongoose
   .then(() => {
     app.use(express.json());
     app.use(corsMiddleware);
+    app.use(router);
     app.use(errorHandlerMiddleware);
 
     app.listen(PORT, () => {
