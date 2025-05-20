@@ -44,20 +44,20 @@ export class RolesRepository {
     return role;
   }
 
-  static async addPermission(role: string, permissionCode: string) {
+  static async addPermission(role: string, permissionId: string) {
     const updatedRole = Role.findOneAndUpdate(
       { name: role },
-      { $push: { permissions: permissionCode } },
+      { $push: { permissions: permissionId } },
       { new: true }
     );
 
     return updatedRole;
   }
 
-  static async removePermission(role: string, permissionCode: string) {
+  static async removePermission(role: string, permissionId: string) {
     const updatedRole = await Role.findOneAndUpdate(
       { name: role },
-      { $pull: { permissions: permissionCode } },
+      { $pull: { permissions: permissionId } },
       { new: true }
     );
 

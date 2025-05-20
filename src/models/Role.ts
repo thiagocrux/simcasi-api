@@ -10,10 +10,8 @@ const schema = new Schema(
     },
     permissions: [
       {
-        type: String,
+        type: Schema.Types.ObjectId,
         ref: 'Permission',
-        foreignField: 'code',
-        localField: 'permissions',
       },
     ],
   },

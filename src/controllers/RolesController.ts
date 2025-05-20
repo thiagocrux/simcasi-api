@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { isValidObjectId } from 'mongoose';
 
 import { RolesRepository } from '../repositories/RolesRepository';
 
@@ -6,7 +7,6 @@ import {
   handleDuplicationError,
   handleInvalidIDFormatError,
   handleNotFoundError,
-  isObjectIdValid,
 } from '../utils';
 
 export class RolesController {
@@ -19,7 +19,7 @@ export class RolesController {
   static async show(request: Request, response: Response) {
     const { id } = request.params;
 
-    if (!isObjectIdValid(id)) {
+    if (!isValidObjectId(id)) {
       handleInvalidIDFormatError({ id }, (error) =>
         response.status(error.status).json({ error: error.message })
       );
@@ -60,7 +60,7 @@ export class RolesController {
     const { id } = request.params;
     const { name } = request.body;
 
-    if (!isObjectIdValid(id)) {
+    if (!isValidObjectId(id)) {
       handleInvalidIDFormatError({ id }, (error) =>
         response.status(error.status).json({ error: error.message })
       );
@@ -85,7 +85,7 @@ export class RolesController {
   static async delete(request: Request, response: Response) {
     const { id } = request.params;
 
-    if (!isObjectIdValid(id)) {
+    if (!isValidObjectId(id)) {
       handleInvalidIDFormatError({ id }, (error) =>
         response.status(error.status).json({ error: error.message })
       );

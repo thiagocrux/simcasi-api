@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { isValidObjectId } from 'mongoose';
 
 import { permissionsByRole, ROLES } from '../config';
 import { PermissionsRepository, RolesRepository } from '../repositories';
@@ -7,7 +8,6 @@ import {
   handleDuplicationError,
   handleInvalidIDFormatError,
   handleNotFoundError,
-  isObjectIdValid,
 } from '../utils';
 
 export class PermissionsController {
@@ -19,7 +19,7 @@ export class PermissionsController {
   static async show(request: Request, response: Response) {
     const { id } = request.params;
 
-    if (!isObjectIdValid(id)) {
+    if (!isValidObjectId(id)) {
       handleInvalidIDFormatError({ id }, (error) =>
         response.status(error.status).json({ error: error.message })
       );
@@ -58,7 +58,7 @@ export class PermissionsController {
 
     ROLES.forEach(async (role) => {
       if (permissionsByRole[role].includes(permission.code)) {
-        await RolesRepository.addPermission(role, permission.code);
+        await RolesRepository.addPermission(role, String(permission._id));
       }
     });
 
@@ -69,7 +69,7 @@ export class PermissionsController {
     const { id } = request.params;
     const { code } = request.body;
 
-    if (!isObjectIdValid(id)) {
+    if (!isValidObjectId(id)) {
       handleInvalidIDFormatError({ id }, (error) =>
         response.status(error.status).json({ error: error.message })
       );
@@ -94,7 +94,7 @@ export class PermissionsController {
   static async delete(request: Request, response: Response) {
     const { id } = request.params;
 
-    if (!isObjectIdValid(id)) {
+    if (!isValidObjectId(id)) {
       handleInvalidIDFormatError({ id }, (error) =>
         response.status(error.status).json({ error: error.message })
       );
@@ -114,7 +114,7 @@ export class PermissionsController {
 
     ROLES.forEach(async (role) => {
       if (permissionsByRole[role].includes(permission.code)) {
-        await RolesRepository.removePermission(role, permission.code);
+        await RolesRepository.removePermission(role, String(permission._id));
       }
     });
 
