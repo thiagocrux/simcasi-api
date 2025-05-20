@@ -6,6 +6,7 @@ import {
   handleDuplicationError,
   handleInvalidIDFormatError,
   handleNotFoundError,
+  isObjectIdValid,
 } from '../utils';
 
 export class RolesController {
@@ -18,30 +19,38 @@ export class RolesController {
   static async show(request: Request, response: Response) {
     const { id } = request.params;
 
-    handleInvalidIDFormatError({ id }, (error) =>
-      response.status(error.status).json({ error: error.message })
-    );
+    if (!isObjectIdValid(id)) {
+      handleInvalidIDFormatError({ id }, (error) =>
+        response.status(error.status).json({ error: error.message })
+      );
+
+      return;
+    }
 
     const role = await RolesRepository.findById(id);
 
-    handleNotFoundError({ name: 'Role', id: id, condition: !!role }, (error) =>
-      response.status(error.status).json({ error: error.message })
-    );
+    if (!role) {
+      handleNotFoundError({ name: 'Role', id: id }, (error) =>
+        response.status(error.status).json({ error: error.message })
+      );
+
+      return;
+    }
 
     response.status(200).json(role);
   }
 
   static async create(request: Request, response: Response) {
     const { name } = request.body;
-
     const nameAlreadyExists = await RolesRepository.findByName(name);
 
-    handleDuplicationError(
-      { name: 'Role', condition: !!nameAlreadyExists },
-      (error) => {
+    if (nameAlreadyExists) {
+      handleDuplicationError({ name: 'Role' }, (error) => {
         response.status(error.status).json({ error: error.message });
-      }
-    );
+      });
+
+      return;
+    }
 
     const role = await RolesRepository.create({ name });
     response.status(201).json(role);
@@ -51,15 +60,23 @@ export class RolesController {
     const { id } = request.params;
     const { name } = request.body;
 
-    handleInvalidIDFormatError({ id }, (error) =>
-      response.status(error.status).json({ error: error.message })
-    );
+    if (!isObjectIdValid(id)) {
+      handleInvalidIDFormatError({ id }, (error) =>
+        response.status(error.status).json({ error: error.message })
+      );
+
+      return;
+    }
 
     const role = await RolesRepository.findById(id);
 
-    handleNotFoundError({ name: 'Role', id: id, condition: !!role }, (error) =>
-      response.status(error.status).json({ error: error.message })
-    );
+    if (!role) {
+      handleNotFoundError({ name: 'Role', id: id }, (error) =>
+        response.status(error.status).json({ error: error.message })
+      );
+
+      return;
+    }
 
     const updatedRole = await RolesRepository.update(id, { name });
     response.status(200).json(updatedRole);
@@ -68,15 +85,23 @@ export class RolesController {
   static async delete(request: Request, response: Response) {
     const { id } = request.params;
 
-    handleInvalidIDFormatError({ id }, (error) =>
-      response.status(error.status).json({ error: error.message })
-    );
+    if (!isObjectIdValid(id)) {
+      handleInvalidIDFormatError({ id }, (error) =>
+        response.status(error.status).json({ error: error.message })
+      );
+
+      return;
+    }
 
     const role = await RolesRepository.findById(id);
 
-    handleNotFoundError({ name: 'Role', id: id, condition: !!role }, (error) =>
-      response.status(error.status).json({ error: error.message })
-    );
+    if (!role) {
+      handleNotFoundError({ name: 'Role', id: id }, (error) =>
+        response.status(error.status).json({ error: error.message })
+      );
+
+      return;
+    }
 
     await RolesRepository.delete(id);
     response.sendStatus(204);
