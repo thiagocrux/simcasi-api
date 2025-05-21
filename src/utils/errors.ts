@@ -3,35 +3,35 @@ interface ErrorResponse {
   message: string;
 }
 
-interface ErrorHandlerParams {
-  name?: string;
-  id?: string;
-  condition?: boolean;
-}
+export class ValidationError {
+  static duplicatedEmail(onError: (errorResponse: ErrorResponse) => void) {
+    onError({
+      message: 'This e-mail is already taken.',
+      status: 409,
+    });
+  }
 
-export function handleInvalidIDFormatError(
-  { id }: ErrorHandlerParams,
-  onError: (errorResponse: ErrorResponse) => void
-) {
-  onError({ message: `ID ${id} has not a valid format.`, status: 500 });
-}
+  static duplicatedSubject(
+    subject: string,
+    onError: (errorResponse: ErrorResponse) => void
+  ) {
+    onError({
+      message: `The ${subject?.toLowerCase()} already exists.`,
+      status: 409,
+    });
+  }
 
-export function handleNotFoundError(
-  { name, id }: ErrorHandlerParams,
-  onError: (errorResponse: ErrorResponse) => void
-) {
-  onError({
-    message: `${name}${id ? ` with ID ${id}` : ''} could not be found.`,
-    status: 404,
-  });
-}
+  static notFound(
+    subject: string,
+    onError: (errorResponse: ErrorResponse) => void
+  ) {
+    onError({
+      message: `The ${subject?.toLowerCase()} could not be found.`,
+      status: 404,
+    });
+  }
 
-export function handleDuplicationError(
-  { name }: ErrorHandlerParams,
-  onError: (errorResponse: ErrorResponse) => void
-) {
-  onError({
-    message: `${name} has already been created.`,
-    status: 409,
-  });
+  static invalidIdFormat(onError: (errorResponse: ErrorResponse) => void) {
+    onError({ message: `The ID has an invalid format.`, status: 500 });
+  }
 }

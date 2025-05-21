@@ -3,12 +3,7 @@ import { isValidObjectId } from 'mongoose';
 
 import { permissionsByRole, ROLES } from '../config';
 import { PermissionsRepository, RolesRepository } from '../repositories';
-
-import {
-  handleDuplicationError,
-  handleInvalidIDFormatError,
-  handleNotFoundError,
-} from '../utils';
+import { ValidationError } from '../utils';
 
 export class PermissionsController {
   static async index(request: Request, response: Response) {
@@ -20,7 +15,7 @@ export class PermissionsController {
     const { id } = request.params;
 
     if (!isValidObjectId(id)) {
-      handleInvalidIDFormatError({ id }, (error) =>
+      ValidationError.invalidIdFormat((error) =>
         response.status(error.status).json({ error: error.message })
       );
 
@@ -30,7 +25,7 @@ export class PermissionsController {
     const permission = await PermissionsRepository.findById(id);
 
     if (!permission) {
-      handleNotFoundError({ name: 'Permission', id: id }, (error) =>
+      ValidationError.notFound('permission', (error) =>
         response.status(error.status).json({ error: error.message })
       );
 
@@ -47,7 +42,7 @@ export class PermissionsController {
       await PermissionsRepository.findByCode(code);
 
     if (permissionAlreadyExists) {
-      handleDuplicationError({ name: 'Permission' }, (error) =>
+      ValidationError.duplicatedSubject('permission', (error) =>
         response.status(error.status).json({ error: error.message })
       );
 
@@ -70,7 +65,7 @@ export class PermissionsController {
     const { code } = request.body;
 
     if (!isValidObjectId(id)) {
-      handleInvalidIDFormatError({ id }, (error) =>
+      ValidationError.invalidIdFormat((error) =>
         response.status(error.status).json({ error: error.message })
       );
 
@@ -80,7 +75,7 @@ export class PermissionsController {
     const permission = await PermissionsRepository.findById(id);
 
     if (!permission) {
-      handleNotFoundError({ name: 'Permission', id: id }, (error) =>
+      ValidationError.notFound('permission', (error) =>
         response.status(error.status).json({ error: error.message })
       );
 
@@ -95,7 +90,7 @@ export class PermissionsController {
     const { id } = request.params;
 
     if (!isValidObjectId(id)) {
-      handleInvalidIDFormatError({ id }, (error) =>
+      ValidationError.invalidIdFormat((error) =>
         response.status(error.status).json({ error: error.message })
       );
 
@@ -105,7 +100,7 @@ export class PermissionsController {
     const permission = await PermissionsRepository.findById(id);
 
     if (!permission) {
-      handleNotFoundError({ name: 'Permission', id: id }, (error) =>
+      ValidationError.notFound('permission', (error) =>
         response.status(error.status).json({ error: error.message })
       );
 

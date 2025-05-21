@@ -1,18 +1,12 @@
 import { Request, Response } from 'express';
 import { isValidObjectId } from 'mongoose';
 
-import { RolesRepository } from '../repositories/RolesRepository';
-
-import {
-  handleDuplicationError,
-  handleInvalidIDFormatError,
-  handleNotFoundError,
-} from '../utils';
+import { RolesRepository } from '../repositories';
+import { ValidationError } from '../utils';
 
 export class RolesController {
   static async index(request: Request, response: Response) {
     const roles = await RolesRepository.findAll();
-    console.log(roles);
     response.status(200).json(roles);
   }
 
@@ -20,7 +14,7 @@ export class RolesController {
     const { id } = request.params;
 
     if (!isValidObjectId(id)) {
-      handleInvalidIDFormatError({ id }, (error) =>
+      ValidationError.invalidIdFormat((error) =>
         response.status(error.status).json({ error: error.message })
       );
 
@@ -30,7 +24,7 @@ export class RolesController {
     const role = await RolesRepository.findById(id);
 
     if (!role) {
-      handleNotFoundError({ name: 'Role', id: id }, (error) =>
+      ValidationError.notFound('role', (error) =>
         response.status(error.status).json({ error: error.message })
       );
 
@@ -45,9 +39,9 @@ export class RolesController {
     const nameAlreadyExists = await RolesRepository.findByName(name);
 
     if (nameAlreadyExists) {
-      handleDuplicationError({ name: 'Role' }, (error) => {
-        response.status(error.status).json({ error: error.message });
-      });
+      ValidationError.duplicatedSubject('role', (error) =>
+        response.status(error.status).json({ error: error.message })
+      );
 
       return;
     }
@@ -61,7 +55,7 @@ export class RolesController {
     const { name } = request.body;
 
     if (!isValidObjectId(id)) {
-      handleInvalidIDFormatError({ id }, (error) =>
+      ValidationError.invalidIdFormat((error) =>
         response.status(error.status).json({ error: error.message })
       );
 
@@ -71,7 +65,7 @@ export class RolesController {
     const role = await RolesRepository.findById(id);
 
     if (!role) {
-      handleNotFoundError({ name: 'Role', id: id }, (error) =>
+      ValidationError.notFound('role', (error) =>
         response.status(error.status).json({ error: error.message })
       );
 
@@ -86,7 +80,7 @@ export class RolesController {
     const { id } = request.params;
 
     if (!isValidObjectId(id)) {
-      handleInvalidIDFormatError({ id }, (error) =>
+      ValidationError.invalidIdFormat((error) =>
         response.status(error.status).json({ error: error.message })
       );
 
@@ -96,7 +90,7 @@ export class RolesController {
     const role = await RolesRepository.findById(id);
 
     if (!role) {
-      handleNotFoundError({ name: 'Role', id: id }, (error) =>
+      ValidationError.notFound('role', (error) =>
         response.status(error.status).json({ error: error.message })
       );
 
