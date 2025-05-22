@@ -1,6 +1,10 @@
 import { Router } from 'express';
 
-import { PermissionsController, RolesController } from './controllers';
+import {
+  AccountsController,
+  PermissionsController,
+  RolesController,
+} from './controllers';
 
 export const router = Router();
 
@@ -14,4 +18,9 @@ router.get('/permissions', PermissionsController.index);
 router.get('/permissions/:id', PermissionsController.show);
 router.post('/permissions', PermissionsController.create);
 router.put('/permissions/:id', PermissionsController.update);
-router.delete('/permissions/:id', PermissionsController.delete);
+
+router.get('/accounts', AccountsController.index);
+router.get('/accounts/:id', AccountsController.show);
+router.post('/accounts', AccountsController.create);
+router.put('/accounts/:id', AccountsController.update);
+router.delete('/accounts/:id', AccountsController.delete);
