@@ -3,7 +3,12 @@ import { isValidObjectId } from 'mongoose';
 
 import { AccountsRepository } from '../repositories/AccountsRepository';
 
-import { ValidationError } from '../utils';
+import {
+  InvalidIdentifierError,
+  NotFoundError,
+  UniqueConstraintViolationError,
+  UniqueEmailViolationError,
+} from '../utils';
 
 export class AccountsController {
   static async index(request: Request, response: Response) {
@@ -15,21 +20,13 @@ export class AccountsController {
     const { id } = request.params;
 
     if (!isValidObjectId(id)) {
-      ValidationError.invalidIdFormat((error) =>
-        response.status(error.status).json({ error: error.message })
-      );
-
-      return;
+      throw new InvalidIdentifierError();
     }
 
     const account = await AccountsRepository.findById(id);
 
     if (!account) {
-      ValidationError.notFound('account', (error) =>
-        response.status(error.status).json({ error: error.message })
-      );
-
-      return;
+      throw new NotFoundError('account');
     }
 
     response.status(200).json(account);
@@ -40,11 +37,7 @@ export class AccountsController {
     const accountAlreadyExists = await AccountsRepository.findByEmail(email);
 
     if (accountAlreadyExists) {
-      ValidationError.duplicatedSubject('account', (error) =>
-        response.status(error.status).json({ error: error.message })
-      );
-
-      return;
+      throw new UniqueConstraintViolationError('account');
     }
 
     const account = await AccountsRepository.create({
@@ -62,32 +55,20 @@ export class AccountsController {
     const { name, email, password, role } = request.body;
 
     if (!isValidObjectId(id)) {
-      ValidationError.invalidIdFormat((error) =>
-        response.status(error.status).json({ error: error.message })
-      );
-
-      return;
+      throw new InvalidIdentifierError();
     }
 
     const account = await AccountsRepository.findById(id);
 
     if (!account) {
-      ValidationError.notFound('account', (error) =>
-        response.status(error.status).json({ error: error.message })
-      );
-
-      return;
+      throw new NotFoundError('account');
     }
 
     if (account?.email !== email) {
       const isEmailTaken = await AccountsRepository.findByEmail(email);
 
       if (isEmailTaken) {
-        ValidationError.duplicatedEmail((error) =>
-          response.status(error.status).json({ error: error.message })
-        );
-
-        return;
+        throw new UniqueEmailViolationError();
       }
     }
 
@@ -105,21 +86,13 @@ export class AccountsController {
     const { id } = request.params;
 
     if (!isValidObjectId(id)) {
-      ValidationError.invalidIdFormat((error) =>
-        response.status(error.status).json({ error: error.message })
-      );
-
-      return;
+      throw new InvalidIdentifierError();
     }
 
     const account = await AccountsRepository.findById(id);
 
     if (!account) {
-      ValidationError.notFound('account', (error) =>
-        response.status(error.status).json({ error: error.message })
-      );
-
-      return;
+      throw new NotFoundError('account');
     }
 
     await AccountsRepository.delete(id);

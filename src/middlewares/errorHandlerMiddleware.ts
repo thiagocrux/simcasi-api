@@ -1,10 +1,14 @@
 import type { NextFunction, Request, Response } from 'express';
 
+interface CustomError extends Error {
+  statusCode: number;
+}
+
 export function errorHandlerMiddleware(
-  error: Error,
+  error: CustomError,
   request: Request,
   response: Response,
   next: NextFunction
 ) {
-  response.status(500).json({ error });
+  response.status(error.statusCode || 500).json({ error });
 }

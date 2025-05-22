@@ -3,7 +3,12 @@ import { isValidObjectId } from 'mongoose';
 
 import { permissionsByRole, ROLES } from '../config';
 import { PermissionsRepository, RolesRepository } from '../repositories';
-import { ValidationError } from '../utils';
+
+import {
+  InvalidIdentifierError,
+  NotFoundError,
+  UniqueConstraintViolationError,
+} from '../utils';
 
 export class PermissionsController {
   static async index(request: Request, response: Response) {
@@ -15,21 +20,13 @@ export class PermissionsController {
     const { id } = request.params;
 
     if (!isValidObjectId(id)) {
-      ValidationError.invalidIdFormat((error) =>
-        response.status(error.status).json({ error: error.message })
-      );
-
-      return;
+      throw new InvalidIdentifierError();
     }
 
     const permission = await PermissionsRepository.findById(id);
 
     if (!permission) {
-      ValidationError.notFound('permission', (error) =>
-        response.status(error.status).json({ error: error.message })
-      );
-
-      return;
+      throw new NotFoundError('permission');
     }
 
     response.status(200).json(permission);
@@ -42,11 +39,7 @@ export class PermissionsController {
       await PermissionsRepository.findByCode(code);
 
     if (permissionAlreadyExists) {
-      ValidationError.duplicatedSubject('permission', (error) =>
-        response.status(error.status).json({ error: error.message })
-      );
-
-      return;
+      throw new UniqueConstraintViolationError('permission');
     }
 
     const permission = await PermissionsRepository.create({ code });
@@ -65,21 +58,13 @@ export class PermissionsController {
     const { code } = request.body;
 
     if (!isValidObjectId(id)) {
-      ValidationError.invalidIdFormat((error) =>
-        response.status(error.status).json({ error: error.message })
-      );
-
-      return;
+      throw new InvalidIdentifierError();
     }
 
     const permission = await PermissionsRepository.findById(id);
 
     if (!permission) {
-      ValidationError.notFound('permission', (error) =>
-        response.status(error.status).json({ error: error.message })
-      );
-
-      return;
+      throw new NotFoundError('permission');
     }
 
     const updatedRole = await PermissionsRepository.update(id, { code });
@@ -90,21 +75,13 @@ export class PermissionsController {
     const { id } = request.params;
 
     if (!isValidObjectId(id)) {
-      ValidationError.invalidIdFormat((error) =>
-        response.status(error.status).json({ error: error.message })
-      );
-
-      return;
+      throw new InvalidIdentifierError();
     }
 
     const permission = await PermissionsRepository.findById(id);
 
     if (!permission) {
-      ValidationError.notFound('permission', (error) =>
-        response.status(error.status).json({ error: error.message })
-      );
-
-      return;
+      throw new NotFoundError('permission');
     }
 
     ROLES.forEach(async (role) => {

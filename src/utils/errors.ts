@@ -1,37 +1,44 @@
-interface ErrorResponse {
-  status: number;
-  message: string;
+export abstract class CustomError extends Error {
+  abstract readonly statusCode: number;
+
+  constructor(message: string) {
+    super(message);
+    this.name = this.constructor.name;
+    Object.defineProperty(this, 'message', {
+      enumerable: true,
+      value: message,
+    });
+  }
 }
 
-export class ValidationError {
-  static duplicatedEmail(onError: (errorResponse: ErrorResponse) => void) {
-    onError({
-      message: 'This e-mail is already taken.',
-      status: 409,
-    });
-  }
+export class UniqueEmailViolationError extends CustomError {
+  readonly statusCode = 409;
 
-  static duplicatedSubject(
-    subject: string,
-    onError: (errorResponse: ErrorResponse) => void
-  ) {
-    onError({
-      message: `The ${subject?.toLowerCase()} already exists.`,
-      status: 409,
-    });
+  constructor() {
+    super('This e-mail is already taken.');
   }
+}
 
-  static notFound(
-    subject: string,
-    onError: (errorResponse: ErrorResponse) => void
-  ) {
-    onError({
-      message: `The ${subject?.toLowerCase()} could not be found.`,
-      status: 404,
-    });
+export class UniqueConstraintViolationError extends CustomError {
+  readonly statusCode = 409;
+
+  constructor(subject: string) {
+    super(`The ${subject?.toLowerCase()} already exists.`);
   }
+}
 
-  static invalidIdFormat(onError: (errorResponse: ErrorResponse) => void) {
-    onError({ message: `The ID has an invalid format.`, status: 500 });
+export class NotFoundError extends CustomError {
+  readonly statusCode = 404;
+
+  constructor(subject: string) {
+    super(`The ${subject?.toLowerCase()} could not be found.`);
+  }
+}
+
+export class InvalidIdentifierError extends CustomError {
+  readonly statusCode = 400;
+
+  constructor() {
+    super('The ID is invalid.');
   }
 }

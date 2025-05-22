@@ -2,7 +2,12 @@ import { Request, Response } from 'express';
 import { isValidObjectId } from 'mongoose';
 
 import { RolesRepository } from '../repositories';
-import { ValidationError } from '../utils';
+
+import {
+  InvalidIdentifierError,
+  NotFoundError,
+  UniqueConstraintViolationError,
+} from '../utils';
 
 export class RolesController {
   static async index(request: Request, response: Response) {
@@ -14,21 +19,13 @@ export class RolesController {
     const { id } = request.params;
 
     if (!isValidObjectId(id)) {
-      ValidationError.invalidIdFormat((error) =>
-        response.status(error.status).json({ error: error.message })
-      );
-
-      return;
+      throw new InvalidIdentifierError();
     }
 
     const role = await RolesRepository.findById(id);
 
     if (!role) {
-      ValidationError.notFound('role', (error) =>
-        response.status(error.status).json({ error: error.message })
-      );
-
-      return;
+      throw new NotFoundError('role');
     }
 
     response.status(200).json(role);
@@ -36,14 +33,10 @@ export class RolesController {
 
   static async create(request: Request, response: Response) {
     const { name } = request.body;
-    const nameAlreadyExists = await RolesRepository.findByName(name);
+    const roleAlreadyExists = await RolesRepository.findByName(name);
 
-    if (nameAlreadyExists) {
-      ValidationError.duplicatedSubject('role', (error) =>
-        response.status(error.status).json({ error: error.message })
-      );
-
-      return;
+    if (roleAlreadyExists) {
+      throw new UniqueConstraintViolationError('role');
     }
 
     const role = await RolesRepository.create({ name });
@@ -55,21 +48,13 @@ export class RolesController {
     const { name } = request.body;
 
     if (!isValidObjectId(id)) {
-      ValidationError.invalidIdFormat((error) =>
-        response.status(error.status).json({ error: error.message })
-      );
-
-      return;
+      throw new InvalidIdentifierError();
     }
 
     const role = await RolesRepository.findById(id);
 
     if (!role) {
-      ValidationError.notFound('role', (error) =>
-        response.status(error.status).json({ error: error.message })
-      );
-
-      return;
+      throw new NotFoundError('role');
     }
 
     const updatedRole = await RolesRepository.update(id, { name });
@@ -80,21 +65,13 @@ export class RolesController {
     const { id } = request.params;
 
     if (!isValidObjectId(id)) {
-      ValidationError.invalidIdFormat((error) =>
-        response.status(error.status).json({ error: error.message })
-      );
-
-      return;
+      throw new InvalidIdentifierError();
     }
 
     const role = await RolesRepository.findById(id);
 
     if (!role) {
-      ValidationError.notFound('role', (error) =>
-        response.status(error.status).json({ error: error.message })
-      );
-
-      return;
+      throw new NotFoundError('role');
     }
 
     await RolesRepository.delete(id);

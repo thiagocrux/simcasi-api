@@ -1,2 +1,2 @@
-export { ValidationError } from './errors';
+export * from './errors';
 export { default as logger } from './logger';
