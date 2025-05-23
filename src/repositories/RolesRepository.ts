@@ -44,6 +44,16 @@ export class RolesRepository {
     return role;
   }
 
+  static async getRolePermissions(id: string) {
+    const role = await Role.findOne({ _id: id }).populate({
+      path: 'permissions',
+      select: 'code -_id',
+      transform: (item) => item.code,
+    });
+
+    return role?.permissions;
+  }
+
   static async addPermission(role: string, permissionId: string) {
     const updatedRole = Role.findOneAndUpdate(
       { name: role },

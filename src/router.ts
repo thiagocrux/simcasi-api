@@ -4,9 +4,15 @@ import {
   AccountsController,
   PermissionsController,
   RolesController,
+  SessionsController,
 } from './controllers';
 
 export const router = Router();
+
+router.post('/sign-in', SessionsController.create);
+router.get('/sessions', SessionsController.index);
+router.get('/sessions/:id', SessionsController.show);
+router.delete('/sessions/:id', SessionsController.delete);
 
 router.get('/roles', RolesController.index);
 router.get('/roles/:id', RolesController.show);
