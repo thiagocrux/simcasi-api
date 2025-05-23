@@ -28,6 +28,7 @@
     "typescript-eslint": "^8.31.0"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.2",
     "dotenv": "^16.5.0",
     "mongoose": "^8.15.0",
     "pino": "^9.6.0"

@@ -1,3 +1,4 @@
+import bcrypt from 'bcryptjs';
 import { Request, Response } from 'express';
 import { isValidObjectId } from 'mongoose';
 
@@ -40,10 +41,13 @@ export class AccountsController {
       throw new UniqueConstraintViolationError('account');
     }
 
+    const salt = bcrypt.genSaltSync(10);
+    const passwordHash = bcrypt.hashSync(password, salt);
+
     const account = await AccountsRepository.create({
       name,
       email,
-      password,
+      password: passwordHash,
       role,
     });
 
