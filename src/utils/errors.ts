@@ -42,3 +42,19 @@ export class InvalidIdentifierError extends CustomError {
     super('The ID is invalid.');
   }
 }
+
+export class UnauthorizedError extends CustomError {
+  readonly statusCode = 403;
+
+  constructor() {
+    super("You don't have permission to access this resource.");
+  }
+}
+
+export class InvalidCredentialsError extends CustomError {
+  readonly statusCode = 401;
+
+  constructor() {
+    super('The provided email or password is incorrect.');
+  }
+}
