@@ -1,5 +1,7 @@
 import { Router } from 'express';
 
+import { authenticationMiddleware } from './middlewares';
+
 import {
   AccountsController,
   PermissionsController,
@@ -9,24 +11,58 @@ import {
 
 export const router = Router();
 
+router.get('/accounts', authenticationMiddleware, AccountsController.index);
+router.get('/accounts/:id', authenticationMiddleware, AccountsController.show);
+router.post('/accounts', authenticationMiddleware, AccountsController.create);
+
+router.put(
+  '/accounts/:id',
+  authenticationMiddleware,
+  AccountsController.update
+);
+
+router.delete(
+  '/accounts/:id',
+  authenticationMiddleware,
+  AccountsController.delete
+);
+
 router.post('/sign-in', SessionsController.create);
-router.get('/sessions', SessionsController.index);
-router.get('/sessions/:id', SessionsController.show);
-router.delete('/sessions/:id', SessionsController.delete);
+router.get('/sessions', authenticationMiddleware, SessionsController.index);
+router.get('/sessions/:id', authenticationMiddleware, SessionsController.show);
 
-router.get('/roles', RolesController.index);
-router.get('/roles/:id', RolesController.show);
-router.post('/roles', RolesController.create);
-router.put('/roles/:id', RolesController.update);
-router.delete('/roles/:id', RolesController.delete);
+router.delete(
+  '/sessions/:id',
+  authenticationMiddleware,
+  SessionsController.delete
+);
 
-router.get('/permissions', PermissionsController.index);
-router.get('/permissions/:id', PermissionsController.show);
-router.post('/permissions', PermissionsController.create);
-router.put('/permissions/:id', PermissionsController.update);
+router.get('/roles', authenticationMiddleware, RolesController.index);
+router.get('/roles/:id', authenticationMiddleware, RolesController.show);
+router.post('/roles', authenticationMiddleware, RolesController.create);
+router.put('/roles/:id', authenticationMiddleware, RolesController.update);
+router.delete('/roles/:id', authenticationMiddleware, RolesController.delete);
 
-router.get('/accounts', AccountsController.index);
-router.get('/accounts/:id', AccountsController.show);
-router.post('/accounts', AccountsController.create);
-router.put('/accounts/:id', AccountsController.update);
-router.delete('/accounts/:id', AccountsController.delete);
+router.get(
+  '/permissions',
+  authenticationMiddleware,
+  PermissionsController.index
+);
+
+router.get(
+  '/permissions/:id',
+  authenticationMiddleware,
+  PermissionsController.show
+);
+
+router.post(
+  '/permissions',
+  authenticationMiddleware,
+  PermissionsController.create
+);
+
+router.put(
+  '/permissions/:id',
+  authenticationMiddleware,
+  PermissionsController.update
+);

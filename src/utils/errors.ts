@@ -58,3 +58,19 @@ export class InvalidCredentialsError extends CustomError {
     super('The provided email or password is incorrect.');
   }
 }
+
+export class MissingAccessTokenError extends CustomError {
+  readonly statusCode = 401;
+
+  constructor() {
+    super('The access token is missing.');
+  }
+}
+
+export class InvalidAccessTokenError extends CustomError {
+  readonly statusCode = 401;
+
+  constructor() {
+    super('The access token is invalid.');
+  }
+}
