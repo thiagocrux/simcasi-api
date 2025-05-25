@@ -82,3 +82,11 @@ export class ExpiredSessionError extends CustomError {
     super('This session has expired.');
   }
 }
+
+export class SessionCreationError extends CustomError {
+  readonly statusCode = 500;
+
+  constructor() {
+    super('An error ocurred while creating a session.');
+  }
+}

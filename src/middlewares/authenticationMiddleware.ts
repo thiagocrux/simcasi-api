@@ -2,9 +2,15 @@ import { NextFunction, Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
 import { ENVS } from '../config';
-import { InvalidAccessTokenError, MissingAccessTokenError } from '../utils';
+import { SessionsRepository } from '../repositories';
 
-export function authenticationMiddleware(
+import {
+  InvalidAccessTokenError,
+  MissingAccessTokenError,
+  UnauthorizedError,
+} from '../utils';
+
+export async function authenticationMiddleware(
   request: Request,
   response: Response,
   next: NextFunction
@@ -21,6 +27,23 @@ export function authenticationMiddleware(
     throw new InvalidAccessTokenError();
   }
 
-  jwt.verify(token, ENVS.jwtSecret) as JwtPayload;
+  const { sub: accountId, sid: sessionId } = jwt.verify(
+    token,
+    ENVS.jwtSecret
+  ) as JwtPayload;
+
+  if (!accountId) {
+    throw new InvalidAccessTokenError();
+  }
+
+  const session = await SessionsRepository.findJwtVinculatedSession(
+    sessionId,
+    accountId
+  );
+
+  if (!session || !session?.isActive) {
+    throw new UnauthorizedError();
+  }
+
   next();
 }

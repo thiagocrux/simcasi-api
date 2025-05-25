@@ -3,14 +3,16 @@ import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { isValidObjectId } from 'mongoose';
 
-import { ENVS, JWT_EXPIRATION_TIME, SESSION_LIMIT_IN_DAYS } from '../config';
-import { Session } from '../models';
+import { ENVS, JWT_DURATION, SESSION_DURATION } from '../config';
 import { AccountsRepository, SessionsRepository } from '../repositories';
 
 import {
+  ExpiredSessionError,
+  generateSessionTimeframe,
   InvalidCredentialsError,
   InvalidIdentifierError,
   NotFoundError,
+  SessionCreationError,
 } from '../utils';
 
 export class SessionsController {
@@ -39,6 +41,11 @@ export class SessionsController {
     const { email, password } = request.body;
     const account = await AccountsRepository.findByEmail(email);
 
+    const deviceInfo = {
+      ipAddress: request.ip,
+      userAgent: request.get('User-Agent'),
+    };
+
     if (!account) {
       console.log(account);
       throw new InvalidCredentialsError();
@@ -50,25 +57,30 @@ export class SessionsController {
       throw new InvalidCredentialsError();
     }
 
-    const accessToken = jwt.sign({ sub: account._id }, ENVS.jwtSecret, {
-      expiresIn: JWT_EXPIRATION_TIME,
+    const timeframe = generateSessionTimeframe(SESSION_DURATION);
+
+    if (!timeframe) {
+      throw new SessionCreationError();
+    }
+
+    await SessionsRepository.deactivate(String(account._id));
+
+    const session = await SessionsRepository.create({
+      accountId: String(account._id),
+      issuedAt: timeframe.issuedAt,
+      expiresAt: timeframe.expiresAt,
+      deviceInfo,
     });
 
-    const issuedAt = new Date();
-    const expiresAt = new Date(issuedAt.getTime());
-    expiresAt.setDate(expiresAt.getDate() + SESSION_LIMIT_IN_DAYS);
+    const accessToken = jwt.sign(
+      { sub: account._id, sid: session._id },
+      ENVS.jwtSecret,
+      {
+        expiresIn: JWT_DURATION,
+      }
+    );
 
-    const session = await Session.create({
-      accountId: account._id,
-      issuedAt,
-      expiresAt,
-      deviceInfo: {
-        ipAddress: request.ip,
-        userAgent: request.get('User-Agent'),
-      },
-    });
-
-    response.status(201).json({ accessToken, refreshToken: session._id });
+    response.status(201).json({ accessToken, session: session._id });
   }
 
   static async delete(request: Request, response: Response) {
@@ -86,5 +98,31 @@ export class SessionsController {
 
     await SessionsRepository.delete(id);
     response.sendStatus(204);
+  }
+
+  static async refreshToken(request: Request, response: Response) {
+    const { session: sessionId } = request.body;
+    const session = await SessionsRepository.findById(sessionId);
+
+    if (!session) {
+      throw new NotFoundError('session');
+    }
+
+    const hasSessionExpired = Date.now() > session.expiresAt.getTime();
+
+    if (hasSessionExpired || !session.isActive) {
+      await SessionsRepository.update(sessionId, { isActive: false });
+      throw new ExpiredSessionError();
+    }
+
+    const accessToken = await jwt.sign(
+      { sub: session.accountId, sid: session._id },
+      ENVS.jwtSecret,
+      {
+        expiresIn: JWT_DURATION,
+      }
+    );
+
+    response.status(201).json({ accessToken });
   }
 }

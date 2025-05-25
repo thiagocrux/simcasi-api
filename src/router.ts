@@ -27,9 +27,10 @@ router.delete(
   AccountsController.delete
 );
 
-router.post('/sign-in', SessionsController.create);
+router.post('/sessions', SessionsController.create);
 router.get('/sessions', authenticationMiddleware, SessionsController.index);
 router.get('/sessions/:id', authenticationMiddleware, SessionsController.show);
+router.post('/sessions/refresh-token', SessionsController.refreshToken);
 
 router.delete(
   '/sessions/:id',
