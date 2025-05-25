@@ -36,12 +36,12 @@ export async function authenticationMiddleware(
     throw new InvalidAccessTokenError();
   }
 
-  const session = await SessionsRepository.findJwtVinculatedSession(
-    sessionId,
-    accountId
-  );
+  const accountRelatedSession = await SessionsRepository.find({
+    _id: sessionId,
+    accountId,
+  });
 
-  if (!session || !session?.isActive) {
+  if (!accountRelatedSession || !accountRelatedSession?.isActive) {
     throw new UnauthorizedError();
   }
 

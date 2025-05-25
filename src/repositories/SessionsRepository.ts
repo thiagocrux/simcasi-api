@@ -1,30 +1,12 @@
 import { Session } from '../models';
-
-interface CreateSessionDTO {
-  accountId: string;
-  isActive?: boolean;
-  issuedAt: Date;
-  expiresAt: Date;
-  deviceInfo: {
-    ipAddress?: string;
-    userAgent?: string;
-  };
-}
-
-interface UpdateSessionDTO {
-  accountId?: string;
-  isActive?: boolean;
-  issuedAt?: Date;
-  expiresAt?: Date;
-  deviceInfo?: {
-    ipAddress?: string;
-    userAgent?: string;
-  };
-}
+import { CreateSessionDTO, SessionFilter, UpdateSessionDTO } from '../types';
 
 export class SessionsRepository {
-  static async findAll() {
-    const sessions = await Session.find();
+  static async findAll(order: 'asc' | 'desc') {
+    const sessions = await Session.find().sort({
+      updatedAt: order === 'asc' ? 1 : -1,
+    });
+
     return sessions;
   }
 
@@ -33,35 +15,34 @@ export class SessionsRepository {
     return session;
   }
 
+  static async find(filter: SessionFilter) {
+    const session = await Session.findOne(filter);
+    return session;
+  }
+
   static async create(body: CreateSessionDTO) {
     const session = await Session.create(body);
     return session._id;
   }
 
-  static async update(id: string, body: UpdateSessionDTO) {
-    const role = await Session.findOneAndUpdate({ _id: id }, body, {
+  static async updateById(id: string, body: UpdateSessionDTO) {
+    const session = await Session.findOneAndUpdate({ _id: id }, body, {
       new: true,
     });
 
-    return role;
+    return session;
   }
 
-  static async delete(id: string) {
+  static async update(filter: SessionFilter, body: UpdateSessionDTO) {
+    const session = await Session.findOneAndUpdate(filter, body, {
+      new: true,
+    });
+
+    return session;
+  }
+
+  static async deleteById(id: string) {
     const session = await Session.findByIdAndDelete(id);
     return session;
-  }
-
-  static async findJwtVinculatedSession(id: string, accountId: string) {
-    const session = await Session.findOne({ _id: id, accountId });
-    return session;
-  }
-
-  static async deactivate(accountId: string) {
-    const sessions = await Session.updateOne(
-      { accountId, isActive: true },
-      { isActive: false }
-    );
-
-    return sessions;
   }
 }

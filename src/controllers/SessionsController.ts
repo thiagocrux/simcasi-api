@@ -17,7 +17,8 @@ import {
 
 export class SessionsController {
   static async index(request: Request, response: Response) {
-    const sessions = await SessionsRepository.findAll();
+    const order = request.query.order === 'desc' ? 'desc' : 'asc';
+    const sessions = await SessionsRepository.findAll(order);
     response.status(200).json(sessions);
   }
 
@@ -63,7 +64,10 @@ export class SessionsController {
       throw new SessionCreationError();
     }
 
-    await SessionsRepository.deactivate(String(account._id));
+    await SessionsRepository.update(
+      { accountId: String(account._id), isActive: true },
+      { isActive: false }
+    );
 
     const session = await SessionsRepository.create({
       accountId: String(account._id),
@@ -96,7 +100,7 @@ export class SessionsController {
       throw new NotFoundError('session');
     }
 
-    await SessionsRepository.delete(id);
+    await SessionsRepository.deleteById(id);
     response.sendStatus(204);
   }
 
@@ -111,7 +115,7 @@ export class SessionsController {
     const hasSessionExpired = Date.now() > session.expiresAt.getTime();
 
     if (hasSessionExpired || !session.isActive) {
-      await SessionsRepository.update(sessionId, { isActive: false });
+      await SessionsRepository.updateById(sessionId, { isActive: false });
       throw new ExpiredSessionError();
     }
 
