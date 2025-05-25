@@ -74,3 +74,11 @@ export class InvalidAccessTokenError extends CustomError {
     super('The access token is invalid.');
   }
 }
+
+export class ExpiredSessionError extends CustomError {
+  readonly statusCode = 401;
+
+  constructor() {
+    super('This session has expired.');
+  }
+}
