@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { isValidObjectId } from 'mongoose';
+import { isValidObjectId, Types } from 'mongoose';
 
-import { permissionsByRole, ROLES } from '../config';
+import { ACCOUNT_ROLES, permissionsByRole } from '../config';
 import { PermissionsRepository, RolesRepository } from '../repositories';
 
 import {
@@ -12,7 +12,8 @@ import {
 
 export class PermissionsController {
   static async index(request: Request, response: Response) {
-    const permission = await PermissionsRepository.findAll();
+    const order = request.query.order === 'desc' ? 'desc' : 'asc';
+    const permission = await PermissionsRepository.findAll(order);
     response.status(200).json(permission);
   }
 
@@ -23,7 +24,9 @@ export class PermissionsController {
       throw new InvalidIdentifierError();
     }
 
-    const permission = await PermissionsRepository.findById(id);
+    const permission = await PermissionsRepository.find({
+      _id: new Types.ObjectId(id),
+    });
 
     if (!permission) {
       throw new NotFoundError('permission');
@@ -35,8 +38,9 @@ export class PermissionsController {
   static async create(request: Request, response: Response) {
     const { code } = request.body;
 
-    const permissionAlreadyExists =
-      await PermissionsRepository.findByCode(code);
+    const permissionAlreadyExists = await PermissionsRepository.find({
+      code,
+    });
 
     if (permissionAlreadyExists) {
       throw new UniqueConstraintViolationError('permission');
@@ -44,7 +48,7 @@ export class PermissionsController {
 
     const permission = await PermissionsRepository.create({ code });
 
-    ROLES.forEach(async (role) => {
+    ACCOUNT_ROLES.forEach(async (role) => {
       if (permissionsByRole[role].includes(permission.code)) {
         await RolesRepository.addPermission(role, String(permission._id));
       }
@@ -61,13 +65,19 @@ export class PermissionsController {
       throw new InvalidIdentifierError();
     }
 
-    const permission = await PermissionsRepository.findById(id);
+    const permission = await PermissionsRepository.find({
+      _id: new Types.ObjectId(id),
+    });
 
     if (!permission) {
       throw new NotFoundError('permission');
     }
 
-    const updatedRole = await PermissionsRepository.update(id, { code });
+    const updatedRole = await PermissionsRepository.update(
+      { _id: new Types.ObjectId(id) },
+      { code }
+    );
+
     response.status(200).json(updatedRole);
   }
 
@@ -78,13 +88,15 @@ export class PermissionsController {
       throw new InvalidIdentifierError();
     }
 
-    const permission = await PermissionsRepository.findById(id);
+    const permission = await PermissionsRepository.find({
+      _id: new Types.ObjectId(id),
+    });
 
     if (!permission) {
       throw new NotFoundError('permission');
     }
 
-    ROLES.forEach(async (role) => {
+    ACCOUNT_ROLES.forEach(async (role) => {
       if (permissionsByRole[role].includes(permission.code)) {
         await RolesRepository.removePermission(role, String(permission._id));
       }

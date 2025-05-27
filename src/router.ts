@@ -67,3 +67,9 @@ router.put(
   authenticationMiddleware,
   PermissionsController.update
 );
+
+router.delete(
+  '/permissions/:id',
+  authenticationMiddleware,
+  PermissionsController.delete
+);

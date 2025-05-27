@@ -13,7 +13,8 @@ import {
 
 export class AccountsController {
   static async index(request: Request, response: Response) {
-    const accounts = await AccountsRepository.findAll();
+    const order = request.query.order === 'desc' ? 'desc' : 'asc';
+    const accounts = await AccountsRepository.findAll(order);
     response.status(200).json(accounts);
   }
 
@@ -76,7 +77,7 @@ export class AccountsController {
       }
     }
 
-    const updatedAccount = await AccountsRepository.update(id, {
+    const updatedAccount = await AccountsRepository.updateById(id, {
       name,
       email,
       password,

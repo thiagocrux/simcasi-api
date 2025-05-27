@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { isValidObjectId } from 'mongoose';
+import { isValidObjectId, Types } from 'mongoose';
 
 import { ENVS, JWT_DURATION, SESSION_DURATION } from '../config';
 import { AccountsRepository, SessionsRepository } from '../repositories';
@@ -29,7 +29,9 @@ export class SessionsController {
       throw new InvalidIdentifierError();
     }
 
-    const session = await SessionsRepository.findById(id);
+    const session = await SessionsRepository.find({
+      _id: new Types.ObjectId(id),
+    });
 
     if (!session) {
       throw new NotFoundError('session');
@@ -65,12 +67,12 @@ export class SessionsController {
     }
 
     await SessionsRepository.update(
-      { accountId: String(account._id), isActive: true },
+      { accountId: account._id, isActive: true },
       { isActive: false }
     );
 
     const session = await SessionsRepository.create({
-      accountId: String(account._id),
+      accountId: account._id,
       issuedAt: timeframe.issuedAt,
       expiresAt: timeframe.expiresAt,
       deviceInfo,
@@ -94,19 +96,21 @@ export class SessionsController {
       throw new InvalidIdentifierError();
     }
 
-    const session = await SessionsRepository.findById(id);
+    const session = await SessionsRepository.find({
+      _id: new Types.ObjectId(id),
+    });
 
     if (!session) {
       throw new NotFoundError('session');
     }
 
-    await SessionsRepository.deleteById(id);
+    await SessionsRepository.delete({ _id: new Types.ObjectId(id) });
     response.sendStatus(204);
   }
 
   static async refreshToken(request: Request, response: Response) {
     const { session: sessionId } = request.body;
-    const session = await SessionsRepository.findById(sessionId);
+    const session = await SessionsRepository.find({ _id: sessionId });
 
     if (!session) {
       throw new NotFoundError('session');
@@ -115,7 +119,7 @@ export class SessionsController {
     const hasSessionExpired = Date.now() > session.expiresAt.getTime();
 
     if (hasSessionExpired || !session.isActive) {
-      await SessionsRepository.updateById(sessionId, { isActive: false });
+      await SessionsRepository.update({ _id: sessionId }, { isActive: false });
       throw new ExpiredSessionError();
     }
 

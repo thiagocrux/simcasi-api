@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { isValidObjectId } from 'mongoose';
+import { isValidObjectId, Types } from 'mongoose';
 
 import { RolesRepository } from '../repositories';
 
@@ -11,7 +11,8 @@ import {
 
 export class RolesController {
   static async index(request: Request, response: Response) {
-    const roles = await RolesRepository.findAll();
+    const order = request.query.order === 'desc' ? 'desc' : 'asc';
+    const roles = await RolesRepository.findAll(order);
     response.status(200).json(roles);
   }
 
@@ -22,7 +23,7 @@ export class RolesController {
       throw new InvalidIdentifierError();
     }
 
-    const role = await RolesRepository.findById(id);
+    const role = await RolesRepository.find({ _id: new Types.ObjectId(id) });
 
     if (!role) {
       throw new NotFoundError('role');
@@ -33,7 +34,7 @@ export class RolesController {
 
   static async create(request: Request, response: Response) {
     const { name } = request.body;
-    const roleAlreadyExists = await RolesRepository.findByName(name);
+    const roleAlreadyExists = await RolesRepository.find({ name });
 
     if (roleAlreadyExists) {
       throw new UniqueConstraintViolationError('role');
@@ -51,13 +52,17 @@ export class RolesController {
       throw new InvalidIdentifierError();
     }
 
-    const role = await RolesRepository.findById(id);
+    const role = await RolesRepository.find({ _id: new Types.ObjectId(id) });
 
     if (!role) {
       throw new NotFoundError('role');
     }
 
-    const updatedRole = await RolesRepository.update(id, { name });
+    const updatedRole = await RolesRepository.update(
+      { _id: new Types.ObjectId(id) },
+      { name }
+    );
+
     response.status(200).json(updatedRole);
   }
 
@@ -68,13 +73,13 @@ export class RolesController {
       throw new InvalidIdentifierError();
     }
 
-    const role = await RolesRepository.findById(id);
+    const role = await RolesRepository.find({ _id: new Types.ObjectId(id) });
 
     if (!role) {
       throw new NotFoundError('role');
     }
 
-    await RolesRepository.delete(id);
+    await RolesRepository.delete({ _id: new Types.ObjectId(id) });
     response.sendStatus(204);
   }
 }

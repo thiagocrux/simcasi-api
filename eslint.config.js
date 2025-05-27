@@ -17,6 +17,12 @@ export default defineConfig([
         'error',
         { argsIgnorePattern: 'next' },
       ],
+      '@typescript-eslint/no-empty-object-type': [
+        'error',
+        {
+          allowInterfaces: 'always',
+        },
+      ],
     },
   },
   tseslint.configs.recommended,

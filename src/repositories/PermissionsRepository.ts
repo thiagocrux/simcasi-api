@@ -1,41 +1,31 @@
 import { Permission } from '../models';
-
-interface CreatePermissionDTO {
-  code: string;
-}
-
-interface UpdatePermissionDTO {
-  code: string;
-}
+import {
+  CreatePermissionDTO,
+  PermissionFilter,
+  UpdatePermissionDTO,
+} from '../types';
 
 export class PermissionsRepository {
-  static async findAll() {
-    const permissions = await Permission.find();
+  static async findAll(order: 'asc' | 'desc') {
+    const permissions = await Permission.find().sort({
+      updatedAt: order === 'asc' ? 1 : -1,
+    });
+
     return permissions;
   }
 
-  static async findById(id: string) {
-    const permission = await Permission.findById(id);
+  static async find(filter: PermissionFilter) {
+    const permission = await Permission.findOne(filter);
     return permission;
   }
 
-  static async findByCode(code: string) {
-    const permission = await Permission.findOne({ code });
+  static async create(body: CreatePermissionDTO) {
+    const permission = await Permission.create(body);
     return permission;
   }
 
-  static async create({ code }: CreatePermissionDTO) {
-    const permission = await Permission.create({ code });
-    return permission;
-  }
-
-  static async update(id: string, { code }: UpdatePermissionDTO) {
-    const role = await Permission.findOneAndUpdate(
-      { _id: id },
-      { code },
-      { new: true }
-    );
-
+  static async update(filter: PermissionFilter, body: UpdatePermissionDTO) {
+    const role = await Permission.findOneAndUpdate(filter, body, { new: true });
     return role;
   }
 

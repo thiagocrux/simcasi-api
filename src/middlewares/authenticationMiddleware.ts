@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
+import { Types } from 'mongoose';
 
 import { ENVS } from '../config';
 import { SessionsRepository } from '../repositories';
@@ -38,7 +39,7 @@ export async function authenticationMiddleware(
 
   const accountRelatedSession = await SessionsRepository.find({
     _id: sessionId,
-    accountId,
+    accountId: new Types.ObjectId(accountId),
   });
 
   if (!accountRelatedSession || !accountRelatedSession?.isActive) {

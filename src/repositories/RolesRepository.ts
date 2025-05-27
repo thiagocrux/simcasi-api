@@ -1,48 +1,36 @@
 import { Role } from '../models';
-
-interface CreateRoleDTO {
-  name: string;
-}
-
-interface UpdateRoleDTO {
-  name: string;
-}
+import { CreateRoleDTO, RoleFilter, UpdateRoleDTO } from '../types';
 
 export class RolesRepository {
-  static async findAll() {
-    const roles = await Role.find();
+  static async findAll(order: 'asc' | 'desc') {
+    const roles = await Role.find().sort({
+      updatedAt: order === 'asc' ? 1 : -1,
+    });
+
     return roles;
   }
 
-  static async findById(id: string) {
-    const role = await Role.findById(id);
+  static async find(filter: RoleFilter) {
+    const role = await Role.findOne(filter);
     return role;
   }
 
-  static async findByName(name: string) {
-    const role = await Role.findOne({ name });
+  static async create(body: CreateRoleDTO) {
+    const role = await Role.create(body);
     return role;
   }
 
-  static async create({ name }: CreateRoleDTO) {
-    const role = await Role.create({ name });
+  static async update(filter: RoleFilter, body: UpdateRoleDTO) {
+    const role = await Role.findOneAndUpdate(filter, body, { new: true });
     return role;
   }
 
-  static async update(id: string, { name }: UpdateRoleDTO) {
-    const role = await Role.findOneAndUpdate(
-      { _id: id },
-      { name },
-      { new: true }
-    );
-
+  static async delete(filter: RoleFilter) {
+    const role = await Role.findOneAndDelete(filter);
     return role;
   }
 
-  static async delete(id: string) {
-    const role = await Role.findByIdAndDelete(id);
-    return role;
-  }
+  // FIXME: Improve?
 
   static async getRolePermissions(id: string) {
     const role = await Role.findOne({ _id: id }).populate({

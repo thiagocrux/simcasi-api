@@ -10,11 +10,6 @@ export class SessionsRepository {
     return sessions;
   }
 
-  static async findById(id: string) {
-    const session = await Session.findById(id);
-    return session;
-  }
-
   static async find(filter: SessionFilter) {
     const session = await Session.findOne(filter);
     return session;
@@ -25,14 +20,6 @@ export class SessionsRepository {
     return session._id;
   }
 
-  static async updateById(id: string, body: UpdateSessionDTO) {
-    const session = await Session.findOneAndUpdate({ _id: id }, body, {
-      new: true,
-    });
-
-    return session;
-  }
-
   static async update(filter: SessionFilter, body: UpdateSessionDTO) {
     const session = await Session.findOneAndUpdate(filter, body, {
       new: true,
@@ -41,8 +28,8 @@ export class SessionsRepository {
     return session;
   }
 
-  static async deleteById(id: string) {
-    const session = await Session.findByIdAndDelete(id);
+  static async delete(filter: SessionFilter) {
+    const session = await Session.findOneAndDelete(filter);
     return session;
   }
 }

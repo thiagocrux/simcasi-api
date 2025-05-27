@@ -1,6 +1,8 @@
+import { Types } from 'mongoose';
+import { WithObjectId, WithTimestamps, WithVersion } from './common';
+
 export interface Session {
-  _id: string;
-  accountId: string;
+  accountId: Types.ObjectId;
   isActive: boolean;
   issuedAt: Date;
   expiresAt: Date;
@@ -10,28 +12,14 @@ export interface Session {
   };
 }
 
-export interface CreateSessionDTO {
-  accountId: string;
-  isActive?: boolean;
-  issuedAt: Date;
-  expiresAt: Date;
-  deviceInfo: {
-    ipAddress?: string;
-    userAgent?: string;
-  };
-}
+export interface CreateSessionDTO
+  extends Omit<Session, 'isActive'>,
+    Partial<Pick<Session, 'isActive'>> {}
 
-export interface UpdateSessionDTO {
-  accountId?: string;
-  isActive?: boolean;
-  issuedAt?: Date;
-  expiresAt?: Date;
-  deviceInfo?: {
-    ipAddress?: string;
-    userAgent?: string;
-  };
-}
+export interface UpdateSessionDTO extends Partial<Session> {}
 
-export interface SessionFilter extends UpdateSessionDTO {
-  _id?: string;
-}
+export interface SessionFilter
+  extends Partial<Session>,
+    Partial<WithObjectId>,
+    Partial<WithVersion>,
+    Partial<WithTimestamps> {}

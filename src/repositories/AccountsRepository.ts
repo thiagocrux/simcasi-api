@@ -1,23 +1,12 @@
 import { Account } from '../models';
-import { Role } from '../types';
-
-interface CreateAccountDTO {
-  name: string;
-  email: string;
-  password: string;
-  role: Role;
-}
-
-interface UpdateAccountDTO {
-  name?: string;
-  email?: string;
-  password?: string;
-  role?: Role;
-}
+import { AccountFilter, CreateAccountDTO, UpdateAccountDTO } from '../types';
 
 export class AccountsRepository {
-  static async findAll() {
-    const accounts = await Account.find();
+  static async findAll(order: 'asc' | 'desc') {
+    const accounts = await Account.find().sort({
+      updatedAt: order === 'asc' ? 1 : -1,
+    });
+
     return accounts;
   }
 
@@ -36,12 +25,20 @@ export class AccountsRepository {
     return account;
   }
 
-  static async update(id: string, body: UpdateAccountDTO) {
+  static async updateById(id: string, body: UpdateAccountDTO) {
     const role = await Account.findOneAndUpdate({ _id: id }, body, {
       new: true,
     });
 
     return role;
+  }
+
+  static async update(filter: AccountFilter, body: UpdateAccountDTO) {
+    const account = await Account.findOneAndUpdate(filter, body, {
+      new: true,
+    });
+
+    return account;
   }
 
   static async delete(id: string) {

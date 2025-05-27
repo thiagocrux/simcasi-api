@@ -1,4 +1,6 @@
-export type Permissions =
+import { WithObjectId, WithTimestamps, WithVersion } from './common';
+
+export type PermissionCodes =
   | 'accounts:create'
   | 'accounts:delete'
   | 'accounts:read'
@@ -31,3 +33,16 @@ export type Permissions =
   | 'treatments:delete'
   | 'treatments:read'
   | 'treatments:update';
+
+export interface Permission {
+  code: PermissionCodes;
+}
+
+export interface CreatePermissionDTO extends Permission {}
+export interface UpdatePermissionDTO extends Partial<Permission> {}
+
+export interface PermissionFilter
+  extends Partial<Permission>,
+    Partial<WithObjectId>,
+    Partial<WithVersion>,
+    Partial<WithTimestamps> {}

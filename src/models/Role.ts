@@ -1,10 +1,11 @@
 import { model, Schema } from 'mongoose';
+import { ACCOUNT_ROLES } from '../config';
 
 const schema = new Schema(
   {
     name: {
       type: String,
-      enum: ['user', 'admin', 'viewer'],
+      enum: ACCOUNT_ROLES,
       unique: true,
       required: true,
     },
