@@ -23,4 +23,6 @@ mongoose
       logger.info(`Server running on http://localhost:${PORT}`);
     });
   })
-  .catch((error) => logger.error(`[mongodb] Error: `, error));
+  .catch((error) => {
+    throw Error(error);
+  });
