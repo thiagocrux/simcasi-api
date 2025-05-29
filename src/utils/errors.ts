@@ -8,6 +8,9 @@ export abstract class CustomError extends Error {
       enumerable: true,
       value: message,
     });
+    Object.defineProperty(this, 'stack', {
+      enumerable: true,
+    });
   }
 }
 
