@@ -10,27 +10,14 @@ export class AccountsRepository {
     return accounts;
   }
 
-  static async findById(id: string) {
-    const account = await Account.findById(id);
-    return account;
-  }
-
-  static async findByEmail(email: string) {
-    const account = await Account.findOne({ email });
+  static async find(filter: AccountFilter) {
+    const account = await Account.findOne(filter);
     return account;
   }
 
   static async create(body: CreateAccountDTO) {
     const account = await Account.create(body);
     return account;
-  }
-
-  static async updateById(id: string, body: UpdateAccountDTO) {
-    const role = await Account.findOneAndUpdate({ _id: id }, body, {
-      new: true,
-    });
-
-    return role;
   }
 
   static async update(filter: AccountFilter, body: UpdateAccountDTO) {

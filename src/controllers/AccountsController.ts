@@ -25,7 +25,7 @@ export class AccountsController {
       throw new InvalidIdentifierError();
     }
 
-    const account = await AccountsRepository.findById(id);
+    const account = await AccountsRepository.find({ _id: id });
 
     if (!account) {
       throw new NotFoundError('account');
@@ -36,7 +36,7 @@ export class AccountsController {
 
   static async create(request: Request, response: Response) {
     const { name, email, password, role } = request.body;
-    const accountAlreadyExists = await AccountsRepository.findByEmail(email);
+    const accountAlreadyExists = await AccountsRepository.find({ email });
 
     if (accountAlreadyExists) {
       throw new UniqueConstraintViolationError('account');
@@ -63,26 +63,29 @@ export class AccountsController {
       throw new InvalidIdentifierError();
     }
 
-    const account = await AccountsRepository.findById(id);
+    const account = await AccountsRepository.find({ _id: id });
 
     if (!account) {
       throw new NotFoundError('account');
     }
 
     if (account?.email !== email) {
-      const isEmailTaken = await AccountsRepository.findByEmail(email);
+      const isEmailTaken = await AccountsRepository.find({ email });
 
       if (isEmailTaken) {
         throw new UniqueEmailViolationError();
       }
     }
 
-    const updatedAccount = await AccountsRepository.updateById(id, {
-      name,
-      email,
-      password,
-      role,
-    });
+    const updatedAccount = await AccountsRepository.update(
+      { _id: id },
+      {
+        name,
+        email,
+        password,
+        role,
+      }
+    );
 
     response.status(200).json(updatedAccount);
   }
@@ -94,7 +97,7 @@ export class AccountsController {
       throw new InvalidIdentifierError();
     }
 
-    const account = await AccountsRepository.findById(id);
+    const account = await AccountsRepository.find({ _id: id });
 
     if (!account) {
       throw new NotFoundError('account');

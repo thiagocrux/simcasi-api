@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
 
 export interface WithObjectId {
-  _id: Types.ObjectId;
+  _id: Types.ObjectId | string;
 }
 
 export interface WithVersion {

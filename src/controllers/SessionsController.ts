@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { isValidObjectId, Types } from 'mongoose';
+import { isValidObjectId } from 'mongoose';
 
 import { ENVS, JWT_DURATION, SESSION_DURATION } from '../config';
 import { AccountsRepository, SessionsRepository } from '../repositories';
@@ -29,9 +29,7 @@ export class SessionsController {
       throw new InvalidIdentifierError();
     }
 
-    const session = await SessionsRepository.find({
-      _id: new Types.ObjectId(id),
-    });
+    const session = await SessionsRepository.find({ _id: id });
 
     if (!session) {
       throw new NotFoundError('session');
@@ -42,7 +40,7 @@ export class SessionsController {
 
   static async create(request: Request, response: Response) {
     const { email, password } = request.body;
-    const account = await AccountsRepository.findByEmail(email);
+    const account = await AccountsRepository.find({ email });
 
     const deviceInfo = {
       ipAddress: request.ip,
@@ -96,15 +94,13 @@ export class SessionsController {
       throw new InvalidIdentifierError();
     }
 
-    const session = await SessionsRepository.find({
-      _id: new Types.ObjectId(id),
-    });
+    const session = await SessionsRepository.find({ _id: id });
 
     if (!session) {
       throw new NotFoundError('session');
     }
 
-    await SessionsRepository.delete({ _id: new Types.ObjectId(id) });
+    await SessionsRepository.delete({ _id: id });
     response.sendStatus(204);
   }
 

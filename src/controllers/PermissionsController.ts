@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { isValidObjectId, Types } from 'mongoose';
+import { isValidObjectId } from 'mongoose';
 
 import { ACCOUNT_ROLES, permissionsByRole } from '../config';
 import { PermissionsRepository, RolesRepository } from '../repositories';
@@ -24,9 +24,7 @@ export class PermissionsController {
       throw new InvalidIdentifierError();
     }
 
-    const permission = await PermissionsRepository.find({
-      _id: new Types.ObjectId(id),
-    });
+    const permission = await PermissionsRepository.find({ _id: id });
 
     if (!permission) {
       throw new NotFoundError('permission');
@@ -65,16 +63,14 @@ export class PermissionsController {
       throw new InvalidIdentifierError();
     }
 
-    const permission = await PermissionsRepository.find({
-      _id: new Types.ObjectId(id),
-    });
+    const permission = await PermissionsRepository.find({ _id: id });
 
     if (!permission) {
       throw new NotFoundError('permission');
     }
 
     const updatedRole = await PermissionsRepository.update(
-      { _id: new Types.ObjectId(id) },
+      { _id: id },
       { code }
     );
 
@@ -88,9 +84,7 @@ export class PermissionsController {
       throw new InvalidIdentifierError();
     }
 
-    const permission = await PermissionsRepository.find({
-      _id: new Types.ObjectId(id),
-    });
+    const permission = await PermissionsRepository.find({ _id: id });
 
     if (!permission) {
       throw new NotFoundError('permission');

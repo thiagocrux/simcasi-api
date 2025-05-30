@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { isValidObjectId, Types } from 'mongoose';
+import { isValidObjectId } from 'mongoose';
 
 import { RolesRepository } from '../repositories';
 
@@ -23,7 +23,7 @@ export class RolesController {
       throw new InvalidIdentifierError();
     }
 
-    const role = await RolesRepository.find({ _id: new Types.ObjectId(id) });
+    const role = await RolesRepository.find({ _id: id });
 
     if (!role) {
       throw new NotFoundError('role');
@@ -52,16 +52,13 @@ export class RolesController {
       throw new InvalidIdentifierError();
     }
 
-    const role = await RolesRepository.find({ _id: new Types.ObjectId(id) });
+    const role = await RolesRepository.find({ _id: id });
 
     if (!role) {
       throw new NotFoundError('role');
     }
 
-    const updatedRole = await RolesRepository.update(
-      { _id: new Types.ObjectId(id) },
-      { name }
-    );
+    const updatedRole = await RolesRepository.update({ _id: id }, { name });
 
     response.status(200).json(updatedRole);
   }
@@ -73,13 +70,13 @@ export class RolesController {
       throw new InvalidIdentifierError();
     }
 
-    const role = await RolesRepository.find({ _id: new Types.ObjectId(id) });
+    const role = await RolesRepository.find({ _id: id });
 
     if (!role) {
       throw new NotFoundError('role');
     }
 
-    await RolesRepository.delete({ _id: new Types.ObjectId(id) });
+    await RolesRepository.delete({ _id: id });
     response.sendStatus(204);
   }
 }
