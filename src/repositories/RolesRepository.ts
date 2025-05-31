@@ -3,15 +3,28 @@ import { CreateRoleDTO, RoleFilter, UpdateRoleDTO } from '../types';
 
 export class RolesRepository {
   static async findAll(order: 'asc' | 'desc') {
-    const roles = await Role.find().sort({
-      updatedAt: order === 'asc' ? 1 : -1,
-    });
+    const roles = await Role.find()
+      .sort({
+        updatedAt: order === 'asc' ? 1 : -1,
+      })
+      .populate<{
+        permissions: { code: string }[];
+      }>({
+        path: 'permissions',
+        select: 'code',
+      });
 
     return roles;
   }
 
   static async find(filter: RoleFilter) {
-    const role = await Role.findOne(filter);
+    const role = await Role.findOne(filter).populate<{
+      permissions: { code: string }[];
+    }>({
+      path: 'permissions',
+      select: 'code',
+    });
+
     return role;
   }
 
@@ -30,16 +43,17 @@ export class RolesRepository {
     return role;
   }
 
-  // FIXME: Improve?
-
   static async getRolePermissions(id: string) {
-    const role = await Role.findOne({ _id: id }).populate({
+    const role = await Role.findOne({ _id: id }).populate<{
+      permissions: { code: string }[];
+    }>({
       path: 'permissions',
-      select: 'code -_id',
-      transform: (item) => item.code,
+      select: 'code',
     });
 
-    return role?.permissions;
+    return role?.permissions
+      .map((permission) => permission.code)
+      .sort((a, b) => a.localeCompare(b));
   }
 
   static async addPermission(role: string, permissionId: string) {

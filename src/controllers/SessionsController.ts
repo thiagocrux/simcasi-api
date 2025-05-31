@@ -48,7 +48,6 @@ export class SessionsController {
     };
 
     if (!account) {
-      console.log(account);
       throw new InvalidCredentialsError();
     }
 
@@ -77,7 +76,7 @@ export class SessionsController {
     });
 
     const accessToken = jwt.sign(
-      { sub: account._id, sid: session._id },
+      { sub: account._id, rid: account.role, sid: session._id },
       ENVS.jwtSecret,
       {
         expiresIn: JWT_DURATION,
@@ -119,8 +118,14 @@ export class SessionsController {
       throw new ExpiredSessionError();
     }
 
+    const account = await AccountsRepository.find({ _id: session.accountId });
+
+    if (!account) {
+      throw new NotFoundError('account');
+    }
+
     const accessToken = await jwt.sign(
-      { sub: session.accountId, sid: session._id },
+      { sub: account._id, rid: account.role, sid: session._id },
       ENVS.jwtSecret,
       {
         expiresIn: JWT_DURATION,
