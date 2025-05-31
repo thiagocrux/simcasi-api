@@ -1,10 +1,8 @@
 import { Router } from 'express';
 
-import { middlewareAdapter } from './adapters';
-
 import {
-  makeAuthenticationMiddleware,
-  makeAuthorizationMiddleware,
+  createAuthenticationMiddleware,
+  createAuthorizationMiddleware,
 } from './factories';
 
 import {
@@ -20,61 +18,61 @@ export const router = Router();
 
 router.get(
   '/accounts',
-  middlewareAdapter(makeAuthenticationMiddleware()),
-  middlewareAdapter(makeAuthorizationMiddleware(['accounts:read'])),
+  createAuthenticationMiddleware(),
+  createAuthorizationMiddleware(['accounts:read']),
   AccountsController.index
 );
 
 router.get(
   '/accounts/:id',
-  middlewareAdapter(makeAuthenticationMiddleware()),
-  middlewareAdapter(makeAuthorizationMiddleware(['accounts:read'])),
+  createAuthenticationMiddleware(),
+  createAuthorizationMiddleware(['accounts:read']),
   AccountsController.show
 );
 
 router.post(
   '/accounts',
-  middlewareAdapter(makeAuthenticationMiddleware()),
-  middlewareAdapter(makeAuthorizationMiddleware(['accounts:create'])),
+  createAuthenticationMiddleware(),
+  createAuthorizationMiddleware(['accounts:create']),
   AccountsController.create
 );
 
 router.put(
   '/accounts/:id',
-  middlewareAdapter(makeAuthenticationMiddleware()),
-  middlewareAdapter(makeAuthorizationMiddleware(['accounts:update'])),
+  createAuthenticationMiddleware(),
+  createAuthorizationMiddleware(['accounts:update']),
   AccountsController.update
 );
 
 router.delete(
   '/accounts/:id',
-  middlewareAdapter(makeAuthenticationMiddleware()),
-  middlewareAdapter(makeAuthorizationMiddleware(['accounts:delete'])),
+  createAuthenticationMiddleware(),
+  createAuthorizationMiddleware(['accounts:delete']),
   AccountsController.delete
 );
 
 /* Sessions */
 
-router.post('/sessions', SessionsController.create);
+router.post('/sessions/sign-in', SessionsController.create);
 router.post('/sessions/refresh-token', SessionsController.refreshToken);
 
 router.get(
   '/sessions',
-  middlewareAdapter(makeAuthenticationMiddleware()),
-  middlewareAdapter(makeAuthorizationMiddleware(['sessions:read'])),
+  createAuthenticationMiddleware(),
+  createAuthorizationMiddleware(['sessions:read']),
   SessionsController.index
 );
 router.get(
   '/sessions/:id',
-  middlewareAdapter(makeAuthenticationMiddleware()),
-  middlewareAdapter(makeAuthorizationMiddleware(['sessions:read'])),
+  createAuthenticationMiddleware(),
+  createAuthorizationMiddleware(['sessions:read']),
   SessionsController.show
 );
 
 router.delete(
   '/sessions/:id',
-  middlewareAdapter(makeAuthenticationMiddleware()),
-  middlewareAdapter(makeAuthorizationMiddleware(['sessions:delete'])),
+  createAuthenticationMiddleware(),
+  createAuthorizationMiddleware(['sessions:delete']),
   SessionsController.delete
 );
 
@@ -82,36 +80,36 @@ router.delete(
 
 router.get(
   '/roles',
-  middlewareAdapter(makeAuthenticationMiddleware()),
-  middlewareAdapter(makeAuthorizationMiddleware(['roles:read'])),
+  createAuthenticationMiddleware(),
+  createAuthorizationMiddleware(['roles:read']),
   RolesController.index
 );
 
 router.get(
   '/roles/:id',
-  middlewareAdapter(makeAuthenticationMiddleware()),
-  middlewareAdapter(makeAuthorizationMiddleware(['roles:read'])),
+  createAuthenticationMiddleware(),
+  createAuthorizationMiddleware(['roles:read']),
   RolesController.show
 );
 
 router.post(
   '/roles',
-  middlewareAdapter(makeAuthenticationMiddleware()),
-  middlewareAdapter(makeAuthorizationMiddleware(['roles:create'])),
+  createAuthenticationMiddleware(),
+  createAuthorizationMiddleware(['roles:create']),
   RolesController.create
 );
 
 router.put(
   '/roles/:id',
-  middlewareAdapter(makeAuthenticationMiddleware()),
-  middlewareAdapter(makeAuthorizationMiddleware(['roles:update'])),
+  createAuthenticationMiddleware(),
+  createAuthorizationMiddleware(['roles:update']),
   RolesController.update
 );
 
 router.delete(
   '/roles/:id',
-  middlewareAdapter(makeAuthenticationMiddleware()),
-  middlewareAdapter(makeAuthorizationMiddleware(['roles:read'])),
+  createAuthenticationMiddleware(),
+  createAuthorizationMiddleware(['roles:read']),
   RolesController.delete
 );
 
@@ -119,35 +117,35 @@ router.delete(
 
 router.get(
   '/permissions',
-  middlewareAdapter(makeAuthenticationMiddleware()),
-  middlewareAdapter(makeAuthorizationMiddleware(['permissions:read'])),
+  createAuthenticationMiddleware(),
+  createAuthorizationMiddleware(['permissions:read']),
   PermissionsController.index
 );
 
 router.get(
   '/permissions/:id',
-  middlewareAdapter(makeAuthenticationMiddleware()),
-  middlewareAdapter(makeAuthorizationMiddleware(['permissions:read'])),
+  createAuthenticationMiddleware(),
+  createAuthorizationMiddleware(['permissions:read']),
   PermissionsController.show
 );
 
 router.post(
   '/permissions',
-  middlewareAdapter(makeAuthenticationMiddleware()),
-  middlewareAdapter(makeAuthorizationMiddleware(['permissions:create'])),
+  createAuthenticationMiddleware(),
+  createAuthorizationMiddleware(['permissions:create']),
   PermissionsController.create
 );
 
 router.put(
   '/permissions/:id',
-  middlewareAdapter(makeAuthenticationMiddleware()),
-  middlewareAdapter(makeAuthorizationMiddleware(['permissions:update'])),
+  createAuthenticationMiddleware(),
+  createAuthorizationMiddleware(['permissions:update']),
   PermissionsController.update
 );
 
 router.delete(
   '/permissions/:id',
-  middlewareAdapter(makeAuthenticationMiddleware()),
-  middlewareAdapter(makeAuthorizationMiddleware(['permissions:delete'])),
+  createAuthenticationMiddleware(),
+  createAuthorizationMiddleware(['permissions:delete']),
   PermissionsController.delete
 );

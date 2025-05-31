@@ -13,10 +13,10 @@ export interface Response {
   body: Record<string, unknown> | null;
 }
 
-export interface Data {
-  data: Record<string, unknown>;
+export interface Data<T = unknown> {
+  data: Record<string, T>;
 }
 
-export interface Middleware {
-  handle(request: Request): Promise<Response | Data>;
+export interface Middleware<T = unknown> {
+  handle(request: Request): Promise<Response | Data<T>>;
 }

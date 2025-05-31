@@ -1,2 +1,2 @@
-export { makeAuthenticationMiddleware } from './makeAuthenticationMiddleware';
-export { makeAuthorizationMiddleware } from './makeAuthorizationMiddleware';
+export { createAuthenticationMiddleware } from './createAuthenticationMiddleware';
+export { createAuthorizationMiddleware } from './createAuthorizationMiddleware';
