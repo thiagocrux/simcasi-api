@@ -38,6 +38,14 @@ export class NotFoundError extends CustomError {
   }
 }
 
+export class MissingDataError extends CustomError {
+  readonly statusCode = 400;
+
+  constructor(subject: string) {
+    super(`The ${subject?.toLowerCase()} is missing.`);
+  }
+}
+
 export class InvalidIdentifierError extends CustomError {
   readonly statusCode = 400;
 

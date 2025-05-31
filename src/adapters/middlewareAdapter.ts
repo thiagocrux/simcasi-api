@@ -8,7 +8,10 @@ export function middlewareAdapter(middleware: Middleware) {
       body: request.body,
       params: request.params,
       headers: request.headers as Record<string, string>,
-      // account: request.metadata?.account,
+      account: {
+        id: request.account?.id,
+        role: request.account?.role,
+      },
     });
 
     if ('statusCode' in result) {
@@ -16,8 +19,8 @@ export function middlewareAdapter(middleware: Middleware) {
       return;
     }
 
-    request.metadata = {
-      ...request.metadata,
+    request.account = {
+      ...request.account,
       ...result.data,
     };
 

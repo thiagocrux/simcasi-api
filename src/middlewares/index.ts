@@ -1,4 +1,4 @@
-export { authenticationMiddleware } from './authenticationMiddleware';
+export { AuthenticationMiddleware } from './AuthenticationMiddleware';
 export { AuthorizationMiddleware } from './AuthorizationMiddleware';
 export { corsMiddleware } from './corsMiddleware';
 export { errorHandlerMiddleware } from './errorHandlerMiddleware';

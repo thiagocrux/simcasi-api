@@ -3,8 +3,8 @@ export interface Request {
   params: Record<string, string>;
   headers: Record<string, string>;
   account?: {
-    id: string;
-    role: string;
+    id?: string;
+    role?: string;
   };
 }
 

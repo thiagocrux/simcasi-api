@@ -1,37 +1,15 @@
-import jwt, { JwtPayload } from 'jsonwebtoken';
-
-import { ENVS } from '../config';
 import { RolesRepository } from '../repositories';
 import { Data, Middleware, Request, Response } from '../types';
-import {
-  InvalidAccessTokenError,
-  MissingAccessTokenError,
-  NotFoundError,
-  UnauthorizedError,
-} from '../utils';
+import { MissingDataError, UnauthorizedError } from '../utils';
 
 export class AuthorizationMiddleware implements Middleware {
   constructor(private readonly requiredPermissions: string[]) {}
 
   async handle(request: Request): Promise<Response | Data> {
-    const { authorization } = request.headers;
+    const roleId = request.account?.role;
 
-    if (!authorization) {
-      throw new MissingAccessTokenError();
-    }
-
-    const [bearer, token] = authorization.split(' ');
-
-    if (bearer !== 'Bearer') {
-      throw new InvalidAccessTokenError();
-    }
-
-    const { rid: roleId } = jwt.verify(token, ENVS.jwtSecret) as JwtPayload;
-
-    const role = await RolesRepository.find({ _id: roleId });
-
-    if (!role) {
-      throw new NotFoundError('role');
+    if (!roleId) {
+      throw new MissingDataError('role id');
     }
 
     const permissionCodes = await RolesRepository.getRolePermissions(roleId);
