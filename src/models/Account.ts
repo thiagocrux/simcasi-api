@@ -1,4 +1,13 @@
-import { model, Schema } from 'mongoose';
+import { model, Schema, Types } from 'mongoose';
+
+export interface AccountDocument extends Document {
+  name: string;
+  email: string;
+  password: string;
+  role: Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 const schema = new Schema(
   {
@@ -10,4 +19,4 @@ const schema = new Schema(
   { timestamps: true }
 );
 
-export const Account = model('Account', schema);
+export const Account = model<AccountDocument>('Account', schema);

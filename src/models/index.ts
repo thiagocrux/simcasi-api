@@ -1,4 +1,4 @@
-export { Account } from './Account';
-export { Permission } from './Permission';
-export { Role } from './Role';
-export { Session } from './Session';
+export * from './Account';
+export * from './Permission';
+export * from './Role';
+export * from './Session';

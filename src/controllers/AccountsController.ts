@@ -1,109 +1,46 @@
-import bcrypt from 'bcryptjs';
 import { Request, Response } from 'express';
-import { isValidObjectId } from 'mongoose';
-
-import { AccountsRepository } from '../repositories/AccountsRepository';
 
 import {
-  InvalidIdentifierError,
-  NotFoundError,
-  UniqueConstraintViolationError,
-  UniqueEmailViolationError,
-} from '../utils';
+  createCreateAccountUseCase,
+  createDeleteAccountUseCase,
+  createGetAccountByIdUseCase,
+  createGetAllAccountsUseCase,
+  createUpdateAccountUseCase,
+} from '../factories';
 
 export class AccountsController {
   static async index(request: Request, response: Response) {
-    const order = request.query.order === 'desc' ? 'desc' : 'asc';
-    const accounts = await AccountsRepository.findAll(order);
+    const accounts = await createGetAllAccountsUseCase().execute(
+      request.query?.order as string
+    );
+
     response.status(200).json(accounts);
   }
 
   static async show(request: Request, response: Response) {
-    const { id } = request.params;
-
-    if (!isValidObjectId(id)) {
-      throw new InvalidIdentifierError();
-    }
-
-    const account = await AccountsRepository.find({ _id: id });
-
-    if (!account) {
-      throw new NotFoundError('account');
-    }
+    const account = await createGetAccountByIdUseCase().execute(
+      request.params.id
+    );
 
     response.status(200).json(account);
   }
 
   static async create(request: Request, response: Response) {
-    const { name, email, password, role } = request.body;
-    const accountAlreadyExists = await AccountsRepository.find({ email });
-
-    if (accountAlreadyExists) {
-      throw new UniqueConstraintViolationError('account');
-    }
-
-    const salt = bcrypt.genSaltSync(10);
-    const passwordHash = bcrypt.hashSync(password, salt);
-
-    const account = await AccountsRepository.create({
-      name,
-      email,
-      password: passwordHash,
-      role,
-    });
-
+    const account = await createCreateAccountUseCase().execute(request.body);
     response.status(201).json(account);
   }
 
   static async update(request: Request, response: Response) {
-    const { id } = request.params;
-    const { name, email, password, role } = request.body;
-
-    if (!isValidObjectId(id)) {
-      throw new InvalidIdentifierError();
-    }
-
-    const account = await AccountsRepository.find({ _id: id });
-
-    if (!account) {
-      throw new NotFoundError('account');
-    }
-
-    if (account?.email !== email) {
-      const isEmailTaken = await AccountsRepository.find({ email });
-
-      if (isEmailTaken) {
-        throw new UniqueEmailViolationError();
-      }
-    }
-
-    const updatedAccount = await AccountsRepository.update(
-      { _id: id },
-      {
-        name,
-        email,
-        password,
-        role,
-      }
+    const updatedAccount = await createUpdateAccountUseCase().execute(
+      request.params.id,
+      request.body
     );
 
     response.status(200).json(updatedAccount);
   }
 
   static async delete(request: Request, response: Response) {
-    const { id } = request.params;
-
-    if (!isValidObjectId(id)) {
-      throw new InvalidIdentifierError();
-    }
-
-    const account = await AccountsRepository.find({ _id: id });
-
-    if (!account) {
-      throw new NotFoundError('account');
-    }
-
-    await AccountsRepository.delete(id);
+    await createDeleteAccountUseCase().execute(request.params.id);
     response.sendStatus(204);
   }
 }

@@ -4,7 +4,7 @@ import { AccountFilter, CreateAccountDTO, UpdateAccountDTO } from '../types';
 export class AccountsRepository {
   static async findAll(order: 'asc' | 'desc') {
     const accounts = await Account.find().sort({
-      updatedAt: order === 'asc' ? 1 : -1,
+      updatedAt: order === 'desc' ? -1 : 1,
     });
 
     return accounts;
