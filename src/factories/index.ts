@@ -1,3 +1,4 @@
+export { createAccountsController } from './controllers/createAccountsController';
 export { createAuthenticationMiddleware } from './middlewares/createAuthenticationMiddleware';
 export { createAuthorizationMiddleware } from './middlewares/createAuthorizationMiddleware';
 export { createCreateAccountUseCase } from './useCases/accounts/createCreateAccountUseCase';

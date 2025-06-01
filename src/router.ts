@@ -1,12 +1,12 @@
 import { Router } from 'express';
 
 import {
+  createAccountsController,
   createAuthenticationMiddleware,
   createAuthorizationMiddleware,
 } from './factories';
 
 import {
-  AccountsController,
   PermissionsController,
   RolesController,
   SessionsController,
@@ -20,35 +20,35 @@ router.get(
   '/accounts',
   createAuthenticationMiddleware(),
   createAuthorizationMiddleware(['accounts:read']),
-  AccountsController.index
+  createAccountsController().index
 );
 
 router.get(
   '/accounts/:id',
   createAuthenticationMiddleware(),
   createAuthorizationMiddleware(['accounts:read']),
-  AccountsController.show
+  createAccountsController().show
 );
 
 router.post(
   '/accounts',
   createAuthenticationMiddleware(),
   createAuthorizationMiddleware(['accounts:create']),
-  AccountsController.create
+  createAccountsController().create
 );
 
 router.put(
   '/accounts/:id',
   createAuthenticationMiddleware(),
   createAuthorizationMiddleware(['accounts:update']),
-  AccountsController.update
+  createAccountsController().update
 );
 
 router.delete(
   '/accounts/:id',
   createAuthenticationMiddleware(),
   createAuthorizationMiddleware(['accounts:delete']),
-  AccountsController.delete
+  createAccountsController().delete
 );
 
 /* Sessions */
