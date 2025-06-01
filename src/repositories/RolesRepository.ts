@@ -3,28 +3,15 @@ import { CreateRoleDTO, RoleFilter, UpdateRoleDTO } from '../types';
 
 export class RolesRepository {
   static async findAll(order: 'asc' | 'desc') {
-    const roles = await Role.find()
-      .sort({
-        updatedAt: order === 'asc' ? 1 : -1,
-      })
-      .populate<{
-        permissions: { code: string }[];
-      }>({
-        path: 'permissions',
-        select: 'code',
-      });
+    const roles = await Role.find().sort({
+      updatedAt: order === 'asc' ? 1 : -1,
+    });
 
     return roles;
   }
 
   static async find(filter: RoleFilter) {
-    const role = await Role.findOne(filter).populate<{
-      permissions: { code: string }[];
-    }>({
-      path: 'permissions',
-      select: 'code',
-    });
-
+    const role = await Role.findOne(filter);
     return role;
   }
 
@@ -43,33 +30,20 @@ export class RolesRepository {
     return role;
   }
 
-  static async getRolePermissions(id: string) {
-    const role = await Role.findOne({ _id: id }).populate<{
-      permissions: { code: string }[];
-    }>({
-      path: 'permissions',
-      select: 'code',
-    });
-
-    return role?.permissions
-      .map((permission) => permission.code)
-      .sort((a, b) => a.localeCompare(b));
-  }
-
-  static async addPermission(role: string, permissionId: string) {
+  static async addPermission(role: string, permissionCode: string) {
     const updatedRole = Role.findOneAndUpdate(
       { name: role },
-      { $push: { permissions: permissionId } },
+      { $push: { permissions: permissionCode } },
       { new: true }
     );
 
     return updatedRole;
   }
 
-  static async removePermission(role: string, permissionId: string) {
+  static async removePermission(role: string, permissionCode: string) {
     const updatedRole = await Role.findOneAndUpdate(
       { name: role },
-      { $pull: { permissions: permissionId } },
+      { $pull: { permissions: permissionCode } },
       { new: true }
     );
 

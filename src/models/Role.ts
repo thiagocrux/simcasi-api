@@ -11,7 +11,7 @@ const schema = new Schema(
     },
     permissions: [
       {
-        type: Schema.Types.ObjectId,
+        type: String,
         ref: 'Permission',
       },
     ],

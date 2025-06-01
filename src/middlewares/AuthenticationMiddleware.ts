@@ -1,7 +1,7 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Types } from 'mongoose';
 
-import { ENVS } from '../config';
+import { ENVS, IS_AUTHENTICATION_DISABLED } from '../config';
 import { SessionsRepository } from '../repositories';
 import { Data, Middleware, Request, Response } from '../types';
 
@@ -15,6 +15,10 @@ export class AuthenticationMiddleware implements Middleware {
   constructor() {}
 
   async handle(request: Request): Promise<Response | Data> {
+    if (IS_AUTHENTICATION_DISABLED) {
+      return { data: {} };
+    }
+
     const { authorization } = request.headers;
 
     if (!authorization) {

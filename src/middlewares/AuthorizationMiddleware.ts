@@ -1,24 +1,35 @@
+import { IS_AUTHORIZATION_DISABLED } from '../config';
 import { RolesRepository } from '../repositories';
 import { Data, Middleware, Request, Response } from '../types';
 import { MissingDataError, UnauthorizedError } from '../utils';
 
 export class AuthorizationMiddleware implements Middleware {
-  constructor(private readonly requiredPermissions: string[]) {}
+  constructor(private readonly requiredPermission: string) {}
 
   async handle(request: Request): Promise<Response | Data> {
+    if (IS_AUTHORIZATION_DISABLED) {
+      return { data: {} };
+    }
+
     const roleId = request.account?.role;
 
     if (!roleId) {
       throw new MissingDataError('role id');
     }
 
-    const permissionCodes = await RolesRepository.getRolePermissions(roleId);
-
-    const isAccountAllowed = this.requiredPermissions.some((permissionCode) => {
-      return permissionCodes?.includes(permissionCode);
+    const role = await RolesRepository.find({
+      _id: String(roleId),
     });
 
-    if (!isAccountAllowed) {
+    if (!role) {
+      throw new UnauthorizedError();
+    }
+
+    const isAccountAuthorized = role.permissions.includes(
+      this.requiredPermission
+    );
+
+    if (!isAccountAuthorized) {
       throw new UnauthorizedError();
     }
 

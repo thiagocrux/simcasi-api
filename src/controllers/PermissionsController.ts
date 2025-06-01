@@ -48,7 +48,7 @@ export class PermissionsController {
 
     ACCOUNT_ROLES.forEach(async (role) => {
       if (permissionsByRole[role].includes(permission.code)) {
-        await RolesRepository.addPermission(role, String(permission._id));
+        await RolesRepository.addPermission(role, String(permission.code));
       }
     });
 

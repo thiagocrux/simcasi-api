@@ -42,11 +42,14 @@ const viewerPermissions: string[] = [];
 
 PERMISSIONS.forEach((permission) => {
   if (permission) {
-    if (!['account:create', 'account:delete'].includes(permission)) {
+    if (!['accounts:create', 'accounts:delete'].includes(permission)) {
       userPermissions.push(permission);
     }
 
-    if (permission.endsWith('read') && !['account:read'].includes(permission)) {
+    if (
+      permission.endsWith('read') &&
+      !['accounts:read'].includes(permission)
+    ) {
       viewerPermissions.push(permission);
     }
   }
