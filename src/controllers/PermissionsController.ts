@@ -46,9 +46,21 @@ export class PermissionsController {
 
     const permission = await PermissionsRepository.create({ code });
 
-    ACCOUNT_ROLES.forEach(async (role) => {
-      if (permissionsByRole[role].includes(permission.code)) {
-        await RolesRepository.addPermission(role, String(permission.code));
+    ACCOUNT_ROLES.forEach(async (roleName) => {
+      const role = await RolesRepository.find({ name: roleName });
+
+      if (!role) {
+        throw new NotFoundError('role');
+      }
+
+      const { permissions: previousPermissions } = role;
+      const newPermissions = [...previousPermissions, permission.code];
+
+      if (permissionsByRole[roleName].includes(permission.code)) {
+        await RolesRepository.update(
+          { _id: role._id },
+          { permissions: newPermissions }
+        );
       }
     });
 
@@ -90,9 +102,24 @@ export class PermissionsController {
       throw new NotFoundError('permission');
     }
 
-    ACCOUNT_ROLES.forEach(async (role) => {
-      if (permissionsByRole[role].includes(permission.code)) {
-        await RolesRepository.removePermission(role, String(permission._id));
+    ACCOUNT_ROLES.forEach(async (roleName) => {
+      const role = await RolesRepository.find({ name: roleName });
+
+      if (!role) {
+        throw new NotFoundError('role');
+      }
+
+      const { permissions: previousPermissions } = role;
+
+      const newPermissions = previousPermissions.filter(
+        (permissionCode) => permissionCode !== permission.code
+      );
+
+      if (permissionsByRole[roleName].includes(permission.code)) {
+        await RolesRepository.update(
+          { _id: role._id },
+          { permissions: newPermissions }
+        );
       }
     });
 

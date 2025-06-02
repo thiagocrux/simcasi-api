@@ -29,24 +29,4 @@ export class RolesRepository {
     const role = await Role.findOneAndDelete(filter);
     return role;
   }
-
-  static async addPermission(role: string, permissionCode: string) {
-    const updatedRole = Role.findOneAndUpdate(
-      { name: role },
-      { $push: { permissions: permissionCode } },
-      { new: true }
-    );
-
-    return updatedRole;
-  }
-
-  static async removePermission(role: string, permissionCode: string) {
-    const updatedRole = await Role.findOneAndUpdate(
-      { name: role },
-      { $pull: { permissions: permissionCode } },
-      { new: true }
-    );
-
-    return updatedRole;
-  }
 }

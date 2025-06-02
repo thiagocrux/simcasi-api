@@ -1,11 +1,10 @@
-import { Types } from 'mongoose';
 import { WithObjectId, WithTimestamps, WithVersion } from './common';
 
 export type AccountRole = 'admin' | 'user' | 'viewer';
 
 export interface Role {
   name: string;
-  permissions: Types.ObjectId[];
+  permissions: string[];
 }
 
 export interface CreateRoleDTO extends Omit<Role, 'permissions'> {}
