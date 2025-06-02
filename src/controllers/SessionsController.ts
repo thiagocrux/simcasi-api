@@ -4,8 +4,12 @@ import jwt from 'jsonwebtoken';
 import { isValidObjectId } from 'mongoose';
 
 import { ENVS, JWT_DURATION, SESSION_DURATION } from '../config';
-import { createGetAllSessionsUseCase } from '../factories';
 import { AccountsRepository, SessionsRepository } from '../repositories';
+
+import {
+  createGetAllSessionsUseCase,
+  createGetSessionByIdUseCase,
+} from '../factories';
 
 import {
   ExpiredSessionError,
@@ -26,17 +30,9 @@ export class SessionsController {
   }
 
   public async show(request: Request, response: Response) {
-    const { id } = request.params;
-
-    if (!isValidObjectId(id)) {
-      throw new InvalidIdentifierError();
-    }
-
-    const session = await SessionsRepository.find({ _id: id });
-
-    if (!session) {
-      throw new NotFoundError('session');
-    }
+    const session = await createGetSessionByIdUseCase().execute(
+      request.params.id
+    );
 
     response.status(200).json(session);
   }
