@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import { isValidObjectId } from 'mongoose';
 
 import { ENVS, JWT_DURATION, SESSION_DURATION } from '../config';
+import { createGetAllSessionsUseCase } from '../factories';
 import { AccountsRepository, SessionsRepository } from '../repositories';
 
 import {
@@ -16,13 +17,15 @@ import {
 } from '../utils';
 
 export class SessionsController {
-  static async index(request: Request, response: Response) {
-    const order = request.query.order === 'desc' ? 'desc' : 'asc';
-    const sessions = await SessionsRepository.findAll(order);
+  public async index(request: Request, response: Response) {
+    const sessions = await createGetAllSessionsUseCase().execute(
+      request.query?.order as string
+    );
+
     response.status(200).json(sessions);
   }
 
-  static async show(request: Request, response: Response) {
+  public async show(request: Request, response: Response) {
     const { id } = request.params;
 
     if (!isValidObjectId(id)) {
@@ -38,7 +41,7 @@ export class SessionsController {
     response.status(200).json(session);
   }
 
-  static async create(request: Request, response: Response) {
+  public async create(request: Request, response: Response) {
     const { email, password } = request.body;
     const account = await AccountsRepository.find({ email });
 
@@ -86,7 +89,7 @@ export class SessionsController {
     response.status(201).json({ accessToken, session: session._id });
   }
 
-  static async delete(request: Request, response: Response) {
+  public async delete(request: Request, response: Response) {
     const { id } = request.params;
 
     if (!isValidObjectId(id)) {
@@ -103,7 +106,7 @@ export class SessionsController {
     response.sendStatus(204);
   }
 
-  static async refreshToken(request: Request, response: Response) {
+  public async refreshToken(request: Request, response: Response) {
     const { session: sessionId } = request.body;
     const session = await SessionsRepository.find({ _id: sessionId });
 

@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { isValidObjectId } from 'mongoose';
 
 import { ACCOUNT_ROLES, permissionsByRole } from '../config';
+import { createGetAllPermissionsUseCase } from '../factories';
 import { PermissionsRepository, RolesRepository } from '../repositories';
 
 import {
@@ -11,13 +12,15 @@ import {
 } from '../utils';
 
 export class PermissionsController {
-  static async index(request: Request, response: Response) {
-    const order = request.query.order === 'desc' ? 'desc' : 'asc';
-    const permission = await PermissionsRepository.findAll(order);
-    response.status(200).json(permission);
+  public async index(request: Request, response: Response) {
+    const permissions = await createGetAllPermissionsUseCase().execute(
+      request.query?.order as string
+    );
+
+    response.status(200).json(permissions);
   }
 
-  static async show(request: Request, response: Response) {
+  public async show(request: Request, response: Response) {
     const { id } = request.params;
 
     if (!isValidObjectId(id)) {
@@ -33,7 +36,7 @@ export class PermissionsController {
     response.status(200).json(permission);
   }
 
-  static async create(request: Request, response: Response) {
+  public async create(request: Request, response: Response) {
     const { code } = request.body;
 
     const permissionAlreadyExists = await PermissionsRepository.find({
@@ -67,7 +70,7 @@ export class PermissionsController {
     response.status(201).json(permission);
   }
 
-  static async update(request: Request, response: Response) {
+  public async update(request: Request, response: Response) {
     const { id } = request.params;
     const { code } = request.body;
 
@@ -89,7 +92,7 @@ export class PermissionsController {
     response.status(200).json(updatedRole);
   }
 
-  static async delete(request: Request, response: Response) {
+  public async delete(request: Request, response: Response) {
     const { id } = request.params;
 
     if (!isValidObjectId(id)) {

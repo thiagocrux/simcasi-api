@@ -1,4 +1,7 @@
 export { createAccountsController } from './controllers/createAccountsController';
+export { createPermissionsController } from './controllers/createPermissionsController';
+export { createRolesController } from './controllers/createRolesController';
+export { createSessionsController } from './controllers/createSessionsController';
 export { createAuthenticationMiddleware } from './middlewares/createAuthenticationMiddleware';
 export { createAuthorizationMiddleware } from './middlewares/createAuthorizationMiddleware';
 export { createCreateAccountUseCase } from './useCases/accounts/createCreateAccountUseCase';
@@ -6,3 +9,6 @@ export { createDeleteAccountUseCase } from './useCases/accounts/createDeleteAcco
 export { createGetAccountByIdUseCase } from './useCases/accounts/createGetAccountByIdUseCase';
 export { createGetAllAccountsUseCase } from './useCases/accounts/createGetAllAccountsUseCase';
 export { createUpdateAccountUseCase } from './useCases/accounts/createUpdateAccountUseCase';
+export { createGetAllPermissionsUseCase } from './useCases/permissions/createGetAllPermissions';
+export { createGetAllRolesUseCase } from './useCases/roles/createGetAllRoles';
+export { createGetAllSessionsUseCase } from './useCases/sessions/createGetAllSessions';

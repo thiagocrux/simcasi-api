@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { isValidObjectId } from 'mongoose';
 
+import { createGetAllRolesUseCase } from '../factories';
 import { RolesRepository } from '../repositories';
 
 import {
@@ -10,13 +11,15 @@ import {
 } from '../utils';
 
 export class RolesController {
-  static async index(request: Request, response: Response) {
-    const order = request.query.order === 'desc' ? 'desc' : 'asc';
-    const roles = await RolesRepository.findAll(order);
+  public async index(request: Request, response: Response) {
+    const roles = await createGetAllRolesUseCase().execute(
+      request.query?.order as string
+    );
+
     response.status(200).json(roles);
   }
 
-  static async show(request: Request, response: Response) {
+  public async show(request: Request, response: Response) {
     const { id } = request.params;
 
     if (!isValidObjectId(id)) {
@@ -32,7 +35,7 @@ export class RolesController {
     response.status(200).json(role);
   }
 
-  static async create(request: Request, response: Response) {
+  public async create(request: Request, response: Response) {
     const { name } = request.body;
     const roleAlreadyExists = await RolesRepository.find({ name });
 
@@ -44,7 +47,7 @@ export class RolesController {
     response.status(201).json(role);
   }
 
-  static async update(request: Request, response: Response) {
+  public async update(request: Request, response: Response) {
     const { id } = request.params;
     const { name } = request.body;
 
@@ -63,7 +66,7 @@ export class RolesController {
     response.status(200).json(updatedRole);
   }
 
-  static async delete(request: Request, response: Response) {
+  public async delete(request: Request, response: Response) {
     const { id } = request.params;
 
     if (!isValidObjectId(id)) {
