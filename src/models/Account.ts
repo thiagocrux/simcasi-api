@@ -20,4 +20,11 @@ const schema = new Schema(
   { timestamps: true }
 );
 
+schema.set('toJSON', {
+  transform: function (originalDocument, returnDocument) {
+    delete returnDocument.password;
+    return returnDocument;
+  },
+});
+
 export const Account = model<AccountDocument>('Account', schema);
