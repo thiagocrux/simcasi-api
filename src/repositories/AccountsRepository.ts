@@ -1,8 +1,8 @@
 import { Account } from '../models';
 import { AccountFilter, CreateAccountDTO, UpdateAccountDTO } from '../types';
 
-export class AccountsRepository {
-  static async findAll(order: 'asc' | 'desc') {
+class AccountsRepository {
+  public async findAll(order: 'asc' | 'desc') {
     const accounts = await Account.find().sort({
       updatedAt: order === 'desc' ? -1 : 1,
     });
@@ -10,17 +10,17 @@ export class AccountsRepository {
     return accounts;
   }
 
-  static async find(filter: AccountFilter) {
+  public async find(filter: AccountFilter) {
     const account = await Account.findOne(filter);
     return account;
   }
 
-  static async create(body: CreateAccountDTO) {
+  public async create(body: CreateAccountDTO) {
     const account = await Account.create(body);
     return account;
   }
 
-  static async update(filter: AccountFilter, body: UpdateAccountDTO) {
+  public async update(filter: AccountFilter, body: UpdateAccountDTO) {
     const account = await Account.findOneAndUpdate(filter, body, {
       new: true,
     });
@@ -28,8 +28,9 @@ export class AccountsRepository {
     return account;
   }
 
-  static async delete(id: string) {
-    const role = await Account.findByIdAndDelete(id);
-    return role;
+  public async delete(filter: AccountFilter) {
+    await Account.findOneAndDelete(filter);
   }
 }
+
+export default new AccountsRepository();

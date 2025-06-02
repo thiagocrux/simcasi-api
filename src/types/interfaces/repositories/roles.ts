@@ -7,5 +7,5 @@ export interface RolesRepository {
   find(filter: RoleFilter): Promise<RoleDocument | null>;
   create(body: CreateRoleDTO): Promise<RoleDocument>;
   update(filter: RoleFilter, body: UpdateRoleDTO): Promise<RoleDocument | null>;
-  delete(id: string): Promise<RoleDocument | null>;
+  delete(filter: RoleFilter): Promise<void>;
 }

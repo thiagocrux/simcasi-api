@@ -14,5 +14,5 @@ export interface PermissionsRepository {
     filter: PermissionFilter,
     body: UpdatePermissionDTO
   ): Promise<PermissionDocument | null>;
-  delete(id: string): Promise<PermissionDocument | null>;
+  delete(filter: PermissionFilter): Promise<void>;
 }

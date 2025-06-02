@@ -126,7 +126,7 @@ export class PermissionsController {
       }
     });
 
-    await PermissionsRepository.delete(id);
+    await PermissionsRepository.delete({ _id: id });
     response.sendStatus(204);
   }
 }

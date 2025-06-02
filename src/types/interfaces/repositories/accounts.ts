@@ -9,5 +9,5 @@ export interface AccountsRepository {
     filter: AccountFilter,
     body: UpdateAccountDTO
   ): Promise<AccountDocument | null>;
-  delete(id: string): Promise<AccountDocument | null>;
+  delete(filter: AccountFilter): Promise<void>;
 }

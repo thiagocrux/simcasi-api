@@ -1,8 +1,8 @@
 import { Role } from '../models';
 import { CreateRoleDTO, RoleFilter, UpdateRoleDTO } from '../types';
 
-export class RolesRepository {
-  static async findAll(order: 'asc' | 'desc') {
+class RolesRepository {
+  public async findAll(order: 'asc' | 'desc') {
     const roles = await Role.find().sort({
       updatedAt: order === 'asc' ? 1 : -1,
     });
@@ -10,23 +10,24 @@ export class RolesRepository {
     return roles;
   }
 
-  static async find(filter: RoleFilter) {
+  public async find(filter: RoleFilter) {
     const role = await Role.findOne(filter);
     return role;
   }
 
-  static async create(body: CreateRoleDTO) {
+  public async create(body: CreateRoleDTO) {
     const role = await Role.create(body);
     return role;
   }
 
-  static async update(filter: RoleFilter, body: UpdateRoleDTO) {
+  public async update(filter: RoleFilter, body: UpdateRoleDTO) {
     const role = await Role.findOneAndUpdate(filter, body, { new: true });
     return role;
   }
 
-  static async delete(filter: RoleFilter) {
-    const role = await Role.findOneAndDelete(filter);
-    return role;
+  public async delete(filter: RoleFilter): Promise<void> {
+    await Role.findOneAndDelete(filter);
   }
 }
+
+export default new RolesRepository();

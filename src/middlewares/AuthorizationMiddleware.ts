@@ -1,6 +1,6 @@
 import { IS_AUTHORIZATION_DISABLED } from '../config';
 import { RolesRepository } from '../repositories';
-import { Data, Middleware, Request, Response } from '../types';
+import { Data, Middleware, PermissionCodes, Request, Response } from '../types';
 import { MissingDataError, UnauthorizedError } from '../utils';
 
 export class AuthorizationMiddleware implements Middleware {
@@ -26,7 +26,7 @@ export class AuthorizationMiddleware implements Middleware {
     }
 
     const isAccountAuthorized = role.permissions.includes(
-      this.requiredPermission
+      this.requiredPermission as PermissionCodes
     );
 
     if (!isAccountAuthorized) {

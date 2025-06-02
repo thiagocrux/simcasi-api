@@ -9,5 +9,5 @@ export interface SessionsRepository {
     filter: SessionFilter,
     body: UpdateSessionDTO
   ): Promise<SessionDocument | null>;
-  delete(id: string): Promise<SessionDocument | null>;
+  delete(filter: SessionFilter): Promise<void>;
 }

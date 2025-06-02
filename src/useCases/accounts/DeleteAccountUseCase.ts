@@ -17,6 +17,6 @@ export class DeleteAccountUseCase {
       throw new NotFoundError('account');
     }
 
-    await this.accountsRepository.delete(id);
+    await this.accountsRepository.delete({ _id: id });
   }
 }

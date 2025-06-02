@@ -1,8 +1,8 @@
 import { Session } from '../models';
 import { CreateSessionDTO, SessionFilter, UpdateSessionDTO } from '../types';
 
-export class SessionsRepository {
-  static async findAll(order: 'asc' | 'desc') {
+class SessionsRepository {
+  public async findAll(order: 'asc' | 'desc') {
     const sessions = await Session.find().sort({
       updatedAt: order === 'asc' ? 1 : -1,
     });
@@ -10,17 +10,17 @@ export class SessionsRepository {
     return sessions;
   }
 
-  static async find(filter: SessionFilter) {
+  public async find(filter: SessionFilter) {
     const session = await Session.findOne(filter);
     return session;
   }
 
-  static async create(body: CreateSessionDTO) {
+  public async create(body: CreateSessionDTO) {
     const session = await Session.create(body);
-    return session._id;
+    return session;
   }
 
-  static async update(filter: SessionFilter, body: UpdateSessionDTO) {
+  public async update(filter: SessionFilter, body: UpdateSessionDTO) {
     const session = await Session.findOneAndUpdate(filter, body, {
       new: true,
     });
@@ -28,8 +28,9 @@ export class SessionsRepository {
     return session;
   }
 
-  static async delete(filter: SessionFilter) {
-    const session = await Session.findOneAndDelete(filter);
-    return session;
+  public async delete(filter: SessionFilter) {
+    await Session.findOneAndDelete(filter);
   }
 }
+
+export default new SessionsRepository();
