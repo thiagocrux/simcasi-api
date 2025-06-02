@@ -5,4 +5,7 @@ export { GetAllAccountsUseCase } from './accounts/GetAllAccountsUseCase';
 export { UpdateAccountUseCase } from './accounts/UpdateAccountUseCase';
 export { GetAllPermissionsUseCase } from './permissions/GetAllPermissionsUseCase';
 export { GetAllRolesUseCase } from './roles/GetAllRolesUseCase';
+export { CreateSessionUseCase } from './sessions/CreateSessionUseCase';
+export { DeleteSessionUseCase } from './sessions/DeleteSessionUseCase';
+export { GenerateNewAccessTokenUseCase } from './sessions/GenerateNewAccessTokenUseCase';
 export { GetAllSessionsUseCase } from './sessions/GetAllSessionsUseCase';

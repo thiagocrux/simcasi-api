@@ -11,5 +11,8 @@ export { createGetAllAccountsUseCase } from './useCases/accounts/createGetAllAcc
 export { createUpdateAccountUseCase } from './useCases/accounts/createUpdateAccountUseCase';
 export { createGetAllPermissionsUseCase } from './useCases/permissions/createGetAllPermissionsUseCase';
 export { createGetAllRolesUseCase } from './useCases/roles/createGetAllRolesUseCase';
+export { createCreateSessionUseCase } from './useCases/sessions/createCreateSessionUseCase';
+export { createDeleteSessionUseCase } from './useCases/sessions/createDeleteSessionUseCase';
+export { createGenerateNewAccessTokenUseCase } from './useCases/sessions/createGenerateNewAccessTokenUseCase';
 export { createGetAllSessionsUseCase } from './useCases/sessions/createGetAllSessionsUseCase';
 export { createGetSessionByIdUseCase } from './useCases/sessions/createGetSessionByIdUseCase';
