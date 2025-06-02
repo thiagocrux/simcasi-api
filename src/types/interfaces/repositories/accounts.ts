@@ -1,4 +1,3 @@
-// accounts-repository.interface.ts
 import { AccountFilter, CreateAccountDTO, UpdateAccountDTO } from '../..';
 import { AccountDocument } from '../../../models';
 

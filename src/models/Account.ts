@@ -1,6 +1,7 @@
-import { model, Schema, Types } from 'mongoose';
+import { Document, model, Schema, Types } from 'mongoose';
 
 export interface AccountDocument extends Document {
+  _id: Types.ObjectId;
   name: string;
   email: string;
   password: string;

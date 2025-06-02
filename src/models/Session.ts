@@ -1,4 +1,18 @@
-import { model, Schema } from 'mongoose';
+import { Document, model, Schema, Types } from 'mongoose';
+
+export interface SessionDocument extends Document {
+  _id: Types.ObjectId;
+  accountId: string;
+  isActive: boolean;
+  issuedAt: Date;
+  expiresAt: Date;
+  deviceInfo: {
+    ipAddress: string;
+    userAgent: string;
+  };
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 const schema = new Schema(
   {
@@ -14,4 +28,4 @@ const schema = new Schema(
   { timestamps: true }
 );
 
-export const Session = model('Session', schema);
+export const Session = model<SessionDocument>('Session', schema);

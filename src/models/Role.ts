@@ -1,5 +1,15 @@
-import { model, Schema } from 'mongoose';
+import { Document, model, Schema, Types } from 'mongoose';
+
 import { ACCOUNT_ROLES } from '../config';
+import { PermissionCodes } from '../types';
+
+export interface RoleDocument extends Document {
+  _id: Types.ObjectId;
+  name: string;
+  permissions: PermissionCodes[];
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 const schema = new Schema(
   {
@@ -19,4 +29,4 @@ const schema = new Schema(
   { timestamps: true }
 );
 
-export const Role = model('Role', schema);
+export const Role = model<RoleDocument>('Role', schema);
