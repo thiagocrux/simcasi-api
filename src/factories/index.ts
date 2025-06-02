@@ -9,7 +9,11 @@ export { createDeleteAccountUseCase } from './useCases/accounts/createDeleteAcco
 export { createGetAccountByIdUseCase } from './useCases/accounts/createGetAccountByIdUseCase';
 export { createGetAllAccountsUseCase } from './useCases/accounts/createGetAllAccountsUseCase';
 export { createUpdateAccountUseCase } from './useCases/accounts/createUpdateAccountUseCase';
+export { createCreatePermissionUseCase } from './useCases/permissions/createCreatePermissionUseCase';
+export { createDeletePermissionUseCase } from './useCases/permissions/createDeletePermissionUseCase';
 export { createGetAllPermissionsUseCase } from './useCases/permissions/createGetAllPermissionsUseCase';
+export { createGetPermissionByIdUseCase } from './useCases/permissions/createGetPermissionByIdUseCase';
+export { createUpdatePermissionUseCase } from './useCases/permissions/createUpdatePermissionUseCase';
 export { createGetAllRolesUseCase } from './useCases/roles/createGetAllRolesUseCase';
 export { createCreateSessionUseCase } from './useCases/sessions/createCreateSessionUseCase';
 export { createDeleteSessionUseCase } from './useCases/sessions/createDeleteSessionUseCase';
