@@ -14,7 +14,11 @@ export { createDeletePermissionUseCase } from './useCases/permissions/createDele
 export { createGetAllPermissionsUseCase } from './useCases/permissions/createGetAllPermissionsUseCase';
 export { createGetPermissionByIdUseCase } from './useCases/permissions/createGetPermissionByIdUseCase';
 export { createUpdatePermissionUseCase } from './useCases/permissions/createUpdatePermissionUseCase';
+export { createCreateRoleUseCase } from './useCases/roles/createCreateRoleUseCase';
+export { createDeleteRoleUseCase } from './useCases/roles/createDeleteRoleUseCase';
 export { createGetAllRolesUseCase } from './useCases/roles/createGetAllRolesUseCase';
+export { createGetRoleByIdUseCase } from './useCases/roles/createGetRoleByIdUseCase';
+export { createUpdateRoleUseCase } from './useCases/roles/createUpdateRoleUseCase';
 export { createCreateSessionUseCase } from './useCases/sessions/createCreateSessionUseCase';
 export { createDeleteSessionUseCase } from './useCases/sessions/createDeleteSessionUseCase';
 export { createGenerateNewAccessTokenUseCase } from './useCases/sessions/createGenerateNewAccessTokenUseCase';
