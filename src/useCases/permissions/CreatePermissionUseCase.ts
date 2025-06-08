@@ -1,5 +1,10 @@
-import { ACCOUNT_ROLES, permissionsByRole } from '../../config';
-import { NotFoundError, UniqueConstraintViolationError } from '../../utils';
+import { ACCOUNT_ROLES } from '../../config';
+
+import {
+  getRolePermissions,
+  NotFoundError,
+  UniqueConstraintViolationError,
+} from '../../utils';
 
 import {
   CreatePermissionDTO,
@@ -34,7 +39,7 @@ export class CreatePermissionUseCase {
       const { permissions: previousPermissions } = role;
       const newPermissions = [...previousPermissions, permission.code];
 
-      if (permissionsByRole[roleName].includes(permission.code)) {
+      if (getRolePermissions(roleName).includes(permission.code)) {
         await this.rolesRepository.update(
           { _id: role._id },
           { permissions: newPermissions }
