@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { ENVS, JWT_DURATION } from '../../config';
+import { env, JWT_DURATION } from '../../config';
 import { AccountsRepository, SessionsRepository } from '../../types';
 import { ExpiredSessionError, NotFoundError } from '../../utils';
 
@@ -36,7 +36,7 @@ export class GenerateNewAccessTokenUseCase {
 
     const accessToken = await jwt.sign(
       { sub: account._id, rid: account.role, sid: session._id },
-      ENVS.jwtSecret,
+      env.jwtSecret,
       {
         expiresIn: JWT_DURATION,
       }

@@ -1,12 +1,42 @@
 import { AccountRole } from '../types';
 
-/* Authentication */
-export const JWT_DURATION = '15m';
-export const SESSION_DURATION = '7d';
+export const PERMISSIONS = [
+  'accounts:create',
+  'accounts:delete',
+  'accounts:read',
+  'accounts:update',
+  'exams:create',
+  'exams:delete',
+  'exams:read',
+  'exams:update',
+  'notifications:create',
+  'notifications:delete',
+  'notifications:read',
+  'notifications:update',
+  'observations:create',
+  'observations:delete',
+  'observations:read',
+  'observations:update',
+  'patients:create',
+  'patients:delete',
+  'patients:read',
+  'patients:update',
+  'permissions:create',
+  'permissions:delete',
+  'permissions:read',
+  'permissions:update',
+  'roles:create',
+  'roles:delete',
+  'roles:read',
+  'roles:update',
+  'sessions:create',
+  'sessions:delete',
+  'sessions:read',
+  'sessions:update',
+  'treatments:create',
+  'treatments:delete',
+  'treatments:read',
+  'treatments:update',
+];
 
-/* Enumerators */
 export const ACCOUNT_ROLES: AccountRole[] = ['admin', 'user', 'viewer'];
-
-/* Flags */
-export const IS_AUTHENTICATION_DISABLED = false;
-export const IS_AUTHORIZATION_DISABLED = false;

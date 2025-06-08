@@ -7,7 +7,7 @@ import {
   SessionCreationError,
 } from '../../utils';
 
-import { ENVS, JWT_DURATION, SESSION_DURATION } from '../../config';
+import { env, JWT_DURATION, SESSION_DURATION } from '../../config';
 import { AccountsRepository, SessionsRepository } from '../../types';
 
 export class CreateSessionUseCase {
@@ -53,7 +53,7 @@ export class CreateSessionUseCase {
 
     const accessToken = jwt.sign(
       { sub: account._id, rid: account.role, sid: session._id },
-      ENVS.jwtSecret,
+      env.jwtSecret,
       {
         expiresIn: JWT_DURATION,
       }

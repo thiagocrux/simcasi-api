@@ -1,26 +1,27 @@
-import 'dotenv/config';
 import express from 'express';
 import mongoose from 'mongoose';
 
-import { ENVS } from './config';
+import { env } from './config';
 import { corsMiddleware, errorHandlerMiddleware } from './middlewares';
 import { router } from './router';
 import { logger } from './utils';
 
-const PORT = 3001;
 const app = express();
 
 mongoose
-  .connect(ENVS.databaseURI)
+  .connect(process.env.DATABASE_URL || '')
   .then(() => {
-    app.use(express.json());
     app.use(corsMiddleware);
+    app.use(express.json());
     app.use(router);
     app.use(errorHandlerMiddleware);
 
-    app.listen(PORT, () => {
-      logger.info(`Database running on ${ENVS.databaseURI}`);
-      logger.info(`Server running on http://localhost:${PORT}`);
+    app.listen(env.appPort, () => {
+      logger.info(`Database running on ${env.databaseURL}`);
+
+      logger.info(
+        `Server running in ${env.environment} mode on http://${env.appHostname}:${env.appPort}`
+      );
     });
   })
   .catch((error) => {

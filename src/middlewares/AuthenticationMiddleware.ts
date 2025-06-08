@@ -1,7 +1,7 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Types } from 'mongoose';
 
-import { ENVS, IS_AUTHENTICATION_DISABLED } from '../config';
+import { env, IS_AUTHENTICATION_DISABLED } from '../config';
 import { SessionsRepository } from '../repositories';
 import { Data, Middleware, Request, Response } from '../types';
 
@@ -35,7 +35,7 @@ export class AuthenticationMiddleware implements Middleware {
       sub: accountId,
       rid: roleId,
       sid: sessionId,
-    } = jwt.verify(token, ENVS.jwtSecret) as JwtPayload;
+    } = jwt.verify(token, env.jwtSecret) as JwtPayload;
 
     if (!accountId) {
       throw new InvalidAccessTokenError();
