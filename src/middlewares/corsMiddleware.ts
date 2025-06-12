@@ -1,22 +1,12 @@
-import type { NextFunction, Request, Response } from 'express';
+import type { CorsOptions } from 'cors';
+import cors from 'cors';
 
-export function corsMiddleware(
-  request: Request,
-  response: Response,
-  next: NextFunction
-) {
-  const allowedOrigins = ['http://localhost:5173', 'http://127.0.0.1:5173'];
-  const origin = request.header('Origin');
+const corsOptions: CorsOptions = {
+  origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  maxAge: 10,
+};
 
-  const isOriginAllowed =
-    origin !== undefined && allowedOrigins.includes(origin);
-
-  if (isOriginAllowed) {
-    response.setHeader('Access-Control-Allow-Origin', origin);
-    response.setHeader('Access-Control-Allow-Methods', '*');
-    response.setHeader('Access-Control-Allow-Headers', '*');
-    response.setHeader('Access-Control-Max-Age', '10');
-  }
-
-  next();
-}
+export const corsMiddleware = cors(corsOptions);

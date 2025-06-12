@@ -31,6 +31,18 @@ export class SessionsController {
       { ipAddress: request.ip, userAgent: request.get('User-Agent') }
     );
 
+    response.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: true,
+    });
+
+    response.cookie('session', session.toString(), {
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: true,
+    });
+
     response.status(201).json({ accessToken, session });
   }
 
@@ -43,6 +55,12 @@ export class SessionsController {
     const accessToken = await createGenerateNewAccessTokenUseCase().execute(
       request.body.session
     );
+
+    response.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: true,
+    });
 
     response.status(201).json({ accessToken });
   }
