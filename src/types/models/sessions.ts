@@ -1,4 +1,5 @@
 import { Types } from 'mongoose';
+
 import { WithObjectId, WithTimestamps, WithVersion } from './common';
 
 export interface Session {
