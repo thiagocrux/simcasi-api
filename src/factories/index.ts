@@ -1,7 +1,12 @@
 export { createAccountsController } from './controllers/createAccountsController';
+export { createExamsController } from './controllers/createExamsController';
+export { createNotificationsController } from './controllers/createNotificationsController';
+export { createObservationsController } from './controllers/createObservationsController';
+export { createPatientsController } from './controllers/createPatientsController';
 export { createPermissionsController } from './controllers/createPermissionsController';
 export { createRolesController } from './controllers/createRolesController';
 export { createSessionsController } from './controllers/createSessionsController';
+export { createTreatmentsController } from './controllers/createTreatmentsController';
 export { createAuthenticationMiddleware } from './middlewares/createAuthenticationMiddleware';
 export { createAuthorizationMiddleware } from './middlewares/createAuthorizationMiddleware';
 export { createCreateAccountUseCase } from './useCases/accounts/createCreateAccountUseCase';

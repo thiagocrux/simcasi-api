@@ -1,4 +1,9 @@
 export { AccountsController } from './AccountsController';
+export { ExamsController } from './ExamsController';
+export { NotificationsController } from './NotificationsController';
+export { ObservationsController } from './ObservationsController';
+export { PatientsController } from './PatientsController';
 export { PermissionsController } from './PermissionsController';
 export { RolesController } from './RolesController';
 export { SessionsController } from './SessionsController';
+export { TreatmentsController } from './TreatmentsController';
