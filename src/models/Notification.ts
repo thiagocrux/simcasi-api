@@ -21,7 +21,4 @@ const schema = new Schema(
   }
 );
 
-export const notificationModel = model<NotificationDocument>(
-  'Notification',
-  schema
-);
+export const Notification = model<NotificationDocument>('Notification', schema);
