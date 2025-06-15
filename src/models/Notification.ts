@@ -1,9 +1,12 @@
 import { Document, model, Schema, Types } from 'mongoose';
 
 export interface NotificationDocument extends Document {
+  _id: Types.ObjectId;
   sinan: string;
   observations: string | null;
   patient: Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const schema = new Schema(

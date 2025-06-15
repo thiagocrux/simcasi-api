@@ -1,6 +1,7 @@
 import { Document, model, Schema, Types } from 'mongoose';
 
 export interface ExamDocument extends Document {
+  _id: Types.ObjectId;
   treponemalTestType: string;
   treponemalTestResult: string;
   treponemalTestDate: string;
@@ -12,6 +13,8 @@ export interface ExamDocument extends Document {
   otherNontreponemalTestDate: string | null;
   referenceObservations: string;
   patient: Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const schema = new Schema(

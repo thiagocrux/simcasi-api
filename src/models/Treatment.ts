@@ -1,6 +1,7 @@
 import { Document, model, Schema, Types } from 'mongoose';
 
 export interface TreatmentDocument extends Document {
+  _id: Types.ObjectId;
   medication: string;
   healthCenter: string;
   startDate: string;
@@ -8,6 +9,8 @@ export interface TreatmentDocument extends Document {
   observations: string | null;
   partnerInformation: string | null;
   patient: Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const schema = new Schema(

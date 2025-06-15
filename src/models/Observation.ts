@@ -1,9 +1,12 @@
 import { Document, model, Schema, Types } from 'mongoose';
 
 export interface ObservationDocument extends Document {
+  _id: Types.ObjectId;
   observations: string | null;
   partnerBeingTreated: boolean;
   patient: Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const schema = new Schema(
