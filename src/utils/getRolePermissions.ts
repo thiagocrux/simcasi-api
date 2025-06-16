@@ -1,5 +1,5 @@
+import { PERMISSIONS } from '../schemas';
 import { AccountRole } from '../types';
-import { PERMISSIONS } from '../validations';
 
 const unauthorizedPermissions: Record<string, string[]> = {
   admin: [],
