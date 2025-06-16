@@ -1,6 +1,5 @@
 import { Document, model, Schema, Types } from 'mongoose';
 
-import { PERMISSIONS } from '../config';
 import { PermissionCodes } from '../types';
 
 export interface PermissionDocument extends Document {
@@ -12,7 +11,7 @@ export interface PermissionDocument extends Document {
 
 const schema = new Schema(
   {
-    code: { type: String, enum: PERMISSIONS, unique: true, required: true },
+    code: { type: String, unique: true, required: true },
   },
   { timestamps: true }
 );

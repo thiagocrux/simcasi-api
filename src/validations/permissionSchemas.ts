@@ -1,9 +1,48 @@
 import z from 'zod';
 
+export const PERMISSIONS = [
+  'accounts:create',
+  'accounts:delete',
+  'accounts:read',
+  'accounts:update',
+  'exams:create',
+  'exams:delete',
+  'exams:read',
+  'exams:update',
+  'notifications:create',
+  'notifications:delete',
+  'notifications:read',
+  'notifications:update',
+  'observations:create',
+  'observations:delete',
+  'observations:read',
+  'observations:update',
+  'patients:create',
+  'patients:delete',
+  'patients:read',
+  'patients:update',
+  'permissions:create',
+  'permissions:delete',
+  'permissions:read',
+  'permissions:update',
+  'roles:create',
+  'roles:delete',
+  'roles:read',
+  'roles:update',
+  'sessions:create',
+  'sessions:delete',
+  'sessions:read',
+  'sessions:update',
+  'treatments:create',
+  'treatments:delete',
+  'treatments:read',
+  'treatments:update',
+] as const;
+
 export const CreatePermissionSchema = z.object({
-  code: z.string(),
+  code: z.enum(PERMISSIONS),
 });
 
 export const UpdatePermissionSchema = z.object({
-  code: z.string().optional(),
+  code: z.enum(PERMISSIONS).optional(),
 });
