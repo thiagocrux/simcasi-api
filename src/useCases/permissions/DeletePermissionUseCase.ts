@@ -1,6 +1,6 @@
 import { isValidObjectId } from 'mongoose';
 
-import { ACCOUNT_ROLES } from '../../config';
+import { ACCOUNT_ROLES } from '../../schemas';
 import { PermissionsRepository, RolesRepository } from '../../types';
 
 import {

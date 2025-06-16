@@ -1,5 +1,6 @@
 import { isValidObjectId } from 'mongoose';
 
+import { UpdateNotificationSchema } from '../../schemas';
 import { NotificationsRepository, UpdateNotificationDTO } from '../../types';
 import { InvalidIdentifierError, NotFoundError } from '../../utils';
 
@@ -9,6 +10,8 @@ export class UpdateNotificationUseCase {
   ) {}
 
   async execute(id: string, body: UpdateNotificationDTO) {
+    UpdateNotificationSchema.parse(body);
+
     if (!isValidObjectId(id)) {
       throw new InvalidIdentifierError();
     }

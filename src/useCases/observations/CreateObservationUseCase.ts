@@ -1,3 +1,4 @@
+import { CreateObservationSchema } from '../../schemas';
 import { CreateObservationDTO, ObservationsRepository } from '../../types';
 
 export class CreateObservationUseCase {
@@ -6,6 +7,7 @@ export class CreateObservationUseCase {
   ) {}
 
   public async execute(body: CreateObservationDTO) {
+    CreateObservationSchema.parse(body);
     const observation = await this.observationsRepository.create(body);
     return observation;
   }

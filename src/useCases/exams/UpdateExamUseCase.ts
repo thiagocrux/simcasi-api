@@ -1,5 +1,6 @@
 import { isValidObjectId } from 'mongoose';
 
+import { UpdateExamSchema } from '../../schemas';
 import { ExamsRepository, UpdateExamDTO } from '../../types';
 import { InvalidIdentifierError, NotFoundError } from '../../utils';
 
@@ -7,6 +8,8 @@ export class UpdateExamUseCase {
   constructor(private readonly examsRepository: ExamsRepository) {}
 
   async execute(id: string, body: UpdateExamDTO) {
+    UpdateExamSchema.parse(body);
+
     if (!isValidObjectId(id)) {
       throw new InvalidIdentifierError();
     }

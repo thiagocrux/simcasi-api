@@ -8,6 +8,7 @@ import {
 } from '../../utils';
 
 import { env, JWT_DURATION, SESSION_DURATION } from '../../config';
+import { CreateSessionSchema } from '../../schemas';
 import { AccountsRepository, SessionsRepository } from '../../types';
 
 export class CreateSessionUseCase {
@@ -20,6 +21,12 @@ export class CreateSessionUseCase {
     { email, password }: { email: string; password: string },
     { ipAddress, userAgent }: { ipAddress?: string; userAgent?: string }
   ) {
+    CreateSessionSchema.parse({
+      email,
+      password,
+      deviceInfo: { ipAddress, userAgent },
+    });
+
     const account = await this.accountsRepository.find({ email });
     const deviceInfo = { ipAddress, userAgent };
 

@@ -1,5 +1,6 @@
 import { isValidObjectId } from 'mongoose';
 
+import { UpdateObservationSchema } from '../../schemas';
 import { ObservationsRepository, UpdateObservationDTO } from '../../types';
 import { InvalidIdentifierError, NotFoundError } from '../../utils';
 
@@ -9,6 +10,8 @@ export class UpdateObservationUseCase {
   ) {}
 
   async execute(id: string, body: UpdateObservationDTO) {
+    UpdateObservationSchema.parse(body);
+
     if (!isValidObjectId(id)) {
       throw new InvalidIdentifierError();
     }

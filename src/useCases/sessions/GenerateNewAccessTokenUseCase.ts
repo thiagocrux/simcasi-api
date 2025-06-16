@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+
 import { env, JWT_DURATION } from '../../config';
 import { AccountsRepository, SessionsRepository } from '../../types';
 import { ExpiredSessionError, NotFoundError } from '../../utils';

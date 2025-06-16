@@ -1,4 +1,4 @@
-import { ACCOUNT_ROLES } from '../../config';
+import { ACCOUNT_ROLES, CreatePermissionSchema } from '../../schemas';
 
 import {
   getRolePermissions,
@@ -19,6 +19,8 @@ export class CreatePermissionUseCase {
   ) {}
 
   async execute({ code }: CreatePermissionDTO) {
+    CreatePermissionSchema.parse({ code });
+
     const permissionAlreadyExists = await this.permissionsRepository.find({
       code,
     });
@@ -41,7 +43,7 @@ export class CreatePermissionUseCase {
 
       if (getRolePermissions(roleName).includes(permission.code)) {
         await this.rolesRepository.update(
-          { _id: role._id },
+          { _id: role._id }, // unknown why?
           { permissions: newPermissions }
         );
       }

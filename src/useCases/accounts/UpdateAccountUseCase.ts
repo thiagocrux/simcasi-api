@@ -2,6 +2,7 @@ import { isValidObjectId } from 'mongoose';
 
 import { AccountsRepository, UpdateAccountDTO } from '../../types';
 
+import { UpdateAccountSchema } from '../../schemas';
 import {
   InvalidIdentifierError,
   NotFoundError,
@@ -13,6 +14,7 @@ export class UpdateAccountUseCase {
 
   async execute(id: string, body: UpdateAccountDTO) {
     const { name, email, password, role } = body;
+    UpdateAccountSchema.parse({ name, email, password, role });
 
     if (!isValidObjectId(id)) {
       throw new InvalidIdentifierError();

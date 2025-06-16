@@ -1,5 +1,6 @@
 import { isValidObjectId } from 'mongoose';
 
+import { UpdateTreatmentSchema } from '../../schemas';
 import { TreatmentsRepository, UpdateTreatmentDTO } from '../../types';
 import { InvalidIdentifierError, NotFoundError } from '../../utils';
 
@@ -7,6 +8,8 @@ export class UpdateTreatmentUseCase {
   constructor(private readonly treatmentsRepository: TreatmentsRepository) {}
 
   async execute(id: string, body: UpdateTreatmentDTO) {
+    UpdateTreatmentSchema.parse(body);
+
     if (!isValidObjectId(id)) {
       throw new InvalidIdentifierError();
     }

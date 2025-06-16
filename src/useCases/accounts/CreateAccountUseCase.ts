@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 
+import { CreateAccountSchema } from '../../schemas';
 import { AccountsRepository, CreateAccountDTO } from '../../types';
 import { UniqueConstraintViolationError } from '../../utils';
 
@@ -7,6 +8,7 @@ export class CreateAccountUseCase {
   constructor(private readonly accountsRepository: AccountsRepository) {}
 
   async execute({ name, email, password, role }: CreateAccountDTO) {
+    CreateAccountSchema.parse({ name, email, password, role });
     const accountAlreadyExists = await this.accountsRepository.find({ email });
 
     if (accountAlreadyExists) {
