@@ -1,13 +1,13 @@
-import z, { boolean, string } from 'zod';
+import z from 'zod';
 
 export const CreateObservationSchema = z.object({
-  observations: string().nullable().optional(),
-  partnerBeingTreated: boolean(),
-  patient: string(),
+  observations: z.string().nullable().optional(),
+  partnerBeingTreated: z.boolean(),
+  patient: z.string(),
 });
 
 export const UpdateObservationSchema = z.object({
-  observations: string().nullable().optional(),
-  partnerBeingTreated: boolean().optional(),
-  patient: string().optional(),
+  observations: z.string().nullable().optional(),
+  partnerBeingTreated: z.boolean().optional(),
+  patient: z.string().optional(),
 });

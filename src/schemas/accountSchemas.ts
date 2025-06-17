@@ -1,30 +1,25 @@
 import z from 'zod';
 
-const PASSWORD_REGEX =
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{8,}$/;
+import { MESSAGES } from './validations/messages';
+import { REGEX } from './validations/regex';
 
 export const CreateAccountSchema = z.object({
   name: z.string(),
-  email: z.string().email('The email has an invalid format.'),
-  password: z
-    .string()
-    .min(8, 'Password must be at least 8 characters long.')
-    .regex(PASSWORD_REGEX, {
-      message:
-        'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.',
-    }),
+  email: z.string().email(MESSAGES.invalidEmailFormat),
+  password: z.string().min(8, MESSAGES.passwordTooShort).regex(REGEX.password, {
+    message: MESSAGES.invalidPasswordFormat,
+  }),
   role: z.string(),
 });
 
 export const UpdateAccountSchema = z.object({
   name: z.string().optional(),
-  email: z.string().email('The email has an invalid format.').optional(),
+  email: z.string().email(MESSAGES.invalidEmailFormat).optional(),
   password: z
     .string()
-    .min(8, 'Password must be at least 8 characters long.')
-    .regex(PASSWORD_REGEX, {
-      message:
-        'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.',
+    .min(8, MESSAGES.passwordTooShort)
+    .regex(REGEX.password, {
+      message: MESSAGES.invalidPasswordFormat,
     })
     .optional(),
   role: z.string().optional(),

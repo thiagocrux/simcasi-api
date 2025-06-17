@@ -1,14 +1,12 @@
 import z from 'zod';
 
-const PHONE_REGEX = /^\+\d{2}\s(\([1-9]{2}\)|[1-9]{2})\s9\d{4}-\d{4}$/;
-
-const CPF_REGEX =
-  /^([0-9]{2}[.]?[0-9]{3}[.]?[0-9]{3}[/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[.]?[0-9]{3}[.]?[0-9]{3}[-]?[0-9]{2})$/;
+import { MESSAGES } from './validations/messages';
+import { REGEX } from './validations/regex';
 
 export const CreatePatientSchema = z.object({
   susCardNumber: z.string(),
   name: z.string(),
-  cpf: z.string().regex(CPF_REGEX, 'The CPF has an invalid format.'),
+  cpf: z.string().regex(REGEX.cpf, MESSAGES.invalidCpfFormat),
   socialName: z.string().nullable().optional(),
   birthDate: z.string(),
   race: z.string(),
@@ -19,7 +17,7 @@ export const CreatePatientSchema = z.object({
   schooling: z.string(),
   phone: z
     .string()
-    .regex(PHONE_REGEX, 'The phone has an invalid format.')
+    .regex(REGEX.phone, MESSAGES.invalidPhoneFormat)
     .nullable()
     .optional(),
   email: z.string().nullable().optional(),
@@ -39,7 +37,7 @@ export const CreatePatientSchema = z.object({
 export const UpdatePatientSchema = z.object({
   susCardNumber: z.string().optional(),
   name: z.string().optional(),
-  cpf: z.string().regex(CPF_REGEX, 'The CPF has an invalid format.').optional(),
+  cpf: z.string().regex(REGEX.cpf, MESSAGES.invalidCpfFormat).optional(),
   socialName: z.string().nullable().optional(),
   birthDate: z.string().optional(),
   race: z.string().optional(),
@@ -50,7 +48,7 @@ export const UpdatePatientSchema = z.object({
   schooling: z.string().optional(),
   phone: z
     .string()
-    .regex(PHONE_REGEX, 'The phone has an invalid format.')
+    .regex(REGEX.phone, MESSAGES.invalidPhoneFormat)
     .nullable()
     .optional(),
   email: z.string().nullable().optional(),
