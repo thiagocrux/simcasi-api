@@ -1,3 +1,3 @@
 export function isDurationString(value: string) {
-  return value.match(/^(\d+)([smhd])$/);
+  return /^[1-9]\d*[smhd]$/.test(value);
 }
