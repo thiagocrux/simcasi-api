@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { GetAllAccountsUseCase } from '../../../../src/useCases';
-import { mockAccountsRepository } from '../../../mocks/accounts.mock';
+import { mockAccountsRepository } from '../../../mocks';
 
 describe('CreateAccountUseCase.ts', async () => {
   const useCase = new GetAllAccountsUseCase(mockAccountsRepository);

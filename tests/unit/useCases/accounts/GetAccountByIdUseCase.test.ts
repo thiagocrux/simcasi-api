@@ -2,12 +2,13 @@ import { describe, expect, it } from 'vitest';
 
 import { GetAccountByIdUseCase } from '../../../../src/useCases';
 import { InvalidIdentifierError, NotFoundError } from '../../../../src/utils';
-import { mockInvalidObjectId, mockObjectId } from '../../../mocks';
 
 import {
   mockAccountDocument,
   mockAccountsRepository,
-} from '../../../mocks/accounts.mock';
+  mockInvalidObjectId,
+  mockObjectId,
+} from '../../../mocks';
 
 describe('CreateAccountUseCase.ts', async () => {
   const useCase = new GetAccountByIdUseCase(mockAccountsRepository);

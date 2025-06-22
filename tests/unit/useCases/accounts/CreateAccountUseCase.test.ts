@@ -9,7 +9,7 @@ import {
   mockAccountDocument,
   mockAccountsRepository,
   mockCreateAccountDTO,
-} from '../../../mocks/accounts.mock';
+} from '../../../mocks';
 
 describe('CreateAccountUseCase.ts', async () => {
   const useCase = new CreateAccountUseCase(mockAccountsRepository);
