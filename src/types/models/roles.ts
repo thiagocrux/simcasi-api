@@ -5,7 +5,8 @@ export type AccountRole = 'admin' | 'user' | 'viewer';
 
 export interface Role {
   name: string;
-  permissions: PermissionCodes[];
+  // REFACTOR: Check the permissions implementation in the code (should populate automatically or explicitly during creation?)
+  permissions?: PermissionCodes[];
 }
 
 export interface CreateRoleDTO extends Role {}

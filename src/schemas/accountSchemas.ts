@@ -1,19 +1,20 @@
 import z from 'zod';
 
+import { ACCOUNT_ROLES } from './roleSchemas';
 import { MESSAGES } from './validations/messages';
 import { REGEX } from './validations/regex';
 
 export const CreateAccountSchema = z.object({
-  name: z.string(),
+  name: z.string().min(1, MESSAGES.nameTooShort),
   email: z.string().email(MESSAGES.invalidEmailFormat),
   password: z.string().min(8, MESSAGES.passwordTooShort).regex(REGEX.password, {
     message: MESSAGES.invalidPasswordFormat,
   }),
-  role: z.string(),
+  role: z.enum(ACCOUNT_ROLES),
 });
 
 export const UpdateAccountSchema = z.object({
-  name: z.string().optional(),
+  name: z.string().min(1, MESSAGES.nameTooShort).optional(),
   email: z.string().email(MESSAGES.invalidEmailFormat).optional(),
   password: z
     .string()
@@ -22,5 +23,5 @@ export const UpdateAccountSchema = z.object({
       message: MESSAGES.invalidPasswordFormat,
     })
     .optional(),
-  role: z.string().optional(),
+  role: z.enum(ACCOUNT_ROLES).optional(),
 });

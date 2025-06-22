@@ -1,13 +1,17 @@
-import { PERMISSIONS } from '../schemas';
+import { ACCOUNT_ROLES, PERMISSIONS } from '../schemas';
 import { AccountRole } from '../types';
 
-const unauthorizedPermissions: Record<string, string[]> = {
+export const unauthorizedPermissions: Record<string, string[]> = {
   admin: [],
   user: ['accounts:create', 'accounts:delete'],
   viewer: ['accounts:read'],
 };
 
 export function getRolePermissions(role: AccountRole) {
+  if (!ACCOUNT_ROLES.includes(role) || typeof role !== 'string') {
+    return [];
+  }
+
   const adminPermissions: string[] = [];
   const userPermissions: string[] = [];
   const viewerPermissions: string[] = [];

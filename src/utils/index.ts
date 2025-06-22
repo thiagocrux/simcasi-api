@@ -1,5 +1,5 @@
 export * from './dateTime';
 export * from './errors';
-export { getRolePermissions } from './getRolePermissions';
+export * from './getRolePermissions';
 export { logger } from './logger';
 export * from './regex';

@@ -23,8 +23,6 @@ export function convertDurationStringToMiliseconds(duration: string) {
       return value * 60 * 60 * 1000;
     case 'd':
       return value * 24 * 60 * 60 * 1000;
-    default:
-      return null;
   }
 }
 

@@ -1,3 +1,9 @@
 export function isDurationString(value: string) {
-  return /^[1-9]\d*[smhd]$/.test(value);
+  const regexPattern = /^([1-9]\d*)([smhd])$/;
+
+  if (!regexPattern.test(value)) {
+    return null;
+  }
+
+  return value.match(regexPattern);
 }

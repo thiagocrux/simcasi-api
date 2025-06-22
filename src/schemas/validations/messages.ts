@@ -4,5 +4,6 @@ export const MESSAGES = {
   invalidEmailFormat: 'The email has an invalid format.',
   invalidPasswordFormat:
     'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.',
+  nameTooShort: 'Name must be at least 1 character long.',
   passwordTooShort: 'Password must be at least 8 characters long.',
 };
