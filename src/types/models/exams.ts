@@ -13,7 +13,7 @@ export interface Exam {
   otherNontreponemalTest: string | null;
   otherNontreponemalTestDate: string | null;
   referenceObservations: string;
-  patient: Types.ObjectId;
+  patient: Types.ObjectId | string;
 }
 
 export interface CreateExamDTO extends Exam {}

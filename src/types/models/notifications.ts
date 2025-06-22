@@ -5,7 +5,7 @@ import { WithObjectId, WithTimestamps, WithVersion } from './common';
 export interface Notification {
   sinan: string;
   observations: string | null;
-  patient: Types.ObjectId;
+  patient: Types.ObjectId | string;
 }
 
 export interface CreateNotificationDTO extends Notification {}

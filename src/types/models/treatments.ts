@@ -9,7 +9,7 @@ export interface Treatment {
   dosage: string;
   observations: string | null;
   partnerInformation: string | null;
-  patient: Types.ObjectId;
+  patient: Types.ObjectId | string;
 }
 
 export interface CreateTreatmentDTO extends Treatment {}
