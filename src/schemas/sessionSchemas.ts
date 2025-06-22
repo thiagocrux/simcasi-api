@@ -1,13 +1,10 @@
 import z from 'zod';
 
 import { MESSAGES } from './validations/messages';
-import { REGEX } from './validations/regex';
 
 export const CreateSessionSchema = z.object({
   email: z.string().email(MESSAGES.invalidEmailFormat),
-  password: z.string().min(8, MESSAGES.passwordTooShort).regex(REGEX.password, {
-    message: MESSAGES.invalidPasswordFormat,
-  }),
+  password: z.string(),
   deviceInfo: z.object({
     ipAddress: z.string(),
     userAgent: z.string(),
