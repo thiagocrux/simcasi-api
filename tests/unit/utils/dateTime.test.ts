@@ -1,53 +1,53 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
-  convertDurationStringToMiliseconds,
+  convertDurationStringToMilliseconds,
   generateSessionTimeframe,
 } from '../../../src/utils';
 
 describe('dateTime.ts', () => {
-  describe('convertDurationStringToMiliseconds', () => {
+  describe('convertDurationStringToMilliseconds', () => {
     it('should return null for non-string input', () => {
       // @ts-expect-error: deliberate wrong param type for testing purposes
-      expect(convertDurationStringToMiliseconds(null)).toBeNull();
+      expect(convertDurationStringToMilliseconds(null)).toBeNull();
       // @ts-expect-error: deliberate wrong param type for testing purposes
-      expect(convertDurationStringToMiliseconds(undefined)).toBeNull();
+      expect(convertDurationStringToMilliseconds(undefined)).toBeNull();
       // @ts-expect-error: deliberate wrong param type for testing purposes
-      expect(convertDurationStringToMiliseconds(123)).toBeNull();
+      expect(convertDurationStringToMilliseconds(123)).toBeNull();
       // @ts-expect-error: deliberate wrong param type for testing purposes
-      expect(convertDurationStringToMiliseconds({})).toBeNull();
+      expect(convertDurationStringToMilliseconds({})).toBeNull();
     });
 
     it('should return null if regex match fails', () => {
       ['0s', '00m', 's', '30', '3.5h', '30ss', ' 30s', '30s ', ''].forEach(
         (input) => {
-          expect(convertDurationStringToMiliseconds(input)).toBeNull();
+          expect(convertDurationStringToMilliseconds(input)).toBeNull();
         }
       );
     });
 
     it('should return null for invalid unit', () => {
-      expect(convertDurationStringToMiliseconds('10u'));
+      expect(convertDurationStringToMilliseconds('10u'));
     });
 
     it('should convert seconds correctly', () => {
-      expect(convertDurationStringToMiliseconds('30s')).toBe(30000);
+      expect(convertDurationStringToMilliseconds('30s')).toBe(30000);
     });
 
     it('should convert minutes correctly', () => {
-      expect(convertDurationStringToMiliseconds('5m')).toBe(300000);
+      expect(convertDurationStringToMilliseconds('5m')).toBe(300000);
     });
 
     it('should convert hours correctly', () => {
-      expect(convertDurationStringToMiliseconds('2h')).toBe(7200000);
+      expect(convertDurationStringToMilliseconds('2h')).toBe(7200000);
     });
 
     it('should convert days correctly', () => {
-      expect(convertDurationStringToMiliseconds('1d')).toBe(86400000);
+      expect(convertDurationStringToMilliseconds('1d')).toBe(86400000);
     });
 
     it('should return null for unknown units', () => {
-      expect(convertDurationStringToMiliseconds('1y')).toBeNull();
+      expect(convertDurationStringToMilliseconds('1y')).toBeNull();
     });
   });
 
