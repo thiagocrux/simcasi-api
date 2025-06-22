@@ -1,6 +1,6 @@
 import { isDurationString } from './regex';
 
-export function convertDurationStringToMiliseconds(duration: string) {
+export function convertDurationStringToMilliseconds(duration: string) {
   if (typeof duration !== 'string') {
     return null;
   }
@@ -34,7 +34,7 @@ export function generateSessionTimeframe(duration: string) {
   const issuedAt = new Date();
 
   const expiresAt = new Date(
-    issuedAt.getTime() + convertDurationStringToMiliseconds(duration)!
+    issuedAt.getTime() + convertDurationStringToMilliseconds(duration)!
   );
 
   return { issuedAt, expiresAt };
