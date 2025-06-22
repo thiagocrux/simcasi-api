@@ -1,6 +1,13 @@
-import { ObservationsRepository } from '../../../repositories';
 import { CreateObservationUseCase } from '../../../useCases';
 
+import {
+  ObservationsRepository,
+  PatientsRepository,
+} from '../../../repositories';
+
 export function createCreateObservationUseCase() {
-  return new CreateObservationUseCase(ObservationsRepository);
+  return new CreateObservationUseCase(
+    ObservationsRepository,
+    PatientsRepository
+  );
 }
