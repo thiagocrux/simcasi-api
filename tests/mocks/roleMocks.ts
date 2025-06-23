@@ -1,4 +1,5 @@
 import { vi } from 'vitest';
+import { PERMISSIONS } from '../../src/schemas';
 
 export const mockRolesRepository = {
   find: vi.fn(),
@@ -19,6 +20,7 @@ export const mockUpdateRoleDTO = {
 export const mockRoleDocument = {
   _id: '68543a7700151eba4c6270b8',
   name: 'user',
+  permissions: [...PERMISSIONS],
   createdAt: Date.now(),
   updatedAt: Date.now(),
   _v: 0,
