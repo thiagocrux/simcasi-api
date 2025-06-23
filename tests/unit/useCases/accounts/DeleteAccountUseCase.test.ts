@@ -12,6 +12,7 @@ import {
 
 describe('DeleteAccountUseCase.ts', async () => {
   const useCase = new DeleteAccountUseCase(mockAccountsRepository);
+  mockAccountsRepository.find.mockResolvedValue(mockAccountDocument);
 
   it('should throw InvalidIdentifierError when id has invalid mongodb objectId format', async () => {
     await expect(useCase.execute(mockInvalidObjectId)).rejects.toThrow(
@@ -20,21 +21,17 @@ describe('DeleteAccountUseCase.ts', async () => {
   });
 
   it('should find an existing account before deleting', async () => {
-    mockAccountsRepository.find.mockResolvedValueOnce(mockAccountDocument);
     await useCase.execute(mockObjectId);
     expect(mockAccountsRepository.find).toHaveBeenCalled();
   });
 
   it('should throw NotFoundError when account does not exist', async () => {
     mockAccountsRepository.find.mockResolvedValueOnce(null);
-
     await expect(useCase.execute(mockObjectId)).rejects.toThrow(NotFoundError);
-
     expect(mockAccountsRepository.find).toHaveBeenCalled();
   });
 
-  it('should create a new account after passing the validations', async () => {
-    mockAccountsRepository.find.mockResolvedValueOnce(mockAccountDocument);
+  it('should delete account after passing the validations', async () => {
     await useCase.execute(mockObjectId);
     expect(mockAccountsRepository.find).toHaveBeenCalled();
     expect(mockAccountsRepository.delete).toHaveBeenCalled();

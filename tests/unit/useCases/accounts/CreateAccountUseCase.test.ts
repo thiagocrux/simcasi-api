@@ -13,6 +13,7 @@ import {
 
 describe('CreateAccountUseCase.ts', async () => {
   const useCase = new CreateAccountUseCase(mockAccountsRepository);
+  mockAccountsRepository.find.mockResolvedValue(null);
 
   it('should validate input and throw error when data is invalid', async () => {
     const validationSpy = vi.spyOn(CreateAccountSchema, 'parse');
@@ -21,11 +22,10 @@ describe('CreateAccountUseCase.ts', async () => {
       useCase.execute({ ...mockCreateAccountDTO, email: 'Invalid e-mail' })
     ).rejects.toThrow();
 
-    expect(validationSpy).toBeCalled();
+    expect(validationSpy).toHaveBeenCalled();
   });
 
   it('should verify if account does not exist before creation (returns null)', async () => {
-    mockAccountsRepository.find.mockResolvedValueOnce(null);
     await useCase.execute(mockCreateAccountDTO);
     expect(mockAccountsRepository.find).toHaveBeenCalled();
   });
@@ -53,7 +53,6 @@ describe('CreateAccountUseCase.ts', async () => {
   });
 
   it('should create a new account after passing the validations', async () => {
-    mockAccountsRepository.find.mockResolvedValueOnce(null);
     mockAccountsRepository.create.mockResolvedValueOnce(mockAccountDocument);
     const createdAccount = await useCase.execute(mockCreateAccountDTO);
     expect(mockAccountsRepository.find).toHaveBeenCalled();

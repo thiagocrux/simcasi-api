@@ -19,6 +19,8 @@ import {
 
 describe('UpdateAccountUseCase.ts', async () => {
   const useCase = new UpdateAccountUseCase(mockAccountsRepository);
+  mockAccountsRepository.find.mockResolvedValue(mockAccountDocument);
+  mockAccountsRepository.update.mockResolvedValue(mockAccountDocument);
 
   it('should validate input and throw error when data is invalid', async () => {
     const validationSpy = vi.spyOn(UpdateAccountSchema, 'parse');
@@ -32,7 +34,7 @@ describe('UpdateAccountUseCase.ts', async () => {
       })
     ).rejects.toThrow();
 
-    expect(validationSpy).toBeCalled();
+    expect(validationSpy).toHaveBeenCalled();
   });
 
   it('should throw InvalidIdentifierError when id has invalid mongodb objectId format', async () => {
@@ -42,7 +44,6 @@ describe('UpdateAccountUseCase.ts', async () => {
   });
 
   it('should find an existing account before updating', async () => {
-    mockAccountsRepository.find.mockResolvedValueOnce(mockAccountDocument);
     await useCase.execute(mockObjectId, mockUpdateAccountDTO);
     expect(mockAccountsRepository.find).toHaveBeenCalled();
   });
@@ -58,9 +59,7 @@ describe('UpdateAccountUseCase.ts', async () => {
   });
 
   it('should throw UniqueEmailViolationError when updating taken e-mail', async () => {
-    mockAccountsRepository.find.mockResolvedValueOnce({
-      mockAccountDocument,
-    });
+    mockAccountsRepository.find.mockResolvedValueOnce(mockAccountDocument);
 
     mockAccountsRepository.find.mockResolvedValueOnce({
       ...mockAccountDocument,
@@ -76,9 +75,6 @@ describe('UpdateAccountUseCase.ts', async () => {
   });
 
   it('should update the account after passing the validations', async () => {
-    mockAccountsRepository.find.mockResolvedValueOnce(mockAccountDocument);
-    mockAccountsRepository.update.mockResolvedValueOnce(mockAccountDocument);
-
     const updatedAccount = await useCase.execute(
       mockObjectId,
       mockUpdateAccountDTO
@@ -86,6 +82,6 @@ describe('UpdateAccountUseCase.ts', async () => {
 
     expect(mockAccountsRepository.find).toHaveBeenCalled();
     expect(mockAccountsRepository.update).toHaveBeenCalled();
-    expect(updatedAccount?._id).toBe('68543a7700151eba4c6270b8');
+    expect(updatedAccount?._id).toBe(mockAccountDocument._id);
   });
 });

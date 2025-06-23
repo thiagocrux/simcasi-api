@@ -10,8 +10,9 @@ import {
   mockObjectId,
 } from '../../../mocks';
 
-describe('CreateAccountUseCase.ts', async () => {
+describe('GetAccountByIdUseCase.ts', async () => {
   const useCase = new GetAccountByIdUseCase(mockAccountsRepository);
+  mockAccountsRepository.find.mockResolvedValue(mockAccountDocument);
 
   it('should throw InvalidIdentifierError when id has invalid mongodb objectId format', async () => {
     await expect(useCase.execute(mockInvalidObjectId)).rejects.toThrow(
@@ -26,7 +27,6 @@ describe('CreateAccountUseCase.ts', async () => {
   });
 
   it('should get the account after passing the validations', async () => {
-    mockAccountsRepository.find.mockResolvedValueOnce(mockAccountDocument);
     const useCaseReturn = await useCase.execute(mockObjectId);
     expect(mockAccountsRepository.find).toHaveBeenCalled();
     expect(useCaseReturn).toBe(mockAccountDocument);
