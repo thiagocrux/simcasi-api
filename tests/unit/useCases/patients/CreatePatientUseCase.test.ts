@@ -12,8 +12,8 @@ import {
 
 describe('CreatePatientUseCase.ts', async () => {
   const useCase = new CreatePatientUseCase(mockPatientsRepository);
-
   mockPatientsRepository.create.mockResolvedValue(mockPatientDocument);
+  mockPatientsRepository.find.mockResolvedValue(null);
 
   it('should validate input and throw error when data is invalid', async () => {
     const validationSpy = vi.spyOn(CreatePatientSchema, 'parse');
@@ -23,13 +23,12 @@ describe('CreatePatientUseCase.ts', async () => {
       useCase.execute({ ...mockCreatePatientDTO, cpf: 0 })
     ).rejects.toThrow();
 
-    expect(validationSpy).toBeCalled();
+    expect(validationSpy).toHaveBeenCalled();
   });
 
-  it('should find the patient associated to the patient', async () => {
-    mockPatientsRepository.find.mockResolvedValueOnce(null);
+  it('should allow creating a new patient when no patient with the same CPF exists', async () => {
     await useCase.execute(mockCreatePatientDTO);
-    expect(mockPatientsRepository.find).toBeCalled();
+    expect(mockPatientsRepository.find).toHaveBeenCalled();
   });
 
   it('should throw UniqueConstraintViolationError if patient already exists', async () => {
@@ -39,14 +38,12 @@ describe('CreatePatientUseCase.ts', async () => {
       UniqueConstraintViolationError
     );
 
-    expect(mockPatientsRepository.find).toBeCalled();
+    expect(mockPatientsRepository.find).toHaveBeenCalled();
   });
 
   it('should create a new patient after passing the validations', async () => {
-    mockPatientsRepository.find.mockResolvedValueOnce(null);
-    mockPatientsRepository.create.mockResolvedValueOnce(mockPatientDocument);
     await useCase.execute(mockCreatePatientDTO);
-    expect(mockPatientsRepository.find).toBeCalled();
-    expect(mockPatientsRepository.create).toBeCalled();
+    expect(mockPatientsRepository.find).toHaveBeenCalled();
+    expect(mockPatientsRepository.create).toHaveBeenCalled();
   });
 });
