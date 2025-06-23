@@ -18,21 +18,23 @@ describe('CreateTreatmentUseCase.ts', async () => {
     mockPatientsRepository
   );
 
+  mockPatientsRepository.find.mockResolvedValue(mockPatientDocument);
   mockTreatmentsRepository.create.mockResolvedValue(mockTreatmentDocument);
 
   it('should validate input and throw error when data is invalid', async () => {
     const validationSpy = vi.spyOn(CreateTreatmentSchema, 'parse');
+
     await expect(
       // @ts-expect-error: deliberate wrong param type for testing purposes
-      useCase.execute({ ...mockCreateTreatmentDTO, treponemalTestType: 0 })
+      useCase.execute({ ...mockCreateTreatmentDTO, healthCenter: 0 })
     ).rejects.toThrow();
-    expect(validationSpy).toBeCalled();
+
+    expect(validationSpy).toHaveBeenCalled();
   });
 
   it('should find the patient associated to the treatment', async () => {
-    mockPatientsRepository.find.mockResolvedValueOnce(mockPatientDocument);
     await useCase.execute(mockCreateTreatmentDTO);
-    expect(mockPatientsRepository.find).toBeCalled();
+    expect(mockPatientsRepository.find).toHaveBeenCalled();
   });
 
   it('should throw NotFoundError when associated patient does not exist', async () => {
@@ -42,18 +44,12 @@ describe('CreateTreatmentUseCase.ts', async () => {
       NotFoundError
     );
 
-    expect(mockPatientsRepository.find).toBeCalled();
+    expect(mockPatientsRepository.find).toHaveBeenCalled();
   });
 
   it('should create a new treatment after passing the validations', async () => {
-    mockPatientsRepository.find.mockResolvedValueOnce(mockPatientDocument);
-
-    mockTreatmentsRepository.create.mockResolvedValueOnce(
-      mockTreatmentDocument
-    );
-
     await useCase.execute(mockCreateTreatmentDTO);
-    expect(mockPatientsRepository.find).toBeCalled();
-    expect(mockTreatmentsRepository.create).toBeCalled();
+    expect(mockPatientsRepository.find).toHaveBeenCalled();
+    expect(mockTreatmentsRepository.create).toHaveBeenCalled();
   });
 });
