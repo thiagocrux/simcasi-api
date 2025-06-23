@@ -1,11 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { CreatePermissionUseCase } from '../../../../src/useCases';
+
 import {
   ACCOUNT_ROLES,
   CreatePermissionSchema,
   PERMISSIONS,
 } from '../../../../src/schemas';
-import { CreatePermissionUseCase } from '../../../../src/useCases';
 
 import {
   NotFoundError,
@@ -40,7 +41,7 @@ describe('CreateSessionUseCase.ts', async () => {
       useCase.execute({ code: 'invalid_role' })
     ).rejects.toThrow();
 
-    expect(validationSpy).toBeCalled();
+    expect(validationSpy).toHaveBeenCalled();
   });
 
   it('should throw UniqueConstraintViolationError if permission already exists', async () => {
@@ -62,7 +63,7 @@ describe('CreateSessionUseCase.ts', async () => {
       NotFoundError
     );
 
-    expect(mockRolesRepository.find).toBeCalled();
+    expect(mockRolesRepository.find).toHaveBeenCalled();
   });
 
   it('should create a new permission after passing the validations', async () => {
@@ -76,8 +77,10 @@ describe('CreateSessionUseCase.ts', async () => {
 
     const useCaseReturn = await useCase.execute(mockCreatePermissionDTO);
 
-    expect(mockPermissionsRepository.find).toBeCalled();
-    expect(mockRolesRepository.find).toBeCalledTimes(ACCOUNT_ROLES.length);
+    expect(mockPermissionsRepository.find).toHaveBeenCalled();
+    expect(mockRolesRepository.find).toHaveBeenCalledTimes(
+      ACCOUNT_ROLES.length
+    );
     expect(useCaseReturn).toBe(mockPermissionDocument);
   });
 });
