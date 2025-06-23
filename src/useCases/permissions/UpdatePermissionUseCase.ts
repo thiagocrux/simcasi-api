@@ -19,11 +19,11 @@ export class UpdatePermissionUseCase {
       throw new NotFoundError('permission');
     }
 
-    const updatedRole = await this.permissionsRepository.update(
+    const updatedPermission = await this.permissionsRepository.update(
       { _id: id },
       { code }
     );
 
-    return updatedRole;
+    return updatedPermission;
   }
 }

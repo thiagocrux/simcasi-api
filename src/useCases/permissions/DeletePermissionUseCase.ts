@@ -26,7 +26,7 @@ export class DeletePermissionUseCase {
       throw new NotFoundError('permission');
     }
 
-    ACCOUNT_ROLES.forEach(async (roleName) => {
+    for (const roleName of ACCOUNT_ROLES) {
       const role = await this.rolesRepository.find({ name: roleName });
 
       if (!role) {
@@ -45,7 +45,7 @@ export class DeletePermissionUseCase {
           { permissions: newPermissions }
         );
       }
-    });
+    }
 
     await this.permissionsRepository.delete({ _id: id });
   }

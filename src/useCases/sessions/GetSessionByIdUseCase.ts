@@ -3,7 +3,7 @@ import { isValidObjectId } from 'mongoose';
 import { SessionsRepository } from '../../types';
 import { InvalidIdentifierError, NotFoundError } from '../../utils';
 
-export class GetAllSessionsUseCase {
+export class GetSessionByIdUseCase {
   constructor(private readonly sessionsRepository: SessionsRepository) {}
 
   async execute(id: string) {

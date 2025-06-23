@@ -37,6 +37,7 @@ export { CreateSessionUseCase } from './sessions/CreateSessionUseCase';
 export { DeleteSessionUseCase } from './sessions/DeleteSessionUseCase';
 export { GenerateNewAccessTokenUseCase } from './sessions/GenerateNewAccessTokenUseCase';
 export { GetAllSessionsUseCase } from './sessions/GetAllSessionsUseCase';
+export { GetSessionByIdUseCase } from './sessions/GetSessionByIdUseCase';
 export { CreateTreatmentUseCase } from './treatments/CreateTreatmentUseCase';
 export { DeleteTreatmentUseCase } from './treatments/DeleteTreatmentUseCase';
 export { GetAllTreatmentsUseCase } from './treatments/GetAllTreatmentsUseCase';
