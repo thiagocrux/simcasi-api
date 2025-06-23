@@ -6,6 +6,8 @@ import { NotFoundError } from '../../../../src/utils';
 
 import {
   mockCreateNotificationDTO,
+  mockExamDocument,
+  mockExamsRepository,
   mockNotificationDocument,
   mockNotificationsRepository,
   mockPatientDocument,
@@ -22,6 +24,9 @@ describe('CreateNotificationUseCase.ts', async () => {
     mockNotificationDocument
   );
 
+  mockExamsRepository.find.mockResolvedValue(mockExamDocument);
+  mockPatientsRepository.find.mockResolvedValue(mockPatientDocument);
+
   it('should validate input and throw error when data is invalid', async () => {
     const validationSpy = vi.spyOn(CreateNotificationSchema, 'parse');
 
@@ -30,13 +35,12 @@ describe('CreateNotificationUseCase.ts', async () => {
       useCase.execute({ ...mockCreateNotificationDTO, sinan: 0 })
     ).rejects.toThrow();
 
-    expect(validationSpy).toBeCalled();
+    expect(validationSpy).toHaveBeenCalled();
   });
 
   it('should find the patient associated to the notification', async () => {
-    mockPatientsRepository.find.mockResolvedValueOnce(mockPatientDocument);
     await useCase.execute(mockCreateNotificationDTO);
-    expect(mockPatientsRepository.find).toBeCalled();
+    expect(mockPatientsRepository.find).toHaveBeenCalled();
   });
 
   it('should throw NotFoundError when associated patient does not exist', async () => {
@@ -46,18 +50,12 @@ describe('CreateNotificationUseCase.ts', async () => {
       NotFoundError
     );
 
-    expect(mockPatientsRepository.find).toBeCalled();
+    expect(mockPatientsRepository.find).toHaveBeenCalled();
   });
 
   it('should create a new notification after passing the validations', async () => {
-    mockPatientsRepository.find.mockResolvedValueOnce(mockPatientDocument);
-
-    mockNotificationsRepository.create.mockResolvedValueOnce(
-      mockNotificationDocument
-    );
-
     await useCase.execute(mockCreateNotificationDTO);
-    expect(mockPatientsRepository.find).toBeCalled();
-    expect(mockNotificationsRepository.create).toBeCalled();
+    expect(mockPatientsRepository.find).toHaveBeenCalled();
+    expect(mockNotificationsRepository.create).toHaveBeenCalled();
   });
 });
