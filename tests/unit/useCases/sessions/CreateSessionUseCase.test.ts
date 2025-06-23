@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { CreateSessionUseCase } from '../../../../src/useCases';
 import * as dateTime from '../../../../src/utils/dateTime';
@@ -28,10 +28,6 @@ describe('CreateSessionUseCase.ts', async () => {
     mockAccountsRepository
   );
 
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   mockAccountsRepository.find.mockResolvedValue(mockAccountDocument);
   mockSessionsRepository.create.mockResolvedValue(mockSessionDocument);
 
@@ -46,17 +42,17 @@ describe('CreateSessionUseCase.ts', async () => {
       useCase.execute({ ...mockCreateSessionDTO, password: 0 }, mockDeviceInfo)
     ).rejects.toThrow();
 
-    expect(validationSpy).toBeCalled();
+    expect(validationSpy).toHaveBeenCalled();
   });
 
   it('should find the account associated to the session', async () => {
     await useCase.execute(mockCreateSessionDTO, mockDeviceInfo);
-    expect(mockAccountsRepository.find).toBeCalled();
+    expect(mockAccountsRepository.find).toHaveBeenCalled();
   });
 
   it('should successfully compare passwords using bcrypt', async () => {
     await useCase.execute(mockCreateSessionDTO, mockDeviceInfo);
-    expect(bcrypt.compare).toBeCalled();
+    expect(bcrypt.compare).toHaveBeenCalled();
   });
 
   it("should throw InvalidCredentialsError when account can't be found", async () => {
@@ -66,7 +62,7 @@ describe('CreateSessionUseCase.ts', async () => {
       useCase.execute(mockCreateSessionDTO, mockDeviceInfo)
     ).rejects.toThrow(InvalidCredentialsError);
 
-    expect(mockAccountsRepository.find).toBeCalled();
+    expect(mockAccountsRepository.find).toHaveBeenCalled();
   });
 
   it("should throw InvalidCredentialsError when credentials don't match", async () => {
@@ -76,7 +72,7 @@ describe('CreateSessionUseCase.ts', async () => {
       useCase.execute(mockCreateSessionDTO, mockDeviceInfo)
     ).rejects.toThrow(InvalidCredentialsError);
 
-    expect(mockAccountsRepository.find).toBeCalled();
+    expect(mockAccountsRepository.find).toHaveBeenCalled();
   });
 
   it('should throw SessionCreationError when generateSessionTimeframe returns null', async () => {
@@ -88,7 +84,7 @@ describe('CreateSessionUseCase.ts', async () => {
       useCase.execute(mockCreateSessionDTO, mockDeviceInfo)
     ).rejects.toThrow(SessionCreationError);
 
-    expect(generateSessionTimeframe).toBeCalled();
+    expect(generateSessionTimeframe).toHaveBeenCalled();
   });
 
   it('should create a new session after passing the validations', async () => {
@@ -97,8 +93,8 @@ describe('CreateSessionUseCase.ts', async () => {
       mockDeviceInfo
     );
 
-    expect(mockAccountsRepository.find).toBeCalled();
-    expect(mockSessionsRepository.create).toBeCalled();
+    expect(mockAccountsRepository.find).toHaveBeenCalled();
+    expect(mockSessionsRepository.create).toHaveBeenCalled();
 
     expect(useCaseReturn).toStrictEqual({
       accessToken: mockJwtToken,
