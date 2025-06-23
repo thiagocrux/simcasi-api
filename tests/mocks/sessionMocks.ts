@@ -8,8 +8,13 @@ export const mockSessionsRepository = {
   delete: vi.fn(),
 };
 
+export const mockDeviceInfo = {
+  ipAddress: '::1',
+  userAgent: 'PostmanRuntime/7.44.0',
+} as const;
+
 export const mockCreateSessionDTO = {
-  email: 'fulano@gmail.com',
+  email: 'fulano-detail@gmail.com',
   password: 'Teste@12',
 } as const;
 

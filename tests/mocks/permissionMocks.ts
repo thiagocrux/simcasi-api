@@ -9,16 +9,16 @@ export const mockPermissionsRepository = {
 };
 
 export const mockCreatePermissionDTO = {
-  code: 'test:read',
+  code: 'accounts:read',
 } as const;
 
 export const mockUpdatePermissionDTO = {
-  code: 'test:read',
+  code: 'accounts:read',
 } as const;
 
 export const mockPermissionDocument = {
   _id: '68543a7700151eba4c6270b8',
-  code: 'test:read',
+  code: 'accounts:read',
   createdAt: Date.now(),
   updatedAt: Date.now(),
   _v: 0,

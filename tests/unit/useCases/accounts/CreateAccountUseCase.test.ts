@@ -42,6 +42,7 @@ describe('CreateAccountUseCase.ts', async () => {
 
   it('should securely hash the password using bcrypt', async () => {
     vi.spyOn(bcrypt, 'genSaltSync').mockImplementation(() => 'mocked-salt');
+
     vi.spyOn(bcrypt, 'hashSync').mockImplementation(
       (password: string) => `hashed-${password}`
     );
