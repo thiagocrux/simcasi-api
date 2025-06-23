@@ -19,6 +19,7 @@ describe('CreateObservationUseCase.ts', async () => {
   );
 
   mockObservationsRepository.create.mockResolvedValue(mockObservationDocument);
+  mockPatientsRepository.find.mockResolvedValue(mockPatientDocument);
 
   it('should validate input and throw error when data is invalid', async () => {
     const validationSpy = vi.spyOn(CreateObservationSchema, 'parse');
@@ -28,13 +29,12 @@ describe('CreateObservationUseCase.ts', async () => {
       useCase.execute({ ...mockCreateObservationDTO, partnerBeingTreated: 0 })
     ).rejects.toThrow();
 
-    expect(validationSpy).toBeCalled();
+    expect(validationSpy).toHaveBeenCalled();
   });
 
   it('should find the patient associated to the observation', async () => {
-    mockPatientsRepository.find.mockResolvedValueOnce(mockPatientDocument);
     await useCase.execute(mockCreateObservationDTO);
-    expect(mockPatientsRepository.find).toBeCalled();
+    expect(mockPatientsRepository.find).toHaveBeenCalled();
   });
 
   it('should throw NotFoundError when associated patient does not exist', async () => {
@@ -44,18 +44,12 @@ describe('CreateObservationUseCase.ts', async () => {
       NotFoundError
     );
 
-    expect(mockPatientsRepository.find).toBeCalled();
+    expect(mockPatientsRepository.find).toHaveBeenCalled();
   });
 
   it('should create a new observation after passing the validations', async () => {
-    mockPatientsRepository.find.mockResolvedValueOnce(mockPatientDocument);
-
-    mockObservationsRepository.create.mockResolvedValueOnce(
-      mockObservationDocument
-    );
-
     await useCase.execute(mockCreateObservationDTO);
-    expect(mockPatientsRepository.find).toBeCalled();
-    expect(mockObservationsRepository.create).toBeCalled();
+    expect(mockPatientsRepository.find).toHaveBeenCalled();
+    expect(mockObservationsRepository.create).toHaveBeenCalled();
   });
 });
