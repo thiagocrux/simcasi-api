@@ -27,7 +27,7 @@ describe('CreateSessionUseCase.ts', async () => {
       useCase.execute({ ...mockCreateRoleDTO, name: 'invalid_role' })
     ).rejects.toThrow();
 
-    expect(validationSpy).toBeCalled();
+    expect(validationSpy).toHaveBeenCalled();
   });
 
   it("should throw UniqueConstraintViolationError when account can't be found", async () => {
@@ -35,13 +35,13 @@ describe('CreateSessionUseCase.ts', async () => {
       UniqueConstraintViolationError
     );
 
-    expect(mockRolesRepository.find).toBeCalled();
+    expect(mockRolesRepository.find).toHaveBeenCalled();
   });
 
   it('should create a new role after passing the validations', async () => {
     mockRolesRepository.find.mockResolvedValueOnce(null);
     const useCaseReturn = await useCase.execute(mockCreateRoleDTO);
-    expect(mockRolesRepository.find).toBeCalled();
+    expect(mockRolesRepository.find).toHaveBeenCalled();
     expect(useCaseReturn).toBe(mockRoleDocument);
   });
 });
