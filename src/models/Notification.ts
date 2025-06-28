@@ -1,4 +1,4 @@
-import { Document, model, Schema, Types } from 'mongoose';
+import { Document, model, models, Schema, Types } from 'mongoose';
 
 export interface NotificationDocument extends Document {
   _id: Types.ObjectId;
@@ -24,4 +24,5 @@ const schema = new Schema(
   }
 );
 
-export const Notification = model<NotificationDocument>('Notification', schema);
+export const Notification =
+  models.Notification || model<NotificationDocument>('Notification', schema);

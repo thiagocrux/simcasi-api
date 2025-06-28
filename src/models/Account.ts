@@ -1,4 +1,4 @@
-import { Document, model, Schema, Types } from 'mongoose';
+import { Document, model, models, Schema, Types } from 'mongoose';
 
 export interface AccountDocument extends Document {
   _id: Types.ObjectId;
@@ -27,4 +27,5 @@ schema.set('toJSON', {
   },
 });
 
-export const Account = model<AccountDocument>('Account', schema);
+export const Account =
+  models.Account || model<AccountDocument>('Account', schema);

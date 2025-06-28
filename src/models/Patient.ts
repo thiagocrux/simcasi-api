@@ -1,4 +1,4 @@
-import { Document, model, Schema, Types } from 'mongoose';
+import { Document, model, models, Schema, Types } from 'mongoose';
 
 export interface PatientDocument extends Document {
   _id: Types.ObjectId;
@@ -62,4 +62,5 @@ const schema = new Schema(
   }
 );
 
-export const Patient = model<PatientDocument>('Patient', schema);
+export const Patient =
+  models.Patient || model<PatientDocument>('Patient', schema);

@@ -1,4 +1,4 @@
-import { Document, model, Schema, Types } from 'mongoose';
+import { Document, model, models, Schema, Types } from 'mongoose';
 
 import { PermissionCodes } from '../types';
 
@@ -16,4 +16,5 @@ const schema = new Schema(
   { timestamps: true }
 );
 
-export const Permission = model<PermissionDocument>('Permission', schema);
+export const Permission =
+  models.Permission || model<PermissionDocument>('Permission', schema);
