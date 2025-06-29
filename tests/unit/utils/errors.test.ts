@@ -87,9 +87,11 @@ describe('errors.ts', () => {
       const error = new UnauthorizedError();
 
       expect(error.statusCode).toBe(403);
+
       expect(error.message).toBe(
         "You don't have permission to access this resource."
       );
+
       expect(error.name).toBe('UnauthorizedError');
     });
   });
@@ -99,9 +101,11 @@ describe('errors.ts', () => {
       const error = new InvalidCredentialsError();
 
       expect(error.statusCode).toBe(401);
+
       expect(error.message).toBe(
         'The provided email or password is incorrect.'
       );
+
       expect(error.name).toBe('InvalidCredentialsError');
     });
   });
@@ -141,7 +145,7 @@ describe('errors.ts', () => {
       const error = new SessionCreationError();
 
       expect(error.statusCode).toBe(500);
-      expect(error.message).toBe('An error ocurred while creating a session.');
+      expect(error.message).toBe('An error occurred while creating a session.');
       expect(error.name).toBe('SessionCreationError');
     });
   });
