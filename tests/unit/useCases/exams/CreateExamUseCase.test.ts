@@ -23,10 +23,12 @@ describe('CreateExamUseCase.ts', async () => {
 
   it('should validate input and throw error when data is invalid', async () => {
     const validationSpy = vi.spyOn(CreateExamSchema, 'parse');
+
     await expect(
       // @ts-expect-error: deliberate wrong param type for testing purposes
       useCase.execute({ ...mockCreateExamDTO, treponemalTestType: 0 })
     ).rejects.toThrow();
+
     expect(validationSpy).toHaveBeenCalled();
   });
 

@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { GenerateNewAccessTokenUseCase } from '../../../../src/useCases';
 import { ExpiredSessionError, NotFoundError } from '../../../../src/utils';
+
 import {
   mockAccountDocument,
   mockAccountsRepository,
