@@ -10,7 +10,7 @@ import {
   mockObjectId,
 } from '../../../mocks';
 
-describe('DeleteNotificationUseCase.ts', async () => {
+describe('DeleteNotificationUseCase', async () => {
   const useCase = new DeleteNotificationUseCase(mockNotificationsRepository);
   mockNotificationsRepository.find.mockResolvedValue(mockNotificationDocument);
 

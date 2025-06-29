@@ -10,7 +10,7 @@ import {
   mockSessionsRepository,
 } from '../../../mocks';
 
-describe('GetSessionByIdUseCase.ts', async () => {
+describe('GetSessionByIdUseCase', async () => {
   const useCase = new GetSessionByIdUseCase(mockSessionsRepository);
   mockSessionsRepository.find.mockResolvedValue(mockSessionDocument);
 

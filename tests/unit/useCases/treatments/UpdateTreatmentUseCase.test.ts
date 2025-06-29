@@ -13,7 +13,7 @@ import {
   mockUpdateTreatmentDTO,
 } from '../../../mocks';
 
-describe('UpdateTreatmentUseCase.ts', async () => {
+describe('UpdateTreatmentUseCase', async () => {
   const useCase = new UpdateTreatmentUseCase(mockTreatmentsRepository);
   mockTreatmentsRepository.find.mockResolvedValue(mockTreatmentDocument);
   mockTreatmentsRepository.update.mockResolvedValue(mockTreatmentDocument);

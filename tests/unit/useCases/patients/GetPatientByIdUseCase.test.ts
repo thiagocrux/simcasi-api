@@ -10,7 +10,7 @@ import {
   mockPatientsRepository,
 } from '../../../mocks';
 
-describe('GetPatientByIdUseCase.ts', async () => {
+describe('GetPatientByIdUseCase', async () => {
   const useCase = new GetPatientByIdUseCase(mockPatientsRepository);
   mockPatientsRepository.find.mockResolvedValue(mockPatientDocument);
 

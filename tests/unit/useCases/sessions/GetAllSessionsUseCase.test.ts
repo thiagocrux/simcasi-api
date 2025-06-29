@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { GetAllSessionsUseCase } from '../../../../src/useCases';
 import { mockSessionsRepository } from '../../../mocks';
 
-describe('GetAllSessionsUseCase.ts', async () => {
+describe('GetAllSessionsUseCase', async () => {
   const useCase = new GetAllSessionsUseCase(mockSessionsRepository);
   mockSessionsRepository.findAll.mockResolvedValue([]);
 

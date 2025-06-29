@@ -10,7 +10,7 @@ import {
   mockObservationsRepository,
 } from '../../../mocks';
 
-describe('DeleteObservationUseCase.ts', async () => {
+describe('DeleteObservationUseCase', async () => {
   const useCase = new DeleteObservationUseCase(mockObservationsRepository);
   mockObservationsRepository.find.mockResolvedValue(mockObservationDocument);
 

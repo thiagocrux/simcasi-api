@@ -10,7 +10,7 @@ import {
   mockPatientsRepository,
 } from '../../../mocks';
 
-describe('CreatePatientUseCase.ts', async () => {
+describe('CreatePatientUseCase', async () => {
   const useCase = new CreatePatientUseCase(mockPatientsRepository);
   mockPatientsRepository.create.mockResolvedValue(mockPatientDocument);
   mockPatientsRepository.find.mockResolvedValue(null);
@@ -26,12 +26,12 @@ describe('CreatePatientUseCase.ts', async () => {
     expect(validationSpy).toHaveBeenCalled();
   });
 
-  it('should allow creating a new patient when no patient with the same CPF exists', async () => {
+  it('should allow creating a new patient when no patient with the same CPF exi', async () => {
     await useCase.execute(mockCreatePatientDTO);
     expect(mockPatientsRepository.find).toHaveBeenCalled();
   });
 
-  it('should throw UniqueConstraintViolationError if patient already exists', async () => {
+  it('should throw UniqueConstraintViolationError if patient already exi', async () => {
     mockPatientsRepository.find.mockResolvedValueOnce(mockPatientDocument);
 
     await expect(useCase.execute(mockCreatePatientDTO)).rejects.toThrow(

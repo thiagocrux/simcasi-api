@@ -10,7 +10,7 @@ import {
   mockPermissionsRepository,
 } from '../../../mocks';
 
-describe('GetPermissionByIdUseCase.ts', async () => {
+describe('GetPermissionByIdUseCase', async () => {
   const useCase = new GetPermissionByIdUseCase(mockPermissionsRepository);
   mockPermissionsRepository.find.mockResolvedValue(mockPermissionDocument);
 

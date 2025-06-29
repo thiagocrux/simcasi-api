@@ -10,7 +10,7 @@ import {
   mockRolesRepository,
 } from '../../../mocks';
 
-describe('CreateSessionUseCase.ts', async () => {
+describe('CreateSessionUseCase', async () => {
   const useCase = new CreateRoleUseCase(mockRolesRepository);
 
   beforeEach(() => {

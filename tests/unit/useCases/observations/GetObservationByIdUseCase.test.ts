@@ -10,7 +10,7 @@ import {
   mockObservationsRepository,
 } from '../../../mocks';
 
-describe('GetObservationByIdUseCase.ts', async () => {
+describe('GetObservationByIdUseCase', async () => {
   const useCase = new GetObservationByIdUseCase(mockObservationsRepository);
   mockObservationsRepository.find.mockResolvedValue(mockObservationDocument);
 

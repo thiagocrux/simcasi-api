@@ -14,7 +14,7 @@ import {
   mockPatientsRepository,
 } from '../../../mocks';
 
-describe('CreateNotificationUseCase.ts', async () => {
+describe('CreateNotificationUseCase', async () => {
   const useCase = new CreateNotificationUseCase(
     mockNotificationsRepository,
     mockPatientsRepository

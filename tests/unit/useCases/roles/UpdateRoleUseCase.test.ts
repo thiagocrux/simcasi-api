@@ -12,7 +12,7 @@ import {
   mockUpdateRoleDTO,
 } from '../../../mocks';
 
-describe('UpdateRoleUseCase.ts', async () => {
+describe('UpdateRoleUseCase', async () => {
   const useCase = new UpdateRoleUseCase(mockRolesRepository);
   mockRolesRepository.find.mockResolvedValue(mockRoleDocument);
   mockRolesRepository.update.mockResolvedValue(mockRoleDocument);

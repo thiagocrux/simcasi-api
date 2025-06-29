@@ -10,7 +10,7 @@ import {
   mockObjectId,
 } from '../../../mocks';
 
-describe('GetAccountByIdUseCase.ts', async () => {
+describe('GetAccountByIdUseCase', async () => {
   const useCase = new GetAccountByIdUseCase(mockAccountsRepository);
   mockAccountsRepository.find.mockResolvedValue(mockAccountDocument);
 

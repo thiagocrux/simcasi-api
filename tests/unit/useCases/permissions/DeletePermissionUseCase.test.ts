@@ -12,7 +12,7 @@ import {
   mockRolesRepository,
 } from '../../../mocks';
 
-describe('DeletePermissionUseCase.ts', async () => {
+describe('DeletePermissionUseCase', async () => {
   const useCase = new DeletePermissionUseCase(
     mockPermissionsRepository,
     mockRolesRepository

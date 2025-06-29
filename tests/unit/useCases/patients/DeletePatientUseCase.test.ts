@@ -10,7 +10,7 @@ import {
   mockPatientsRepository,
 } from '../../../mocks';
 
-describe('DeletePatientUseCase.ts', async () => {
+describe('DeletePatientUseCase', async () => {
   const useCase = new DeletePatientUseCase(mockPatientsRepository);
   mockPatientsRepository.find.mockResolvedValue(mockPatientDocument);
 

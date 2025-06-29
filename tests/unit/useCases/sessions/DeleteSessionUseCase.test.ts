@@ -10,7 +10,7 @@ import {
   mockSessionsRepository,
 } from '../../../mocks';
 
-describe('DeleteSessionUseCase.ts', async () => {
+describe('DeleteSessionUseCase', async () => {
   const useCase = new DeleteSessionUseCase(mockSessionsRepository);
   mockSessionsRepository.find.mockResolvedValue(mockSessionDocument);
 

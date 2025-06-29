@@ -11,7 +11,7 @@ import {
   mockCreateAccountDTO,
 } from '../../../mocks';
 
-describe('CreateAccountUseCase.ts', async () => {
+describe('CreateAccountUseCase', async () => {
   const useCase = new CreateAccountUseCase(mockAccountsRepository);
   mockAccountsRepository.find.mockResolvedValue(null);
 
@@ -30,7 +30,7 @@ describe('CreateAccountUseCase.ts', async () => {
     expect(mockAccountsRepository.find).toHaveBeenCalled();
   });
 
-  it('should throw UniqueConstraintViolationError if account already exists', async () => {
+  it('should throw UniqueConstraintViolationError if account already exi', async () => {
     mockAccountsRepository.find.mockResolvedValueOnce(mockAccountDocument);
 
     await expect(useCase.execute(mockCreateAccountDTO)).rejects.toThrow(

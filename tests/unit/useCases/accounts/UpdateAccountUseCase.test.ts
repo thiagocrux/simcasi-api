@@ -17,7 +17,7 @@ import {
   mockUpdateAccountDTO,
 } from '../../../mocks';
 
-describe('UpdateAccountUseCase.ts', async () => {
+describe('UpdateAccountUseCase', async () => {
   const useCase = new UpdateAccountUseCase(mockAccountsRepository);
   mockAccountsRepository.find.mockResolvedValue(mockAccountDocument);
   mockAccountsRepository.update.mockResolvedValue(mockAccountDocument);

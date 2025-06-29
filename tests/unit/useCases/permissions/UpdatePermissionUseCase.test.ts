@@ -12,7 +12,7 @@ import {
   mockUpdatePermissionDTO,
 } from '../../../mocks';
 
-describe('UpdatePermissionUseCase.ts', async () => {
+describe('UpdatePermissionUseCase', async () => {
   const useCase = new UpdatePermissionUseCase(mockPermissionsRepository);
   mockPermissionsRepository.find.mockResolvedValue(mockPermissionDocument);
   mockPermissionsRepository.update.mockResolvedValue(mockPermissionDocument);

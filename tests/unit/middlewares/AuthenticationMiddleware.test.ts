@@ -13,7 +13,7 @@ import {
   mockSessionDocument,
 } from '../../mocks';
 
-describe('AuthenticationMiddleware.ts', async () => {
+describe('AuthenticationMiddleware', async () => {
   beforeEach(() => {
     vi.resetModules();
     vi.clearAllMocks();

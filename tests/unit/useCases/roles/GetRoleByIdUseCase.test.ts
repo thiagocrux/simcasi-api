@@ -10,7 +10,7 @@ import {
   mockRolesRepository,
 } from '../../../mocks';
 
-describe('GetRoleByIdUseCase.ts', async () => {
+describe('GetRoleByIdUseCase', async () => {
   const useCase = new GetRoleByIdUseCase(mockRolesRepository);
   mockRolesRepository.find.mockResolvedValue(mockRoleDocument);
 

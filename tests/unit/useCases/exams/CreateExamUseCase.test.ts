@@ -12,7 +12,7 @@ import {
   mockPatientsRepository,
 } from '../../../mocks';
 
-describe('CreateExamUseCase.ts', async () => {
+describe('CreateExamUseCase', async () => {
   const useCase = new CreateExamUseCase(
     mockExamsRepository,
     mockPatientsRepository

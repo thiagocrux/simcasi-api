@@ -10,7 +10,7 @@ import {
   mockObjectId,
 } from '../../../mocks';
 
-describe('GetNotificationByIdUseCase.ts', async () => {
+describe('GetNotificationByIdUseCase', async () => {
   const useCase = new GetNotificationByIdUseCase(mockNotificationsRepository);
   mockNotificationsRepository.find.mockResolvedValue(mockNotificationDocument);
 

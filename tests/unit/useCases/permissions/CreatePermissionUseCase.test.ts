@@ -21,7 +21,7 @@ import {
   mockRolesRepository,
 } from '../../../mocks';
 
-describe('CreateSessionUseCase.ts', async () => {
+describe('CreateSessionUseCase', async () => {
   const useCase = new CreatePermissionUseCase(
     mockPermissionsRepository,
     mockRolesRepository
@@ -44,7 +44,7 @@ describe('CreateSessionUseCase.ts', async () => {
     expect(validationSpy).toHaveBeenCalled();
   });
 
-  it('should throw UniqueConstraintViolationError if permission already exists', async () => {
+  it('should throw UniqueConstraintViolationError if permission already exi', async () => {
     mockPermissionsRepository.find.mockResolvedValueOnce(
       mockPermissionDocument
     );
