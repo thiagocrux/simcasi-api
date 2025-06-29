@@ -5,7 +5,7 @@ import {
   generateSessionTimeframe,
 } from '../../../src/utils';
 
-describe('dateTime.ts', () => {
+describe('dateTime', () => {
   describe('convertDurationStringToMilliseconds', () => {
     it('should return null for non-string input', () => {
       // @ts-expect-error: deliberate wrong param type for testing purposes

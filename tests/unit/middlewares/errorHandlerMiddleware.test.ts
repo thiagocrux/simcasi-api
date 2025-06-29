@@ -5,7 +5,7 @@ import { errorHandlerMiddleware } from '../../../src/middlewares/errorHandlerMid
 import { logger } from '../../../src/utils';
 import { NotFoundError } from '../../../src/utils/errors';
 
-describe('errorHandlerMiddleware.ts', () => {
+describe('errorHandlerMiddleware', () => {
   it('should send the correct status code and error object in the JSON response', () => {
     const error = new NotFoundError('subject');
     const req = {} as any;

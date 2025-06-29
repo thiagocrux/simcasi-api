@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MissingDataError, UnauthorizedError } from '../../../src/utils';
 import { mockRoleDocument, mockRolesRepository } from '../../mocks';
 
-describe('AuthorizationMiddleware.ts', () => {
+describe('AuthorizationMiddleware', () => {
   beforeEach(() => {
     vi.resetModules();
     vi.clearAllMocks();

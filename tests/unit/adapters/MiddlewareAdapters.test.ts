@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { middlewareAdapter } from '../../../src/adapters';
 
-describe('middlewareAdapter.ts', () => {
+describe('middlewareAdapter', () => {
   it('should call next middleware when no error occurs', async () => {
     const req = {} as any;
     const res = {} as any;

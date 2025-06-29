@@ -15,7 +15,7 @@ import {
   UniqueEmailViolationError,
 } from '../../../src/utils';
 
-describe('errors.ts', () => {
+describe('errors', () => {
   describe('ErrorBase', () => {
     it('should have enumerable message and stack properties', () => {
       const error = new NotFoundError('Test');
