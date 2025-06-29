@@ -19,7 +19,7 @@ export class PermissionsController {
 
   public async show(request: Request, response: Response) {
     const permission = await createGetPermissionByIdUseCase().execute(
-      request.params._id
+      request.params.id
     );
 
     response.status(200).json(permission);
