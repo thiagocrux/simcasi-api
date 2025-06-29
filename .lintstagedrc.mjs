@@ -3,7 +3,7 @@ export default {
     `npx prettier --write ${filenames
       .map((filename) => `"${filename}"`)
       .join(' ')}`,
-    // 'eslint . --fix --ignore-pattern "dist/*"',
-    // config testing routine...,
+    'eslint . --fix --ignore-pattern "dist/*"',
+    'npm test',
   ],
 };
