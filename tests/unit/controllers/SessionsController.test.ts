@@ -1,0 +1,148 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { SessionsController } from '../../../src/controllers';
+import * as factories from '../../../src/factories';
+import { mockSessionDocument } from '../../mocks';
+
+describe('SessionsController', () => {
+  let controller: SessionsController;
+  let mockRequest: any;
+  let mockResponse: any;
+
+  beforeEach(() => {
+    vi.restoreAllMocks();
+
+    mockResponse = {
+      status: vi.fn().mockReturnThis(),
+      json: vi.fn().mockReturnThis(),
+      sendStatus: vi.fn().mockReturnThis(),
+      cookie: vi.fn().mockReturnThis(),
+    };
+
+    controller = new SessionsController();
+  });
+
+  it('should retrieve all sessions using the default sort order', async () => {
+    const executeMock = vi.fn().mockResolvedValue([mockSessionDocument]);
+
+    vi.spyOn(factories, 'createGetAllSessionsUseCase').mockReturnValue({
+      execute: executeMock,
+    } as any);
+
+    mockRequest = { query: {} };
+    await controller.index(mockRequest, mockResponse);
+    expect(executeMock).toHaveBeenCalledWith(undefined);
+    expect(mockResponse.status).toHaveBeenCalledWith(200);
+    expect(mockResponse.json).toHaveBeenCalledWith([mockSessionDocument]);
+  });
+
+  it('should retrieve all sessions using a specified sort order', async () => {
+    const executeMock = vi.fn().mockResolvedValue([mockSessionDocument]);
+
+    vi.spyOn(factories, 'createGetAllSessionsUseCase').mockReturnValue({
+      execute: executeMock,
+    } as any);
+
+    mockRequest = { query: { order: 'desc' } };
+
+    await controller.index(mockRequest, mockResponse);
+    expect(executeMock).toHaveBeenCalledWith('desc');
+    expect(mockResponse.status).toHaveBeenCalledWith(200);
+    expect(mockResponse.json).toHaveBeenCalledWith([mockSessionDocument]);
+  });
+
+  it('should retrieve a session by its id', async () => {
+    const executeMock = vi.fn().mockResolvedValue(mockSessionDocument);
+
+    vi.spyOn(factories, 'createGetSessionByIdUseCase').mockReturnValue({
+      execute: executeMock,
+    } as any);
+
+    mockRequest = { params: { id: '1' } };
+    await controller.show(mockRequest, mockResponse);
+    expect(executeMock).toHaveBeenCalledWith('1');
+    expect(mockResponse.status).toHaveBeenCalledWith(200);
+    expect(mockResponse.json).toHaveBeenCalledWith(mockSessionDocument);
+  });
+
+  it('should create and return a new session', async () => {
+    const executeMock = vi.fn().mockResolvedValue({
+      accessToken: 'mockAccessToken',
+      session: mockSessionDocument,
+    });
+
+    vi.spyOn(factories, 'createCreateSessionUseCase').mockReturnValue({
+      execute: executeMock,
+    } as any);
+
+    mockRequest = {
+      body: {
+        name: 'New Session',
+      },
+      ip: '127.0.0.1',
+      get: vi.fn((header: string) => {
+        if (header === 'User-Agent') return 'Vitest';
+        return undefined;
+      }),
+    };
+
+    await controller.create(mockRequest, mockResponse);
+
+    expect(executeMock).toHaveBeenCalledWith(mockRequest.body, {
+      ipAddress: '127.0.0.1',
+      userAgent: 'Vitest',
+    });
+
+    expect(mockResponse.status).toHaveBeenCalledWith(201);
+
+    expect(mockResponse.json).toHaveBeenCalledWith({
+      accessToken: 'mockAccessToken',
+      session: mockSessionDocument,
+    });
+  });
+
+  it('should delete a session by its id and return no content', async () => {
+    const executeMock = vi.fn().mockResolvedValue(undefined);
+
+    vi.spyOn(factories, 'createDeleteSessionUseCase').mockReturnValue({
+      execute: executeMock,
+    } as any);
+
+    mockRequest = { params: { id: '1' } };
+    await controller.delete(mockRequest, mockResponse);
+    expect(executeMock).toHaveBeenCalledWith('1');
+    expect(mockResponse.sendStatus).toHaveBeenCalledWith(204);
+  });
+
+  it('should refresh and return a new access token', async () => {
+    const executeMock = vi.fn().mockResolvedValue('newMockAccessToken');
+
+    vi.spyOn(factories, 'createGenerateNewAccessTokenUseCase').mockReturnValue({
+      execute: executeMock,
+    } as any);
+
+    mockRequest = {
+      body: { session: 'mockSessionId' },
+    };
+
+    await controller.refreshToken(mockRequest, mockResponse);
+    expect(executeMock).toHaveBeenCalledWith('mockSessionId');
+
+    expect(mockResponse.cookie).toHaveBeenCalledWith(
+      'accessToken',
+      'newMockAccessToken',
+      {
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: true,
+      }
+    );
+
+    expect(mockResponse.status).toHaveBeenCalledWith(201);
+
+    expect(mockResponse.json).toHaveBeenCalledWith({
+      accessToken: 'newMockAccessToken',
+    });
+  });
+});
