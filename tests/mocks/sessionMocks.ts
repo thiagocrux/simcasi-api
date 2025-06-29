@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 import { vi } from 'vitest';
 
 export const mockSessionsRepository = {
@@ -16,6 +17,15 @@ export const mockDeviceInfo = {
 export const mockCreateSessionDTO = {
   email: 'fulano-detail@gmail.com',
   password: 'Teste@12',
+  deviceInfo: {
+    ipAddress: '::1',
+    userAgent: 'PostmanRuntime/7.44.0',
+  },
+  _id: new Types.ObjectId('6840dc6db003b4c6b7fe29c6'),
+  accountId: new Types.ObjectId('683cc6b063bb1ed787c7100e'),
+  isActive: true,
+  issuedAt: new Date(),
+  expiresAt: new Date(Date.now() + 3600 * 1000),
 } as const;
 
 export const mockUpdateSessionDTO = {
