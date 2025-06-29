@@ -98,6 +98,6 @@ export class SessionCreationError extends CustomError {
   readonly statusCode = 500;
 
   constructor() {
-    super('An error ocurred while creating a session.');
+    super('An error occurred while creating a session.');
   }
 }
