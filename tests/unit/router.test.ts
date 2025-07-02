@@ -43,7 +43,7 @@ vi.mock('../../src/factories', () => ({
   createAuthorizationMiddleware: vi.fn(() => mockAuthorizationMiddleware),
 }));
 
-describe('Router Configuration', () => {
+describe('router', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.resetModules();
