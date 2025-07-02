@@ -1,6 +1,6 @@
 import { ExamsRepository } from '../../../repositories';
-import { GetAllExamsUseCase } from '../../../useCases';
+import { GetExamByIdUseCase } from '../../../useCases';
 
 export function createGetExamByIdUseCase() {
-  return new GetAllExamsUseCase(ExamsRepository);
+  return new GetExamByIdUseCase(ExamsRepository);
 }
