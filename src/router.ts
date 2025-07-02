@@ -111,7 +111,7 @@ router.put(
 router.delete(
   '/roles/:id',
   createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('roles:read'),
+  createAuthorizationMiddleware('roles:delete'),
   createRolesController().delete
 );
 
