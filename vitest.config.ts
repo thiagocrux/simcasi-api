@@ -11,6 +11,8 @@ export default defineConfig({
         '*.config.{js,ts}',
         '**/src/config/**',
         '**/src/types/**',
+        '**/dist/**',
+        '**/tests/mocks/**',
       ],
     },
     exclude: ['**/node_modules/**', '**/dist/**', '**/coverage/**'],
