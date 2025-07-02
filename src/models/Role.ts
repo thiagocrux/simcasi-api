@@ -1,4 +1,4 @@
-import { Document, model, models, Schema, Types } from 'mongoose';
+import mongoose, { Document, model, Schema, Types } from 'mongoose';
 
 import { PermissionCodes } from '../types';
 
@@ -27,4 +27,4 @@ const schema = new Schema(
   { timestamps: true }
 );
 
-export const Role = models.Role || model<RoleDocument>('Role', schema);
+export const Role = mongoose.models.Role || model<RoleDocument>('Role', schema);

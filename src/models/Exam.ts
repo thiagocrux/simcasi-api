@@ -1,4 +1,4 @@
-import { Document, model, models, Schema, Types } from 'mongoose';
+import mongoose, { Document, model, Schema, Types } from 'mongoose';
 
 export interface ExamDocument extends Document {
   _id: Types.ObjectId;
@@ -40,4 +40,4 @@ const schema = new Schema(
   }
 );
 
-export const Exam = models.Exam || model<ExamDocument>('Exam', schema);
+export const Exam = mongoose.models.Exam || model<ExamDocument>('Exam', schema);

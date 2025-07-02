@@ -1,4 +1,4 @@
-import { Document, model, models, Schema, Types } from 'mongoose';
+import mongoose, { Document, model, Schema, Types } from 'mongoose';
 
 export interface PatientDocument extends Document {
   _id: Types.ObjectId;
@@ -63,4 +63,4 @@ const schema = new Schema(
 );
 
 export const Patient =
-  models.Patient || model<PatientDocument>('Patient', schema);
+  mongoose.models.Patient || model<PatientDocument>('Patient', schema);

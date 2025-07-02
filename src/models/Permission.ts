@@ -1,4 +1,4 @@
-import { Document, model, models, Schema, Types } from 'mongoose';
+import mongoose, { Document, model, Schema, Types } from 'mongoose';
 
 import { PermissionCodes } from '../types';
 
@@ -17,4 +17,4 @@ const schema = new Schema(
 );
 
 export const Permission =
-  models.Permission || model<PermissionDocument>('Permission', schema);
+  mongoose.models.Permission || model<PermissionDocument>('Permission', schema);

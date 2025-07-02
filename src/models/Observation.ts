@@ -1,4 +1,4 @@
-import { Document, model, models, Schema, Types } from 'mongoose';
+import mongoose, { Document, model, Schema, Types } from 'mongoose';
 
 export interface ObservationDocument extends Document {
   _id: Types.ObjectId;
@@ -25,4 +25,5 @@ const schema = new Schema(
 );
 
 export const Observation =
-  models.Observation || model<ObservationDocument>('Observation', schema);
+  mongoose.models.Observation ||
+  model<ObservationDocument>('Observation', schema);
