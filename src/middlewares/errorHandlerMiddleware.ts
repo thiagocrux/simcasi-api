@@ -3,7 +3,7 @@ import type { NextFunction, Request, Response } from 'express';
 import { logger } from '../utils';
 
 interface CustomError extends Error {
-  statusCode: number;
+  statusCode?: number;
 }
 
 export function errorHandlerMiddleware(
@@ -17,5 +17,6 @@ export function errorHandlerMiddleware(
   }
 
   logger.error({ ...error });
-  response.status(error.statusCode).json({ error });
+  const statusCode = error.statusCode || 500;
+  response.status(statusCode).json({ error });
 }
