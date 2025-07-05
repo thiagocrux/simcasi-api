@@ -1,4 +1,5 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
   InvalidAccessTokenError,
@@ -13,230 +14,184 @@ import {
   mockSessionDocument,
 } from '../../mocks';
 
-describe('AuthenticationMiddleware', async () => {
-  beforeEach(() => {
-    vi.resetModules();
-    vi.clearAllMocks();
-  });
+let mockIsAuthenticationDisabled = false;
+let mockEnv = { jwtSecret: 'test-secret' };
 
-  afterEach(() => {
-    vi.unmock('jsonwebtoken');
-    vi.unmock('../../../src/repositories');
-    vi.unmock('../../../src/config');
+vi.mock('../../../src/config', () => ({
+  get IS_AUTHENTICATION_DISABLED() {
+    return mockIsAuthenticationDisabled;
+  },
+  get env() {
+    return mockEnv;
+  },
+}));
+
+vi.mock('jsonwebtoken', () => ({
+  default: {
+    verify: vi.fn(),
+  },
+}));
+
+vi.mock('../../../src/repositories/SessionsRepository', () => ({
+  SessionsRepository: vi.fn().mockImplementation(() => ({
+    find: vi.fn(),
+  })),
+}));
+
+import jwt from 'jsonwebtoken';
+import { AuthenticationMiddleware } from '../../../src/middlewares';
+import { SessionsRepository } from '../../../src/repositories/SessionsRepository';
+
+const mockJwt = vi.mocked(jwt);
+const MockedSessionsRepository = vi.mocked(SessionsRepository);
+
+describe('AuthenticationMiddleware', () => {
+  let mockSessionsRepository: any;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockIsAuthenticationDisabled = false;
+    mockEnv = { jwtSecret: 'test-secret' };
+
+    mockSessionsRepository = {
+      find: vi.fn(),
+    };
+
+    MockedSessionsRepository.mockImplementation(() => mockSessionsRepository);
+
+    (mockJwt.verify as any).mockReturnValue({
+      sub: mockObjectId,
+      rid: mockObjectId,
+      sid: mockObjectId,
+    });
   });
 
   it('should return `{ data: {} }` when authentication is disabled', async () => {
-    vi.doMock('../../../src/config', () => ({
-      IS_AUTHENTICATION_DISABLED: true,
-    }));
+    mockIsAuthenticationDisabled = true;
 
-    const { IS_AUTHENTICATION_DISABLED } = await import('../../../src/config');
-
-    const { AuthenticationMiddleware } = await import(
-      '../../../src/middlewares'
-    );
-
-    const middleware = new AuthenticationMiddleware();
+    const middleware = new AuthenticationMiddleware(mockSessionsRepository);
     const response = await middleware.handle(mockRequest);
-    expect(IS_AUTHENTICATION_DISABLED).toBe(true);
     expect(response).toStrictEqual({ data: {} });
   });
 
   it('should throw MissingAccessTokenError when the authorization header is missing', async () => {
-    vi.doMock('../../../src/config', () => ({
-      IS_AUTHENTICATION_DISABLED: false,
-    }));
+    const middleware = new AuthenticationMiddleware(mockSessionsRepository);
 
-    const { AuthenticationMiddleware } = await import(
-      '../../../src/middlewares'
-    );
-
-    const middleware = new AuthenticationMiddleware().handle({
+    const promise = middleware.handle({
       ...mockRequest,
       headers: {},
     });
 
-    await expect(middleware).rejects.toThrowError(
+    await expect(promise).rejects.toThrowError(
       new MissingAccessTokenError().message
     );
   });
 
   it("should throw InvalidAccessTokenError when the authorization token is missing the 'Bearer' prefix", async () => {
-    vi.doMock('../../../src/config', () => ({
-      IS_AUTHENTICATION_DISABLED: false,
-    }));
+    const middleware = new AuthenticationMiddleware(mockSessionsRepository);
 
-    const { AuthenticationMiddleware } = await import(
-      '../../../src/middlewares'
-    );
-
-    const middleware = new AuthenticationMiddleware().handle({
+    const promise = middleware.handle({
       ...mockRequest,
       headers: { authorization: mockJwtToken },
     });
 
-    await expect(middleware).rejects.toThrowError(
+    await expect(promise).rejects.toThrowError(
       new InvalidAccessTokenError().message
     );
   });
 
   it("should throw a 'jwt malformed' error when the JWT token format is invalid", async () => {
-    vi.doMock('../../../src/config', () => ({
-      IS_AUTHENTICATION_DISABLED: false,
-      env: { jwtSecret: 'jwt-secret' },
-    }));
-
-    vi.doMock('jsonwebtoken', () => ({
-      default: {
-        verify: vi.fn(() => {
-          throw new Error('jwt malformed');
-        }),
-      },
-    }));
-
-    vi.doMock('../../../src/repositories', () => ({
-      SessionsRepository: {
-        find: vi.fn(),
-      },
-    }));
-
-    const { AuthenticationMiddleware } = await import(
-      '../../../src/middlewares'
-    );
-
-    const middleware = new AuthenticationMiddleware().handle({
-      ...mockRequest,
-      headers: { authorization: 'Bearer malformed_token' },
+    (mockJwt.verify as any).mockImplementation(() => {
+      throw new Error('jwt malformed');
     });
 
-    await expect(middleware).rejects.toThrow('jwt malformed');
+    const middleware = new AuthenticationMiddleware(mockSessionsRepository);
+
+    const promise = middleware.handle({
+      ...mockRequest,
+      headers: { authorization: `Bearer ${mockJwtToken}` },
+    });
+
+    await expect(promise).rejects.toThrowError('jwt malformed');
   });
 
   it('should throw InvalidAccessTokenError when the JWT payload is missing the account id (`sub`)', async () => {
-    vi.doMock('../../../src/config', () => ({
-      IS_AUTHENTICATION_DISABLED: false,
-      env: { jwtSecret: 'jwt-secret' },
-    }));
+    (mockJwt.verify as any).mockReturnValue({
+      sub: false, // or null/undefined to trigger the error
+      rid: mockObjectId,
+      sid: mockObjectId,
+    });
 
-    vi.doMock('jsonwebtoken', () => ({
-      default: {
-        verify: vi.fn().mockResolvedValueOnce({
-          sub: false,
-          rid: mockObjectId,
-          sid: mockObjectId,
-        }),
-      },
-    }));
+    const middleware = new AuthenticationMiddleware(mockSessionsRepository);
 
-    vi.mock('../../../src/repositories', () => ({
-      SessionsRepository: {
-        find: vi.fn().mockResolvedValueOnce(null),
-      },
-    }));
+    const promise = middleware.handle({
+      ...mockRequest,
+      headers: { authorization: `Bearer ${mockJwtToken}` },
+    });
 
-    const { AuthenticationMiddleware } = await import(
-      '../../../src/middlewares'
-    );
-
-    const middleware = new AuthenticationMiddleware().handle(mockRequest);
-
-    await expect(middleware).rejects.toThrow(
+    await expect(promise).rejects.toThrowError(
       new InvalidAccessTokenError().message
     );
   });
 
   it('should throw UnauthorizedError when the account-related session does not exist', async () => {
-    vi.doMock('../../../src/config', () => ({
-      IS_AUTHENTICATION_DISABLED: false,
-      env: { jwtSecret: 'jwt-secret' },
-    }));
+    (mockJwt.verify as any).mockReturnValue({
+      sub: mockObjectId,
+      rid: mockObjectId,
+      sid: mockObjectId,
+    });
 
-    vi.doMock('jsonwebtoken', () => ({
-      default: {
-        verify: vi.fn(() => ({
-          sub: mockObjectId,
-          rid: mockObjectId,
-          sid: mockObjectId,
-        })),
-      },
-    }));
+    mockSessionsRepository.find.mockResolvedValue(null);
 
-    vi.doMock('../../../src/repositories', () => ({
-      SessionsRepository: {
-        find: vi.fn().mockResolvedValueOnce(null),
-      },
-    }));
+    const middleware = new AuthenticationMiddleware(mockSessionsRepository);
 
-    const { AuthenticationMiddleware } = await import(
-      '../../../src/middlewares'
-    );
+    const promise = middleware.handle({
+      ...mockRequest,
+      headers: { authorization: `Bearer ${mockJwtToken}` },
+    });
 
-    const middleware = new AuthenticationMiddleware().handle(mockRequest);
-    await expect(middleware).rejects.toThrow(new UnauthorizedError().message);
+    await expect(promise).rejects.toThrowError(new UnauthorizedError().message);
   });
 
   it('should throw UnauthorizedError when the session is not active', async () => {
-    vi.doMock('../../../src/config', () => ({
-      IS_AUTHENTICATION_DISABLED: false,
-      env: { jwtSecret: 'jwt-secret' },
-    }));
+    (mockJwt.verify as any).mockReturnValue({
+      sub: mockObjectId,
+      rid: mockObjectId,
+      sid: mockObjectId,
+    });
 
-    vi.doMock('jsonwebtoken', () => ({
-      default: {
-        verify: vi.fn(() => ({
-          sub: mockObjectId,
-          rid: mockObjectId,
-          sid: mockObjectId,
-        })),
-      },
-    }));
+    mockSessionsRepository.find.mockResolvedValue({
+      ...mockSessionDocument,
+      isActive: false,
+    });
 
-    vi.doMock('../../../src/repositories', () => ({
-      SessionsRepository: {
-        find: vi
-          .fn()
-          .mockResolvedValueOnce({ ...mockSessionDocument, isActive: false }),
-      },
-    }));
+    const middleware = new AuthenticationMiddleware(mockSessionsRepository);
 
-    const { AuthenticationMiddleware } = await import(
-      '../../../src/middlewares'
-    );
+    const promise = middleware.handle({
+      ...mockRequest,
+      headers: { authorization: `Bearer ${mockJwtToken}` },
+    });
 
-    const middleware = new AuthenticationMiddleware().handle(mockRequest);
-    await expect(middleware).rejects.toThrow(new UnauthorizedError().message);
+    await expect(promise).rejects.toThrowError(new UnauthorizedError().message);
   });
 
   it('should return the account id and role when all validations pass', async () => {
-    vi.doMock('../../../src/config', () => ({
-      IS_AUTHENTICATION_DISABLED: false,
-      env: { jwtSecret: 'jwt-secret' },
-    }));
+    (mockJwt.verify as any).mockReturnValue({
+      sub: mockObjectId,
+      rid: mockObjectId,
+      sid: mockObjectId,
+    });
 
-    vi.doMock('jsonwebtoken', () => ({
-      default: {
-        verify: vi.fn(() => ({
-          sub: mockObjectId,
-          rid: mockObjectId,
-          sid: mockObjectId,
-        })),
-      },
-    }));
+    mockSessionsRepository.find.mockResolvedValue(mockSessionDocument);
 
-    vi.doMock('../../../src/repositories', () => ({
-      SessionsRepository: {
-        find: vi.fn().mockResolvedValueOnce(mockSessionDocument),
-      },
-    }));
+    const middleware = new AuthenticationMiddleware(mockSessionsRepository);
 
-    const { AuthenticationMiddleware } = await import(
-      '../../../src/middlewares'
-    );
+    const response = await middleware.handle({
+      ...mockRequest,
+      headers: { authorization: `Bearer ${mockJwtToken}` },
+    });
 
-    const middleware = new AuthenticationMiddleware();
-    const response = await middleware.handle(mockRequest);
-
-    await expect(response).toEqual({
+    expect(response).toStrictEqual({
       data: {
         id: mockObjectId,
         role: mockObjectId,

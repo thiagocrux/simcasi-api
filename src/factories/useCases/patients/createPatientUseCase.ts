@@ -2,5 +2,6 @@ import { PatientsRepository } from '../../../repositories';
 import { CreatePatientUseCase } from '../../../useCases';
 
 export function createPatientUseCase() {
-  return new CreatePatientUseCase(PatientsRepository);
+  const patientsRepository = new PatientsRepository();
+  return new CreatePatientUseCase(patientsRepository);
 }

@@ -2,5 +2,6 @@ import { AccountsRepository } from '../../../repositories';
 import { DeleteAccountUseCase } from '../../../useCases';
 
 export function deleteAccountUseCase() {
-  return new DeleteAccountUseCase(AccountsRepository);
+  const accountsRepository = new AccountsRepository();
+  return new DeleteAccountUseCase(accountsRepository);
 }

@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { Observation } from '../../../src/models';
-import ObservationsRepository from '../../../src/repositories/ObservationsRepository';
+import { ObservationsRepository } from '../../../src/repositories/ObservationsRepository';
 
 import {
   mockCreateObservationDTO,
@@ -21,8 +21,11 @@ vi.mock('../../../src/models', () => ({
 }));
 
 describe('ObservationsRepository', () => {
+  let observationsRepository: ObservationsRepository;
+
   beforeEach(() => {
     vi.clearAllMocks();
+    observationsRepository = new ObservationsRepository();
   });
 
   it('should return all observations in descending order', async () => {
@@ -35,7 +38,7 @@ describe('ObservationsRepository', () => {
         ]),
     });
 
-    const result = await ObservationsRepository.findAll('desc');
+    const result = await observationsRepository.findAll('desc');
     expect(Observation.find).toHaveBeenCalled();
 
     expect(result).toEqual([
@@ -54,7 +57,7 @@ describe('ObservationsRepository', () => {
         ]),
     });
 
-    const result = await ObservationsRepository.findAll('asc');
+    const result = await observationsRepository.findAll('asc');
     expect(Observation.find).toHaveBeenCalled();
 
     expect(result).toEqual([
@@ -66,7 +69,7 @@ describe('ObservationsRepository', () => {
   it('should find an observation by filter', async () => {
     (Observation.findOne as any).mockResolvedValueOnce(mockObservationDocument);
 
-    const result = await ObservationsRepository.find({
+    const result = await observationsRepository.find({
       _id: mockObservationDocument._id,
     });
 
@@ -76,21 +79,23 @@ describe('ObservationsRepository', () => {
     expect(result).toEqual(mockObservationDocument);
   });
 
-  it('should create an observation', async () => {
+  it('should create a new observation', async () => {
     (Observation.create as any).mockResolvedValueOnce(mockObservationDocument);
-    const result = await ObservationsRepository.create(
+
+    const result = await observationsRepository.create(
       mockCreateObservationDTO
     );
+
     expect(Observation.create).toHaveBeenCalledWith(mockCreateObservationDTO);
     expect(result).toEqual(mockObservationDocument);
   });
 
-  it('should update an observation', async () => {
+  it('should update an existing observation', async () => {
     (Observation.findOneAndUpdate as any).mockResolvedValueOnce(
       mockObservationDocument
     );
 
-    const result = await ObservationsRepository.update(
+    const result = await observationsRepository.update(
       { _id: mockObservationDocument._id },
       mockUpdateObservationDTO
     );
@@ -100,12 +105,13 @@ describe('ObservationsRepository', () => {
       mockUpdateObservationDTO,
       { new: true }
     );
+
     expect(result).toEqual(mockObservationDocument);
   });
 
-  it('should delete an observation', async () => {
+  it('should delete an observation by filter', async () => {
     (Observation.findOneAndDelete as any).mockResolvedValueOnce(undefined);
-    await ObservationsRepository.delete({ _id: mockObservationDocument._id });
+    await observationsRepository.delete({ _id: mockObservationDocument._id });
 
     expect(Observation.findOneAndDelete).toHaveBeenCalledWith({
       _id: mockObservationDocument._id,

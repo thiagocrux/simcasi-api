@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { Treatment } from '../../../src/models';
-import TreatmentsRepository from '../../../src/repositories/TreatmentsRepository';
+import { TreatmentsRepository } from '../../../src/repositories/TreatmentsRepository';
 
 import {
   mockCreateTreatmentDTO,
@@ -21,8 +21,11 @@ vi.mock('../../../src/models', () => ({
 }));
 
 describe('TreatmentsRepository', () => {
+  let treatmentsRepository: TreatmentsRepository;
+
   beforeEach(() => {
     vi.clearAllMocks();
+    treatmentsRepository = new TreatmentsRepository();
   });
 
   it('should retrieve all treatments in descending order', async () => {
@@ -35,7 +38,7 @@ describe('TreatmentsRepository', () => {
         ]),
     });
 
-    const result = await TreatmentsRepository.findAll('desc');
+    const result = await treatmentsRepository.findAll('desc');
     expect(Treatment.find).toHaveBeenCalled();
 
     expect(result).toEqual([
@@ -54,7 +57,7 @@ describe('TreatmentsRepository', () => {
         ]),
     });
 
-    const result = await TreatmentsRepository.findAll('asc');
+    const result = await treatmentsRepository.findAll('asc');
     expect(Treatment.find).toHaveBeenCalled();
 
     expect(result).toEqual([
@@ -66,7 +69,7 @@ describe('TreatmentsRepository', () => {
   it('should find a treatment by filter', async () => {
     (Treatment.findOne as any).mockResolvedValueOnce(mockTreatmentDocument);
 
-    const result = await TreatmentsRepository.find({
+    const result = await treatmentsRepository.find({
       _id: mockTreatmentDocument._id,
     });
 
@@ -79,7 +82,7 @@ describe('TreatmentsRepository', () => {
 
   it('should create a new treatment', async () => {
     (Treatment.create as any).mockResolvedValueOnce(mockTreatmentDocument);
-    const result = await TreatmentsRepository.create(mockCreateTreatmentDTO);
+    const result = await treatmentsRepository.create(mockCreateTreatmentDTO);
     expect(Treatment.create).toHaveBeenCalledWith(mockCreateTreatmentDTO);
     expect(result).toEqual(mockTreatmentDocument);
   });
@@ -89,7 +92,7 @@ describe('TreatmentsRepository', () => {
       mockTreatmentDocument
     );
 
-    const result = await TreatmentsRepository.update(
+    const result = await treatmentsRepository.update(
       { _id: mockTreatmentDocument._id },
       mockUpdateTreatmentDTO
     );
@@ -105,7 +108,7 @@ describe('TreatmentsRepository', () => {
 
   it('should delete a treatment by filter', async () => {
     (Treatment.findOneAndDelete as any).mockResolvedValueOnce(undefined);
-    await TreatmentsRepository.delete({ _id: mockTreatmentDocument._id });
+    await treatmentsRepository.delete({ _id: mockTreatmentDocument._id });
 
     expect(Treatment.findOneAndDelete).toHaveBeenCalledWith({
       _id: mockTreatmentDocument._id,

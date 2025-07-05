@@ -1,7 +1,7 @@
 import { Exam } from '../models';
 import { CreateExamDTO, ExamFilter, UpdateExamDTO } from '../types';
 
-class ExamsRepository {
+export class ExamsRepository {
   public async findAll(order: 'asc' | 'desc') {
     const exams = await Exam.find().sort({
       updatedAt: order === 'desc' ? -1 : 1,
@@ -32,5 +32,3 @@ class ExamsRepository {
     await Exam.findOneAndDelete(filter);
   }
 }
-
-export default new ExamsRepository();

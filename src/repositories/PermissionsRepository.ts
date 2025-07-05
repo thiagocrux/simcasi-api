@@ -5,7 +5,7 @@ import {
   UpdatePermissionDTO,
 } from '../types';
 
-class PermissionsRepository {
+export class PermissionsRepository {
   public async findAll(order: 'asc' | 'desc') {
     const permissions = await Permission.find().sort({
       updatedAt: order === 'asc' ? 1 : -1,
@@ -33,5 +33,3 @@ class PermissionsRepository {
     await Permission.findOneAndDelete(filter);
   }
 }
-
-export default new PermissionsRepository();

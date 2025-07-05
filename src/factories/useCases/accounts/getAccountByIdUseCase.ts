@@ -2,5 +2,6 @@ import { AccountsRepository } from '../../../repositories';
 import { GetAccountByIdUseCase } from '../../../useCases';
 
 export function getAccountByIdUseCase() {
-  return new GetAccountByIdUseCase(AccountsRepository);
+  const accountsRepository = new AccountsRepository();
+  return new GetAccountByIdUseCase(accountsRepository);
 }

@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { Permission } from '../../../src/models';
-import PermissionsRepository from '../../../src/repositories/PermissionsRepository';
+import { PermissionsRepository } from '../../../src/repositories/PermissionsRepository';
 
 import {
   mockCreatePermissionDTO,
@@ -21,8 +21,11 @@ vi.mock('../../../src/models', () => ({
 }));
 
 describe('PermissionsRepository', () => {
+  let permissionsRepository: PermissionsRepository;
+
   beforeEach(() => {
     vi.clearAllMocks();
+    permissionsRepository = new PermissionsRepository();
   });
 
   it('should retrieve all permissions in descending order', async () => {
@@ -35,7 +38,7 @@ describe('PermissionsRepository', () => {
         ]),
     });
 
-    const result = await PermissionsRepository.findAll('desc');
+    const result = await permissionsRepository.findAll('desc');
     expect(Permission.find).toHaveBeenCalled();
 
     expect(result).toEqual([
@@ -54,7 +57,7 @@ describe('PermissionsRepository', () => {
         ]),
     });
 
-    const result = await PermissionsRepository.findAll('asc');
+    const result = await permissionsRepository.findAll('asc');
     expect(Permission.find).toHaveBeenCalled();
 
     expect(result).toEqual([
@@ -66,7 +69,7 @@ describe('PermissionsRepository', () => {
   it('should find a permission by filter', async () => {
     (Permission.findOne as any).mockResolvedValueOnce(mockPermissionDocument);
 
-    const result = await PermissionsRepository.find({
+    const result = await permissionsRepository.find({
       _id: mockPermissionDocument._id,
     });
 
@@ -79,7 +82,7 @@ describe('PermissionsRepository', () => {
 
   it('should create a new permission', async () => {
     (Permission.create as any).mockResolvedValueOnce(mockPermissionDocument);
-    const result = await PermissionsRepository.create(mockCreatePermissionDTO);
+    const result = await permissionsRepository.create(mockCreatePermissionDTO);
     expect(Permission.create).toHaveBeenCalledWith(mockCreatePermissionDTO);
     expect(result).toEqual(mockPermissionDocument);
   });
@@ -89,7 +92,7 @@ describe('PermissionsRepository', () => {
       mockPermissionDocument
     );
 
-    const result = await PermissionsRepository.update(
+    const result = await permissionsRepository.update(
       { _id: mockPermissionDocument._id },
       mockUpdatePermissionDTO
     );
@@ -105,7 +108,7 @@ describe('PermissionsRepository', () => {
 
   it('should delete a permission by filter', async () => {
     (Permission.findOneAndDelete as any).mockResolvedValueOnce(undefined);
-    await PermissionsRepository.delete({ _id: mockPermissionDocument._id });
+    await permissionsRepository.delete({ _id: mockPermissionDocument._id });
 
     expect(Permission.findOneAndDelete).toHaveBeenCalledWith({
       _id: mockPermissionDocument._id,

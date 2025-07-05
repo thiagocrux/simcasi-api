@@ -2,5 +2,6 @@ import { ObservationsRepository } from '../../../repositories';
 import { UpdateObservationUseCase } from '../../../useCases';
 
 export function updateObservationUseCase() {
-  return new UpdateObservationUseCase(ObservationsRepository);
+  const observationsRepository = new ObservationsRepository();
+  return new UpdateObservationUseCase(observationsRepository);
 }

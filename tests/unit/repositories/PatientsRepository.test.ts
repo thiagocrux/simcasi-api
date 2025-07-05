@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { Patient } from '../../../src/models';
-import PatientsRepository from '../../../src/repositories/PatientsRepository';
+import { PatientsRepository } from '../../../src/repositories/PatientsRepository';
 
 import {
   mockCreatePatientDTO,
@@ -21,8 +21,11 @@ vi.mock('../../../src/models', () => ({
 }));
 
 describe('PatientsRepository', () => {
+  let patientsRepository: PatientsRepository;
+
   beforeEach(() => {
     vi.clearAllMocks();
+    patientsRepository = new PatientsRepository();
   });
 
   it('should retrieve all patients in descending order', async () => {
@@ -35,7 +38,7 @@ describe('PatientsRepository', () => {
         ]),
     });
 
-    const result = await PatientsRepository.findAll('desc');
+    const result = await patientsRepository.findAll('desc');
     expect(Patient.find).toHaveBeenCalled();
 
     expect(result).toEqual([
@@ -54,7 +57,7 @@ describe('PatientsRepository', () => {
         ]),
     });
 
-    const result = await PatientsRepository.findAll('asc');
+    const result = await patientsRepository.findAll('asc');
     expect(Patient.find).toHaveBeenCalled();
 
     expect(result).toEqual([
@@ -66,7 +69,7 @@ describe('PatientsRepository', () => {
   it('should find a patient by filter', async () => {
     (Patient.findOne as any).mockResolvedValueOnce(mockPatientDocument);
 
-    const result = await PatientsRepository.find({
+    const result = await patientsRepository.find({
       _id: mockPatientDocument._id,
     });
 
@@ -79,7 +82,7 @@ describe('PatientsRepository', () => {
 
   it('should create a new patient', async () => {
     (Patient.create as any).mockResolvedValueOnce(mockPatientDocument);
-    const result = await PatientsRepository.create(mockCreatePatientDTO);
+    const result = await patientsRepository.create(mockCreatePatientDTO);
     expect(Patient.create).toHaveBeenCalledWith(mockCreatePatientDTO);
     expect(result).toEqual(mockPatientDocument);
   });
@@ -89,7 +92,7 @@ describe('PatientsRepository', () => {
       mockPatientDocument
     );
 
-    const result = await PatientsRepository.update(
+    const result = await patientsRepository.update(
       { _id: mockPatientDocument._id },
       mockUpdatePatientDTO
     );
@@ -105,7 +108,7 @@ describe('PatientsRepository', () => {
 
   it('should delete a patient by filter', async () => {
     (Patient.findOneAndDelete as any).mockResolvedValueOnce(undefined);
-    await PatientsRepository.delete({ _id: mockPatientDocument._id });
+    await patientsRepository.delete({ _id: mockPatientDocument._id });
 
     expect(Patient.findOneAndDelete).toHaveBeenCalledWith({
       _id: mockPatientDocument._id,

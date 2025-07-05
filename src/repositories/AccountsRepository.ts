@@ -1,7 +1,7 @@
 import { Account } from '../models';
 import { AccountFilter, CreateAccountDTO, UpdateAccountDTO } from '../types';
 
-class AccountsRepository {
+export class AccountsRepository {
   public async findAll(order: 'asc' | 'desc') {
     const accounts = await Account.find().sort({
       updatedAt: order === 'desc' ? -1 : 1,
@@ -32,5 +32,3 @@ class AccountsRepository {
     await Account.findOneAndDelete(filter);
   }
 }
-
-export default new AccountsRepository();

@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { Notification } from '../../../src/models';
-import NotificationsRepository from '../../../src/repositories/NotificationsRepository';
+import { NotificationsRepository } from '../../../src/repositories/NotificationsRepository';
 
 import {
   mockCreateNotificationDTO,
@@ -21,8 +21,11 @@ vi.mock('../../../src/models', () => ({
 }));
 
 describe('NotificationsRepository', () => {
+  let notificationsRepository: NotificationsRepository;
+
   beforeEach(() => {
     vi.clearAllMocks();
+    notificationsRepository = new NotificationsRepository();
   });
 
   it('should retrieve all notifications in descending order', async () => {
@@ -35,7 +38,7 @@ describe('NotificationsRepository', () => {
         ]),
     });
 
-    const result = await NotificationsRepository.findAll('desc');
+    const result = await notificationsRepository.findAll('desc');
     expect(Notification.find).toHaveBeenCalled();
 
     expect(result).toEqual([
@@ -54,7 +57,7 @@ describe('NotificationsRepository', () => {
         ]),
     });
 
-    const result = await NotificationsRepository.findAll('asc');
+    const result = await notificationsRepository.findAll('asc');
     expect(Notification.find).toHaveBeenCalled();
 
     expect(result).toEqual([
@@ -68,7 +71,7 @@ describe('NotificationsRepository', () => {
       mockNotificationDocument
     );
 
-    const result = await NotificationsRepository.find({
+    const result = await notificationsRepository.find({
       _id: mockNotificationDocument._id,
     });
 
@@ -82,9 +85,11 @@ describe('NotificationsRepository', () => {
     (Notification.create as any).mockResolvedValueOnce(
       mockNotificationDocument
     );
-    const result = await NotificationsRepository.create(
+
+    const result = await notificationsRepository.create(
       mockCreateNotificationDTO
     );
+
     expect(Notification.create).toHaveBeenCalledWith(mockCreateNotificationDTO);
     expect(result).toEqual(mockNotificationDocument);
   });
@@ -94,7 +99,7 @@ describe('NotificationsRepository', () => {
       mockNotificationDocument
     );
 
-    const result = await NotificationsRepository.update(
+    const result = await notificationsRepository.update(
       { _id: mockNotificationDocument._id },
       mockUpdateNotificationDTO
     );
@@ -104,12 +109,13 @@ describe('NotificationsRepository', () => {
       mockUpdateNotificationDTO,
       { new: true }
     );
+
     expect(result).toEqual(mockNotificationDocument);
   });
 
   it('should delete a notification by filter', async () => {
     (Notification.findOneAndDelete as any).mockResolvedValueOnce(undefined);
-    await NotificationsRepository.delete({ _id: mockNotificationDocument._id });
+    await notificationsRepository.delete({ _id: mockNotificationDocument._id });
 
     expect(Notification.findOneAndDelete).toHaveBeenCalledWith({
       _id: mockNotificationDocument._id,

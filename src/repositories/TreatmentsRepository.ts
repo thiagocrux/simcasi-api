@@ -6,7 +6,7 @@ import {
   UpdateTreatmentDTO,
 } from '../types';
 
-class TreatmentsRepository {
+export class TreatmentsRepository {
   public async findAll(order: 'asc' | 'desc') {
     const treatments = await Treatment.find().sort({
       updatedAt: order === 'desc' ? -1 : 1,
@@ -37,5 +37,3 @@ class TreatmentsRepository {
     await Treatment.findOneAndDelete(filter);
   }
 }
-
-export default new TreatmentsRepository();

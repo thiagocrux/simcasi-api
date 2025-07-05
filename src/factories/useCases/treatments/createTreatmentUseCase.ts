@@ -6,5 +6,7 @@ import {
 } from '../../../repositories';
 
 export function createTreatmentUseCase() {
-  return new CreateTreatmentUseCase(TreatmentsRepository, PatientsRepository);
+  const treatmentsRepository = new TreatmentsRepository();
+  const patientsRepository = new PatientsRepository();
+  return new CreateTreatmentUseCase(treatmentsRepository, patientsRepository);
 }

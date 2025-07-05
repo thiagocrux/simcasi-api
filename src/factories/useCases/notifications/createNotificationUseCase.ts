@@ -6,8 +6,11 @@ import {
 } from '../../../repositories';
 
 export function createNotificationUseCase() {
+  const notificationsRepository = new NotificationsRepository();
+  const patientsRepository = new PatientsRepository();
+
   return new CreateNotificationUseCase(
-    NotificationsRepository,
-    PatientsRepository
+    notificationsRepository,
+    patientsRepository
   );
 }

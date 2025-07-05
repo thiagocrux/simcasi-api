@@ -1,7 +1,7 @@
 import { Patient } from '../models';
 import { CreatePatientDTO, PatientFilter, UpdatePatientDTO } from '../types';
 
-class PatientsRepository {
+export class PatientsRepository {
   public async findAll(order: 'asc' | 'desc') {
     const patients = await Patient.find().sort({
       updatedAt: order === 'desc' ? -1 : 1,
@@ -32,5 +32,3 @@ class PatientsRepository {
     await Patient.findOneAndDelete(filter);
   }
 }
-
-export default new PatientsRepository();

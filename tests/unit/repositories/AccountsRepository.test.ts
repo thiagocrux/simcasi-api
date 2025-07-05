@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { Account } from '../../../src/models';
-import AccountsRepository from '../../../src/repositories/AccountsRepository';
+import { AccountsRepository } from '../../../src/repositories/AccountsRepository';
 
 import {
   mockAccountDocument,
@@ -21,8 +21,10 @@ vi.mock('../../../src/models', () => ({
 }));
 
 describe('AccountsRepository', () => {
+  let accountsRepository: AccountsRepository;
   beforeEach(() => {
     vi.clearAllMocks();
+    accountsRepository = new AccountsRepository();
   });
 
   it('should return all accounts in ascending order', async () => {
@@ -35,7 +37,7 @@ describe('AccountsRepository', () => {
         ]),
     });
 
-    const result = await AccountsRepository.findAll('asc');
+    const result = await accountsRepository.findAll('asc');
     expect(Account.find).toHaveBeenCalled();
 
     expect(result).toEqual([
@@ -54,7 +56,7 @@ describe('AccountsRepository', () => {
         ]),
     });
 
-    const result = await AccountsRepository.findAll('desc');
+    const result = await accountsRepository.findAll('desc');
     expect(Account.find).toHaveBeenCalled();
 
     expect(result).toEqual([
@@ -66,7 +68,7 @@ describe('AccountsRepository', () => {
   it('should find an account by filter', async () => {
     (Account.findOne as any).mockResolvedValueOnce(mockAccountDocument);
 
-    const result = await AccountsRepository.find({
+    const result = await accountsRepository.find({
       _id: mockAccountDocument._id,
     });
 
@@ -77,19 +79,19 @@ describe('AccountsRepository', () => {
     expect(result).toEqual(mockAccountDocument);
   });
 
-  it('should create an account', async () => {
+  it('should create a new account', async () => {
     (Account.create as any).mockResolvedValueOnce(mockAccountDocument);
-    const result = await AccountsRepository.create(mockCreateAccountDTO);
+    const result = await accountsRepository.create(mockCreateAccountDTO);
     expect(Account.create).toHaveBeenCalledWith(mockCreateAccountDTO);
     expect(result).toEqual(mockAccountDocument);
   });
 
-  it('should update an account', async () => {
+  it('should update an existing account', async () => {
     (Account.findOneAndUpdate as any).mockResolvedValueOnce(
       mockAccountDocument
     );
 
-    const result = await AccountsRepository.update(
+    const result = await accountsRepository.update(
       { _id: mockAccountDocument._id },
       mockUpdateAccountDTO
     );
@@ -103,9 +105,9 @@ describe('AccountsRepository', () => {
     expect(result).toEqual(mockAccountDocument);
   });
 
-  it('should delete an account', async () => {
+  it('should delete an account by filter', async () => {
     (Account.findOneAndDelete as any).mockResolvedValueOnce(undefined);
-    await AccountsRepository.delete({ _id: mockAccountDocument._id });
+    await accountsRepository.delete({ _id: mockAccountDocument._id });
 
     expect(Account.findOneAndDelete).toHaveBeenCalledWith({
       _id: mockAccountDocument._id,

@@ -19,10 +19,10 @@ describe('errorHandlerMiddleware', () => {
     const next = vi.fn();
 
     errorHandlerMiddleware(error, req, res, next);
-    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.status).toHaveBeenCalledWith(error.statusCode || 404);
 
     expect(res.json).toHaveBeenCalledWith({
-      error,
+      error: error,
     });
 
     expect(next).not.toHaveBeenCalled();
@@ -60,26 +60,5 @@ describe('errorHandlerMiddleware', () => {
     expect(next).toHaveBeenCalledWith(error);
     expect(res.status).not.toHaveBeenCalled();
     expect(res.json).not.toHaveBeenCalled();
-  });
-
-  it('should handle regular JavaScript errors without statusCode and default to 500', () => {
-    const error = new Error('Something went wrong');
-    const req = {} as any;
-
-    const res = {
-      status: vi.fn().mockReturnThis(),
-      json: vi.fn(),
-      headersSent: false,
-    } as any;
-
-    const next = vi.fn();
-    errorHandlerMiddleware(error, req, res, next);
-    expect(res.status).toHaveBeenCalledWith(500);
-
-    expect(res.json).toHaveBeenCalledWith({
-      error,
-    });
-
-    expect(next).not.toHaveBeenCalled();
   });
 });

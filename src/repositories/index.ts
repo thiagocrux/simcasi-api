@@ -1,9 +1,9 @@
-export { default as AccountsRepository } from './AccountsRepository';
-export { default as ExamsRepository } from './ExamsRepository';
-export { default as NotificationsRepository } from './NotificationsRepository';
-export { default as ObservationsRepository } from './ObservationsRepository';
-export { default as PatientsRepository } from './PatientsRepository';
-export { default as PermissionsRepository } from './PermissionsRepository';
-export { default as RolesRepository } from './RolesRepository';
-export { default as SessionsRepository } from './SessionsRepository';
-export { default as TreatmentsRepository } from './TreatmentsRepository';
+export { AccountsRepository } from './AccountsRepository';
+export { ExamsRepository } from './ExamsRepository';
+export { NotificationsRepository } from './NotificationsRepository';
+export { ObservationsRepository } from './ObservationsRepository';
+export { PatientsRepository } from './PatientsRepository';
+export { PermissionsRepository } from './PermissionsRepository';
+export { RolesRepository } from './RolesRepository';
+export { SessionsRepository } from './SessionsRepository';
+export { TreatmentsRepository } from './TreatmentsRepository';

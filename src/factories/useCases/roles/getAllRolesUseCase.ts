@@ -2,5 +2,6 @@ import { RolesRepository } from '../../../repositories';
 import { GetAllRolesUseCase } from '../../../useCases';
 
 export function getAllRolesUseCase() {
-  return new GetAllRolesUseCase(RolesRepository);
+  const rolesRepository = new RolesRepository();
+  return new GetAllRolesUseCase(rolesRepository);
 }

@@ -2,5 +2,6 @@ import { TreatmentsRepository } from '../../../repositories';
 import { DeleteTreatmentUseCase } from '../../../useCases';
 
 export function deleteTreatmentUseCase() {
-  return new DeleteTreatmentUseCase(TreatmentsRepository);
+  const treatmentsRepository = new TreatmentsRepository();
+  return new DeleteTreatmentUseCase(treatmentsRepository);
 }

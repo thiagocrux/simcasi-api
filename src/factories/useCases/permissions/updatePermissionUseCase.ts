@@ -2,5 +2,6 @@ import { PermissionsRepository } from '../../../repositories';
 import { UpdatePermissionUseCase } from '../../../useCases';
 
 export function updatePermissionUseCase() {
-  return new UpdatePermissionUseCase(PermissionsRepository);
+  const permissionsRepository = new PermissionsRepository();
+  return new UpdatePermissionUseCase(permissionsRepository);
 }

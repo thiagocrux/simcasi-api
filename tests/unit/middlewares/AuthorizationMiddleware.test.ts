@@ -1,7 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MissingDataError, UnauthorizedError } from '../../../src/utils';
-import { mockRoleDocument, mockRolesRepository } from '../../mocks';
+import { mockRoleDocument } from '../../mocks';
+
+const mockRolesRepositoryInstance = {
+  find: vi.fn(),
+};
+
+vi.mock('../../../src/repositories/RolesRepository', () => ({
+  default: vi.fn().mockImplementation(() => mockRolesRepositoryInstance),
+}));
 
 describe('AuthorizationMiddleware', () => {
   beforeEach(() => {
@@ -10,26 +18,27 @@ describe('AuthorizationMiddleware', () => {
   });
 
   afterEach(() => {
-    vi.unmock('../../../src/config');
+    vi.doUnmock('../../../src/config');
   });
-
-  mockRolesRepository.find.mockResolvedValue(() => mockRoleDocument);
 
   it('should return `{ data: {} }` when authorization is disabled', async () => {
     vi.doMock('../../../src/config', () => ({
       IS_AUTHORIZATION_DISABLED: true,
     }));
 
-    const mockRequest = {};
-    const { IS_AUTHORIZATION_DISABLED } = await import('../../../src/config');
-
     const { AuthorizationMiddleware } = await import(
       '../../../src/middlewares'
     );
 
-    const middleware = new AuthorizationMiddleware('accounts:find');
+    const mockRequest = {};
+    const mockRolesRepository = {} as any;
+
+    const middleware = new AuthorizationMiddleware(
+      'accounts:find',
+      mockRolesRepository
+    );
+
     const response = await middleware.handle(mockRequest as any);
-    expect(IS_AUTHORIZATION_DISABLED).toBe(true);
     expect(response).toStrictEqual({ data: {} });
   });
 
@@ -42,11 +51,14 @@ describe('AuthorizationMiddleware', () => {
       '../../../src/middlewares'
     );
 
-    const middleware = new AuthorizationMiddleware('accounts:find').handle(
-      {} as any
+    const middleware = new AuthorizationMiddleware(
+      'accounts:find',
+      mockRolesRepositoryInstance as any
     );
 
-    await expect(middleware).rejects.toThrowError(
+    const promise = middleware.handle({} as any);
+
+    await expect(promise).rejects.toThrowError(
       new MissingDataError('role id').message
     );
   });
@@ -56,23 +68,22 @@ describe('AuthorizationMiddleware', () => {
       IS_AUTHORIZATION_DISABLED: false,
     }));
 
-    vi.doMock('../../../src/repositories', () => ({
-      RolesRepository: {
-        find: vi.fn().mockResolvedValueOnce(null),
-      },
-    }));
+    mockRolesRepositoryInstance.find.mockResolvedValueOnce(null);
 
     const { AuthorizationMiddleware } = await import(
       '../../../src/middlewares'
     );
 
-    const middleware = new AuthorizationMiddleware('accounts:find').handle({
+    const middleware = new AuthorizationMiddleware(
+      'accounts:find',
+      mockRolesRepositoryInstance as any
+    );
+
+    const promise = middleware.handle({
       account: { role: 'role_id' },
     } as any);
 
-    await expect(middleware).rejects.toThrowError(
-      new UnauthorizedError().message
-    );
+    await expect(promise).rejects.toThrowError(new UnauthorizedError().message);
   });
 
   it('should throw UnauthorizedError when the role lacks the required permission', async () => {
@@ -80,26 +91,25 @@ describe('AuthorizationMiddleware', () => {
       IS_AUTHORIZATION_DISABLED: false,
     }));
 
-    vi.doMock('../../../src/repositories', () => ({
-      RolesRepository: {
-        find: vi.fn().mockResolvedValueOnce({
-          ...mockRoleDocument,
-          permissions: ['unauthorized_permission'],
-        }),
-      },
-    }));
+    mockRolesRepositoryInstance.find.mockResolvedValueOnce({
+      ...mockRoleDocument,
+      permissions: ['other:permission'],
+    });
 
     const { AuthorizationMiddleware } = await import(
       '../../../src/middlewares'
     );
 
-    const middleware = new AuthorizationMiddleware('accounts:find').handle({
+    const middleware = new AuthorizationMiddleware(
+      'accounts:find',
+      mockRolesRepositoryInstance as any
+    );
+
+    const promise = middleware.handle({
       account: { role: 'role_id' },
     } as any);
 
-    await expect(middleware).rejects.toThrowError(
-      new UnauthorizedError().message
-    );
+    await expect(promise).rejects.toThrowError(new UnauthorizedError().message);
   });
 
   it('should return `{ data: {} }` when the role exists and has the required permission', async () => {
@@ -107,23 +117,24 @@ describe('AuthorizationMiddleware', () => {
       IS_AUTHORIZATION_DISABLED: false,
     }));
 
-    vi.doMock('../../../src/repositories', () => ({
-      RolesRepository: {
-        find: vi.fn().mockResolvedValueOnce({
-          ...mockRoleDocument,
-          permissions: ['accounts:find'],
-        }),
-      },
-    }));
+    mockRolesRepositoryInstance.find.mockResolvedValueOnce({
+      ...mockRoleDocument,
+      permissions: ['accounts:find'],
+    });
 
     const { AuthorizationMiddleware } = await import(
       '../../../src/middlewares'
     );
 
-    const middleware = new AuthorizationMiddleware('accounts:find').handle({
+    const middleware = new AuthorizationMiddleware(
+      'accounts:find',
+      mockRolesRepositoryInstance as any
+    );
+
+    const response = await middleware.handle({
       account: { role: 'role_id' },
     } as any);
 
-    await expect(middleware).resolves.toStrictEqual({ data: {} });
+    expect(response).toStrictEqual({ data: {} });
   });
 });

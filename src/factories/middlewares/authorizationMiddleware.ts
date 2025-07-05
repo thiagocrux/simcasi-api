@@ -1,6 +1,11 @@
 import { middlewareAdapter } from '../../adapters';
 import { AuthorizationMiddleware } from '../../middlewares';
+import { RolesRepository } from '../../repositories';
 
 export function authorizationMiddleware(requiredPermission: string) {
-  return middlewareAdapter(new AuthorizationMiddleware(requiredPermission));
+  const rolesRepository = new RolesRepository();
+
+  return middlewareAdapter(
+    new AuthorizationMiddleware(requiredPermission, rolesRepository)
+  );
 }

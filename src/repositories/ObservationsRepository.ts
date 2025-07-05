@@ -6,7 +6,7 @@ import {
   UpdateObservationDTO,
 } from '../types';
 
-class ObservationsRepository {
+export class ObservationsRepository {
   public async findAll(order: 'asc' | 'desc') {
     const observations = await Observation.find().sort({
       updatedAt: order === 'desc' ? -1 : 1,
@@ -37,5 +37,3 @@ class ObservationsRepository {
     await Observation.findOneAndDelete(filter);
   }
 }
-
-export default new ObservationsRepository();

@@ -12,7 +12,7 @@ import {
 } from '../utils';
 
 export class AuthenticationMiddleware implements Middleware {
-  constructor() {}
+  constructor(private readonly sessionsRepository: SessionsRepository) {}
 
   async handle(request: Request): Promise<Response | Data> {
     if (IS_AUTHENTICATION_DISABLED) {
@@ -41,7 +41,7 @@ export class AuthenticationMiddleware implements Middleware {
       throw new InvalidAccessTokenError();
     }
 
-    const accountRelatedSession = await SessionsRepository.find({
+    const accountRelatedSession = await this.sessionsRepository.find({
       _id: sessionId,
       accountId: new Types.ObjectId(accountId),
     });

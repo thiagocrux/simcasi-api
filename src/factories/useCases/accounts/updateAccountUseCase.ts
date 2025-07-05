@@ -2,5 +2,6 @@ import { AccountsRepository } from '../../../repositories';
 import { UpdateAccountUseCase } from '../../../useCases';
 
 export function updateAccountUseCase() {
-  return new UpdateAccountUseCase(AccountsRepository);
+  const accountsRepository = new AccountsRepository();
+  return new UpdateAccountUseCase(accountsRepository);
 }

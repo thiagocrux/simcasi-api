@@ -2,5 +2,6 @@ import { RolesRepository } from '../../../repositories';
 import { DeleteRoleUseCase } from '../../../useCases';
 
 export function deleteRoleUseCase() {
-  return new DeleteRoleUseCase(RolesRepository);
+  const rolesRepository = new RolesRepository();
+  return new DeleteRoleUseCase(rolesRepository);
 }

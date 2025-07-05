@@ -2,5 +2,6 @@ import { NotificationsRepository } from '../../../repositories';
 import { UpdateNotificationUseCase } from '../../../useCases';
 
 export function updateNotificationUseCase() {
-  return new UpdateNotificationUseCase(NotificationsRepository);
+  const notificationsRepository = new NotificationsRepository();
+  return new UpdateNotificationUseCase(notificationsRepository);
 }

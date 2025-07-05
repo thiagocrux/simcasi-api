@@ -4,7 +4,10 @@ import { Data, Middleware, PermissionCodes, Request, Response } from '../types';
 import { MissingDataError, UnauthorizedError } from '../utils';
 
 export class AuthorizationMiddleware implements Middleware {
-  constructor(private readonly requiredPermission: string) {}
+  constructor(
+    private readonly requiredPermission: string,
+    private readonly rolesRepository: RolesRepository
+  ) {}
 
   async handle(request: Request): Promise<Response | Data> {
     if (IS_AUTHORIZATION_DISABLED) {
@@ -17,7 +20,7 @@ export class AuthorizationMiddleware implements Middleware {
       throw new MissingDataError('role id');
     }
 
-    const role = await RolesRepository.find({
+    const role = await this.rolesRepository.find({
       _id: String(roleId),
     });
 

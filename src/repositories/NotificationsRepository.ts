@@ -6,7 +6,7 @@ import {
   UpdateNotificationDTO,
 } from '../types';
 
-class NotificationsRepository {
+export class NotificationsRepository {
   public async findAll(order: 'asc' | 'desc') {
     const notifications = await Notification.find().sort({
       updatedAt: order === 'desc' ? -1 : 1,
@@ -37,5 +37,3 @@ class NotificationsRepository {
     await Notification.findOneAndDelete(filter);
   }
 }
-
-export default new NotificationsRepository();

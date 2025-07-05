@@ -1,7 +1,7 @@
 import { Session } from '../models';
 import { CreateSessionDTO, SessionFilter, UpdateSessionDTO } from '../types';
 
-class SessionsRepository {
+export class SessionsRepository {
   public async findAll(order: 'asc' | 'desc') {
     const sessions = await Session.find().sort({
       updatedAt: order === 'asc' ? 1 : -1,
@@ -32,5 +32,3 @@ class SessionsRepository {
     await Session.findOneAndDelete(filter);
   }
 }
-
-export default new SessionsRepository();

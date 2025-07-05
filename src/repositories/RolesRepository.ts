@@ -1,7 +1,7 @@
 import { Role } from '../models';
 import { CreateRoleDTO, RoleFilter, UpdateRoleDTO } from '../types';
 
-class RolesRepository {
+export class RolesRepository {
   public async findAll(order: 'asc' | 'desc') {
     const roles = await Role.find().sort({
       updatedAt: order === 'asc' ? 1 : -1,
@@ -29,5 +29,3 @@ class RolesRepository {
     await Role.findOneAndDelete(filter);
   }
 }
-
-export default new RolesRepository();

@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { Role } from '../../../src/models';
-import RolesRepository from '../../../src/repositories/RolesRepository';
+import { RolesRepository } from '../../../src/repositories/RolesRepository';
 
 import {
   mockCreateRoleDTO,
@@ -21,8 +21,11 @@ vi.mock('../../../src/models', () => ({
 }));
 
 describe('RolesRepository', () => {
+  let rolesRepository: RolesRepository;
+
   beforeEach(() => {
     vi.clearAllMocks();
+    rolesRepository = new RolesRepository();
   });
 
   it('should retrieve all roles in descending order', async () => {
@@ -35,7 +38,7 @@ describe('RolesRepository', () => {
         ]),
     });
 
-    const result = await RolesRepository.findAll('desc');
+    const result = await rolesRepository.findAll('desc');
     expect(Role.find).toHaveBeenCalled();
 
     expect(result).toEqual([
@@ -54,7 +57,7 @@ describe('RolesRepository', () => {
         ]),
     });
 
-    const result = await RolesRepository.findAll('asc');
+    const result = await rolesRepository.findAll('asc');
     expect(Role.find).toHaveBeenCalled();
 
     expect(result).toEqual([
@@ -65,16 +68,14 @@ describe('RolesRepository', () => {
 
   it('should find a role by filter', async () => {
     (Role.findOne as any).mockResolvedValueOnce(mockRoleDocument);
-
-    const result = await RolesRepository.find({ _id: mockRoleDocument._id });
-
+    const result = await rolesRepository.find({ _id: mockRoleDocument._id });
     expect(Role.findOne).toHaveBeenCalledWith({ _id: mockRoleDocument._id });
     expect(result).toEqual(mockRoleDocument);
   });
 
   it('should create a new role', async () => {
     (Role.create as any).mockResolvedValueOnce(mockRoleDocument);
-    const result = await RolesRepository.create(mockCreateRoleDTO);
+    const result = await rolesRepository.create(mockCreateRoleDTO);
     expect(Role.create).toHaveBeenCalledWith(mockCreateRoleDTO);
     expect(result).toEqual(mockRoleDocument);
   });
@@ -82,7 +83,7 @@ describe('RolesRepository', () => {
   it('should update an existing role', async () => {
     (Role.findOneAndUpdate as any).mockResolvedValueOnce(mockRoleDocument);
 
-    const result = await RolesRepository.update(
+    const result = await rolesRepository.update(
       { _id: mockRoleDocument._id },
       mockUpdateRoleDTO
     );
@@ -98,7 +99,7 @@ describe('RolesRepository', () => {
 
   it('should delete a role by filter', async () => {
     (Role.findOneAndDelete as any).mockResolvedValueOnce(undefined);
-    await RolesRepository.delete({ _id: mockRoleDocument._id });
+    await rolesRepository.delete({ _id: mockRoleDocument._id });
 
     expect(Role.findOneAndDelete).toHaveBeenCalledWith({
       _id: mockRoleDocument._id,
