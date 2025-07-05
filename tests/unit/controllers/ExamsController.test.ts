@@ -25,7 +25,7 @@ describe('ExamsController', () => {
   it('should retrieve all exams using the default sort order', async () => {
     const executeMock = vi.fn().mockResolvedValue([mockExamDocument]);
 
-    vi.spyOn(factories, 'createGetAllExamsUseCase').mockReturnValue({
+    vi.spyOn(factories, 'getAllExamsUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -39,7 +39,7 @@ describe('ExamsController', () => {
   it('should retrieve all exams using a specified sort order', async () => {
     const executeMock = vi.fn().mockResolvedValue([mockExamDocument]);
 
-    vi.spyOn(factories, 'createGetAllExamsUseCase').mockReturnValue({
+    vi.spyOn(factories, 'getAllExamsUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -53,7 +53,7 @@ describe('ExamsController', () => {
   it('should retrieve an exam by its id', async () => {
     const executeMock = vi.fn().mockResolvedValue(mockExamDocument);
 
-    vi.spyOn(factories, 'createGetExamByIdUseCase').mockReturnValue({
+    vi.spyOn(factories, 'getExamByIdUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -67,7 +67,7 @@ describe('ExamsController', () => {
   it('should create and return a new exam', async () => {
     const executeMock = vi.fn().mockResolvedValue(mockExamDocument);
 
-    vi.spyOn(factories, 'createCreateExamUseCase').mockReturnValue({
+    vi.spyOn(factories, 'createExamUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -81,7 +81,7 @@ describe('ExamsController', () => {
   it('should update and return an existing exam', async () => {
     const executeMock = vi.fn().mockResolvedValue(mockExamDocument);
 
-    vi.spyOn(factories, 'createUpdateExamUseCase').mockReturnValue({
+    vi.spyOn(factories, 'updateExamUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -99,7 +99,7 @@ describe('ExamsController', () => {
   it('should delete an exam by its id and return no content', async () => {
     const executeMock = vi.fn().mockResolvedValue(undefined);
 
-    vi.spyOn(factories, 'createDeleteExamUseCase').mockReturnValue({
+    vi.spyOn(factories, 'deleteExamUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 

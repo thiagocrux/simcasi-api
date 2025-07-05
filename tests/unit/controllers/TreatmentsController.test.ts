@@ -25,7 +25,7 @@ describe('TreatmentsController', () => {
   it('should retrieve all treatments using the default sort order', async () => {
     const executeMock = vi.fn().mockResolvedValue([mockTreatmentDocument]);
 
-    vi.spyOn(factories, 'createGetAllTreatmentsUseCase').mockReturnValue({
+    vi.spyOn(factories, 'getAllTreatmentsUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -39,7 +39,7 @@ describe('TreatmentsController', () => {
   it('should retrieve all treatments using a specified sort order', async () => {
     const executeMock = vi.fn().mockResolvedValue([mockTreatmentDocument]);
 
-    vi.spyOn(factories, 'createGetAllTreatmentsUseCase').mockReturnValue({
+    vi.spyOn(factories, 'getAllTreatmentsUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -53,7 +53,7 @@ describe('TreatmentsController', () => {
   it('should retrieve a treatment by its id', async () => {
     const executeMock = vi.fn().mockResolvedValue(mockTreatmentDocument);
 
-    vi.spyOn(factories, 'createGetTreatmentByIdUseCase').mockReturnValue({
+    vi.spyOn(factories, 'getTreatmentByIdUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -67,7 +67,7 @@ describe('TreatmentsController', () => {
   it('should create and return a new treatment', async () => {
     const executeMock = vi.fn().mockResolvedValue(mockTreatmentDocument);
 
-    vi.spyOn(factories, 'createCreateTreatmentUseCase').mockReturnValue({
+    vi.spyOn(factories, 'createTreatmentUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -81,7 +81,7 @@ describe('TreatmentsController', () => {
   it('should update and return an existing treatment', async () => {
     const executeMock = vi.fn().mockResolvedValue(mockTreatmentDocument);
 
-    vi.spyOn(factories, 'createUpdateTreatmentUseCase').mockReturnValue({
+    vi.spyOn(factories, 'updateTreatmentUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -103,7 +103,7 @@ describe('TreatmentsController', () => {
   it('should delete a treatment by its id and return no content', async () => {
     const executeMock = vi.fn().mockResolvedValue(undefined);
 
-    vi.spyOn(factories, 'createDeleteTreatmentUseCase').mockReturnValue({
+    vi.spyOn(factories, 'deleteTreatmentUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 

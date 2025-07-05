@@ -30,17 +30,17 @@ vi.mock('express', () => ({
 }));
 
 vi.mock('../../src/factories', () => ({
-  createAccountsController: vi.fn(() => mockCreateController()),
-  createExamsController: vi.fn(() => mockCreateController()),
-  createNotificationsController: vi.fn(() => mockCreateController()),
-  createObservationsController: vi.fn(() => mockCreateController()),
-  createPatientsController: vi.fn(() => mockCreateController()),
-  createPermissionsController: vi.fn(() => mockCreateController()),
-  createRolesController: vi.fn(() => mockCreateController()),
-  createSessionsController: vi.fn(() => mockCreateController()),
-  createTreatmentsController: vi.fn(() => mockCreateController()),
-  createAuthenticationMiddleware: vi.fn(() => mockAuthenticationMiddleware),
-  createAuthorizationMiddleware: vi.fn(() => mockAuthorizationMiddleware),
+  accountsController: vi.fn(() => mockCreateController()),
+  examsController: vi.fn(() => mockCreateController()),
+  notificationsController: vi.fn(() => mockCreateController()),
+  observationsController: vi.fn(() => mockCreateController()),
+  patientsController: vi.fn(() => mockCreateController()),
+  permissionsController: vi.fn(() => mockCreateController()),
+  rolesController: vi.fn(() => mockCreateController()),
+  sessionsController: vi.fn(() => mockCreateController()),
+  treatmentsController: vi.fn(() => mockCreateController()),
+  authenticationMiddleware: vi.fn(() => mockAuthenticationMiddleware),
+  authorizationMiddleware: vi.fn(() => mockAuthorizationMiddleware),
 }));
 
 describe('router', () => {
@@ -407,8 +407,8 @@ describe('router', () => {
       await import('../../src/router');
 
       // Verify middleware factories are called
-      expect(factories.createAuthenticationMiddleware).toHaveBeenCalled();
-      expect(factories.createAuthorizationMiddleware).toHaveBeenCalled();
+      expect(factories.authenticationMiddleware).toHaveBeenCalled();
+      expect(factories.authorizationMiddleware).toHaveBeenCalled();
     });
 
     it('should call controller factories for each resource', async () => {
@@ -416,15 +416,15 @@ describe('router', () => {
       await import('../../src/router');
 
       // Verify all controller factories are called
-      expect(factories.createAccountsController).toHaveBeenCalled();
-      expect(factories.createSessionsController).toHaveBeenCalled();
-      expect(factories.createRolesController).toHaveBeenCalled();
-      expect(factories.createPermissionsController).toHaveBeenCalled();
-      expect(factories.createPatientsController).toHaveBeenCalled();
-      expect(factories.createExamsController).toHaveBeenCalled();
-      expect(factories.createNotificationsController).toHaveBeenCalled();
-      expect(factories.createTreatmentsController).toHaveBeenCalled();
-      expect(factories.createObservationsController).toHaveBeenCalled();
+      expect(factories.accountsController).toHaveBeenCalled();
+      expect(factories.sessionsController).toHaveBeenCalled();
+      expect(factories.rolesController).toHaveBeenCalled();
+      expect(factories.permissionsController).toHaveBeenCalled();
+      expect(factories.patientsController).toHaveBeenCalled();
+      expect(factories.examsController).toHaveBeenCalled();
+      expect(factories.notificationsController).toHaveBeenCalled();
+      expect(factories.treatmentsController).toHaveBeenCalled();
+      expect(factories.observationsController).toHaveBeenCalled();
     });
 
     it('should call authorization middleware with correct permissions', async () => {
@@ -432,59 +432,59 @@ describe('router', () => {
       await import('../../src/router');
 
       // Check that authorization middleware is called with various permission strings
-      expect(factories.createAuthorizationMiddleware).toHaveBeenCalledWith(
+      expect(factories.authorizationMiddleware).toHaveBeenCalledWith(
         'accounts:read'
       );
 
-      expect(factories.createAuthorizationMiddleware).toHaveBeenCalledWith(
+      expect(factories.authorizationMiddleware).toHaveBeenCalledWith(
         'accounts:create'
       );
 
-      expect(factories.createAuthorizationMiddleware).toHaveBeenCalledWith(
+      expect(factories.authorizationMiddleware).toHaveBeenCalledWith(
         'accounts:update'
       );
 
-      expect(factories.createAuthorizationMiddleware).toHaveBeenCalledWith(
+      expect(factories.authorizationMiddleware).toHaveBeenCalledWith(
         'accounts:delete'
       );
 
-      expect(factories.createAuthorizationMiddleware).toHaveBeenCalledWith(
+      expect(factories.authorizationMiddleware).toHaveBeenCalledWith(
         'sessions:read'
       );
 
-      expect(factories.createAuthorizationMiddleware).toHaveBeenCalledWith(
+      expect(factories.authorizationMiddleware).toHaveBeenCalledWith(
         'sessions:delete'
       );
 
-      expect(factories.createAuthorizationMiddleware).toHaveBeenCalledWith(
+      expect(factories.authorizationMiddleware).toHaveBeenCalledWith(
         'roles:read'
       );
 
-      expect(factories.createAuthorizationMiddleware).toHaveBeenCalledWith(
+      expect(factories.authorizationMiddleware).toHaveBeenCalledWith(
         'roles:create'
       );
 
-      expect(factories.createAuthorizationMiddleware).toHaveBeenCalledWith(
+      expect(factories.authorizationMiddleware).toHaveBeenCalledWith(
         'roles:update'
       );
 
-      expect(factories.createAuthorizationMiddleware).toHaveBeenCalledWith(
+      expect(factories.authorizationMiddleware).toHaveBeenCalledWith(
         'roles:delete'
       );
 
-      expect(factories.createAuthorizationMiddleware).toHaveBeenCalledWith(
+      expect(factories.authorizationMiddleware).toHaveBeenCalledWith(
         'permissions:read'
       );
 
-      expect(factories.createAuthorizationMiddleware).toHaveBeenCalledWith(
+      expect(factories.authorizationMiddleware).toHaveBeenCalledWith(
         'permissions:create'
       );
 
-      expect(factories.createAuthorizationMiddleware).toHaveBeenCalledWith(
+      expect(factories.authorizationMiddleware).toHaveBeenCalledWith(
         'permissions:update'
       );
 
-      expect(factories.createAuthorizationMiddleware).toHaveBeenCalledWith(
+      expect(factories.authorizationMiddleware).toHaveBeenCalledWith(
         'permissions:delete'
       );
     });

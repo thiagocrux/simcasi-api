@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
 
 import {
-  createCreateNotificationUseCase,
-  createDeleteNotificationUseCase,
-  createGetAllNotificationsUseCase,
-  createGetNotificationByIdUseCase,
-  createUpdateNotificationUseCase,
+  createNotificationUseCase,
+  deleteNotificationUseCase,
+  getAllNotificationsUseCase,
+  getNotificationByIdUseCase,
+  updateNotificationUseCase,
 } from '../factories';
 
 export class NotificationsController {
   public async index(request: Request, response: Response) {
-    const notifications = await createGetAllNotificationsUseCase().execute(
+    const notifications = await getAllNotificationsUseCase().execute(
       request.query?.order as string
     );
 
@@ -18,7 +18,7 @@ export class NotificationsController {
   }
 
   public async show(request: Request, response: Response) {
-    const notification = await createGetNotificationByIdUseCase().execute(
+    const notification = await getNotificationByIdUseCase().execute(
       request.params.id
     );
 
@@ -26,14 +26,14 @@ export class NotificationsController {
   }
 
   public async create(request: Request, response: Response) {
-    const notification = await createCreateNotificationUseCase().execute(
+    const notification = await createNotificationUseCase().execute(
       request.body
     );
     response.status(201).json(notification);
   }
 
   public async update(request: Request, response: Response) {
-    const updatedNotification = await createUpdateNotificationUseCase().execute(
+    const updatedNotification = await updateNotificationUseCase().execute(
       request.params.id,
       request.body
     );
@@ -42,7 +42,7 @@ export class NotificationsController {
   }
 
   public async delete(request: Request, response: Response) {
-    await createDeleteNotificationUseCase().execute(request.params.id);
+    await deleteNotificationUseCase().execute(request.params.id);
     response.sendStatus(204);
   }
 }

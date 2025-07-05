@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
 
 import {
-  createCreatePermissionUseCase,
-  createDeletePermissionUseCase,
-  createGetAllPermissionsUseCase,
-  createGetPermissionByIdUseCase,
-  createUpdatePermissionUseCase,
+  createPermissionUseCase,
+  deletePermissionUseCase,
+  getAllPermissionsUseCase,
+  getPermissionByIdUseCase,
+  updatePermissionUseCase,
 } from '../factories';
 
 export class PermissionsController {
   public async index(request: Request, response: Response) {
-    const permissions = await createGetAllPermissionsUseCase().execute(
+    const permissions = await getAllPermissionsUseCase().execute(
       request.query?.order as string
     );
 
@@ -18,7 +18,7 @@ export class PermissionsController {
   }
 
   public async show(request: Request, response: Response) {
-    const permission = await createGetPermissionByIdUseCase().execute(
+    const permission = await getPermissionByIdUseCase().execute(
       request.params.id
     );
 
@@ -26,15 +26,13 @@ export class PermissionsController {
   }
 
   public async create(request: Request, response: Response) {
-    const permission = await createCreatePermissionUseCase().execute(
-      request.body
-    );
+    const permission = await createPermissionUseCase().execute(request.body);
 
     response.status(201).json(permission);
   }
 
   public async update(request: Request, response: Response) {
-    const updatedPermission = await createUpdatePermissionUseCase().execute(
+    const updatedPermission = await updatePermissionUseCase().execute(
       request.params.id,
       request.body
     );
@@ -43,7 +41,7 @@ export class PermissionsController {
   }
 
   public async delete(request: Request, response: Response) {
-    await createDeletePermissionUseCase().execute(request.params.id);
+    await deletePermissionUseCase().execute(request.params.id);
     response.sendStatus(204);
   }
 }

@@ -25,7 +25,7 @@ describe('AccountsController', () => {
   it('should retrieve all accounts using the default sort order', async () => {
     const executeMock = vi.fn().mockResolvedValue([mockAccountDocument]);
 
-    vi.spyOn(factories, 'createGetAllAccountsUseCase').mockReturnValue({
+    vi.spyOn(factories, 'getAllAccountsUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -39,7 +39,7 @@ describe('AccountsController', () => {
   it('should retrieve all accounts using a specified sort order', async () => {
     const executeMock = vi.fn().mockResolvedValue([mockAccountDocument]);
 
-    vi.spyOn(factories, 'createGetAllAccountsUseCase').mockReturnValue({
+    vi.spyOn(factories, 'getAllAccountsUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -53,7 +53,7 @@ describe('AccountsController', () => {
   it('should retrieve an account by its id', async () => {
     const executeMock = vi.fn().mockResolvedValue(mockAccountDocument);
 
-    vi.spyOn(factories, 'createGetAccountByIdUseCase').mockReturnValue({
+    vi.spyOn(factories, 'getAccountByIdUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -67,7 +67,7 @@ describe('AccountsController', () => {
   it('should create and return a new account', async () => {
     const executeMock = vi.fn().mockResolvedValue(mockAccountDocument);
 
-    vi.spyOn(factories, 'createCreateAccountUseCase').mockReturnValue({
+    vi.spyOn(factories, 'createAccountUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -81,7 +81,7 @@ describe('AccountsController', () => {
   it('should update and return an existing account', async () => {
     const executeMock = vi.fn().mockResolvedValue(mockAccountDocument);
 
-    vi.spyOn(factories, 'createUpdateAccountUseCase').mockReturnValue({
+    vi.spyOn(factories, 'updateAccountUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -99,7 +99,7 @@ describe('AccountsController', () => {
   it('should delete an account by its id and return no content', async () => {
     const executeMock = vi.fn().mockResolvedValue(undefined);
 
-    vi.spyOn(factories, 'createDeleteAccountUseCase').mockReturnValue({
+    vi.spyOn(factories, 'deleteAccountUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 

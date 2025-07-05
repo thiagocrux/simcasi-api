@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
 
 import {
-  createCreateAccountUseCase,
-  createDeleteAccountUseCase,
-  createGetAccountByIdUseCase,
-  createGetAllAccountsUseCase,
-  createUpdateAccountUseCase,
+  createAccountUseCase,
+  deleteAccountUseCase,
+  getAccountByIdUseCase,
+  getAllAccountsUseCase,
+  updateAccountUseCase,
 } from '../factories';
 
 export class AccountsController {
   public async index(request: Request, response: Response) {
-    const accounts = await createGetAllAccountsUseCase().execute(
+    const accounts = await getAllAccountsUseCase().execute(
       request.query?.order as string
     );
 
@@ -18,20 +18,18 @@ export class AccountsController {
   }
 
   public async show(request: Request, response: Response) {
-    const account = await createGetAccountByIdUseCase().execute(
-      request.params.id
-    );
+    const account = await getAccountByIdUseCase().execute(request.params.id);
 
     response.status(200).json(account);
   }
 
   public async create(request: Request, response: Response) {
-    const account = await createCreateAccountUseCase().execute(request.body);
+    const account = await createAccountUseCase().execute(request.body);
     response.status(201).json(account);
   }
 
   public async update(request: Request, response: Response) {
-    const updatedAccount = await createUpdateAccountUseCase().execute(
+    const updatedAccount = await updateAccountUseCase().execute(
       request.params.id,
       request.body
     );
@@ -40,7 +38,7 @@ export class AccountsController {
   }
 
   public async delete(request: Request, response: Response) {
-    await createDeleteAccountUseCase().execute(request.params.id);
+    await deleteAccountUseCase().execute(request.params.id);
     response.sendStatus(204);
   }
 }

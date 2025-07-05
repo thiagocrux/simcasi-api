@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
 
 import {
-  createCreateExamUseCase,
-  createDeleteExamUseCase,
-  createGetAllExamsUseCase,
-  createGetExamByIdUseCase,
-  createUpdateExamUseCase,
+  createExamUseCase,
+  deleteExamUseCase,
+  getAllExamsUseCase,
+  getExamByIdUseCase,
+  updateExamUseCase,
 } from '../factories';
 
 export class ExamsController {
   public async index(request: Request, response: Response) {
-    const exams = await createGetAllExamsUseCase().execute(
+    const exams = await getAllExamsUseCase().execute(
       request.query?.order as string
     );
 
@@ -18,18 +18,18 @@ export class ExamsController {
   }
 
   public async show(request: Request, response: Response) {
-    const exam = await createGetExamByIdUseCase().execute(request.params.id);
+    const exam = await getExamByIdUseCase().execute(request.params.id);
 
     response.status(200).json(exam);
   }
 
   public async create(request: Request, response: Response) {
-    const exam = await createCreateExamUseCase().execute(request.body);
+    const exam = await createExamUseCase().execute(request.body);
     response.status(201).json(exam);
   }
 
   public async update(request: Request, response: Response) {
-    const updatedExam = await createUpdateExamUseCase().execute(
+    const updatedExam = await updateExamUseCase().execute(
       request.params.id,
       request.body
     );
@@ -38,7 +38,7 @@ export class ExamsController {
   }
 
   public async delete(request: Request, response: Response) {
-    await createDeleteExamUseCase().execute(request.params.id);
+    await deleteExamUseCase().execute(request.params.id);
     response.sendStatus(204);
   }
 }

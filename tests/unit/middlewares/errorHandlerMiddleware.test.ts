@@ -73,7 +73,6 @@ describe('errorHandlerMiddleware', () => {
     } as any;
 
     const next = vi.fn();
-
     errorHandlerMiddleware(error, req, res, next);
     expect(res.status).toHaveBeenCalledWith(500);
 

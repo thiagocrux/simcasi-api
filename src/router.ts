@@ -1,17 +1,17 @@
 import { Router } from 'express';
 
 import {
-  createAccountsController,
-  createAuthenticationMiddleware,
-  createAuthorizationMiddleware,
-  createExamsController,
-  createNotificationsController,
-  createObservationsController,
-  createPatientsController,
-  createPermissionsController,
-  createRolesController,
-  createSessionsController,
-  createTreatmentsController,
+  accountsController,
+  authenticationMiddleware,
+  authorizationMiddleware,
+  examsController,
+  notificationsController,
+  observationsController,
+  patientsController,
+  permissionsController,
+  rolesController,
+  sessionsController,
+  treatmentsController,
 } from './factories';
 
 export const router = Router();
@@ -20,319 +20,319 @@ export const router = Router();
 
 router.get(
   '/accounts',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('accounts:read'),
-  createAccountsController().index
+  authenticationMiddleware(),
+  authorizationMiddleware('accounts:read'),
+  accountsController().index
 );
 
 router.get(
   '/accounts/:id',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('accounts:read'),
-  createAccountsController().show
+  authenticationMiddleware(),
+  authorizationMiddleware('accounts:read'),
+  accountsController().show
 );
 
 router.post(
   '/accounts',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('accounts:create'),
-  createAccountsController().create
+  authenticationMiddleware(),
+  authorizationMiddleware('accounts:create'),
+  accountsController().create
 );
 
 router.put(
   '/accounts/:id',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('accounts:update'),
-  createAccountsController().update
+  authenticationMiddleware(),
+  authorizationMiddleware('accounts:update'),
+  accountsController().update
 );
 
 router.delete(
   '/accounts/:id',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('accounts:delete'),
-  createAccountsController().delete
+  authenticationMiddleware(),
+  authorizationMiddleware('accounts:delete'),
+  accountsController().delete
 );
 
 /* Sessions */
 
-router.post('/sessions/sign-in', createSessionsController().create);
-router.post('/sessions/refresh-token', createSessionsController().refreshToken);
+router.post('/sessions/sign-in', sessionsController().create);
+router.post('/sessions/refresh-token', sessionsController().refreshToken);
 
 router.get(
   '/sessions',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('sessions:read'),
-  createSessionsController().index
+  authenticationMiddleware(),
+  authorizationMiddleware('sessions:read'),
+  sessionsController().index
 );
 router.get(
   '/sessions/:id',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('sessions:read'),
-  createSessionsController().show
+  authenticationMiddleware(),
+  authorizationMiddleware('sessions:read'),
+  sessionsController().show
 );
 
 router.delete(
   '/sessions/:id',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('sessions:delete'),
-  createSessionsController().delete
+  authenticationMiddleware(),
+  authorizationMiddleware('sessions:delete'),
+  sessionsController().delete
 );
 
 /* Roles */
 
 router.get(
   '/roles',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('roles:read'),
-  createRolesController().index
+  authenticationMiddleware(),
+  authorizationMiddleware('roles:read'),
+  rolesController().index
 );
 
 router.get(
   '/roles/:id',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('roles:read'),
-  createRolesController().show
+  authenticationMiddleware(),
+  authorizationMiddleware('roles:read'),
+  rolesController().show
 );
 
 router.post(
   '/roles',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('roles:create'),
-  createRolesController().create
+  authenticationMiddleware(),
+  authorizationMiddleware('roles:create'),
+  rolesController().create
 );
 
 router.put(
   '/roles/:id',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('roles:update'),
-  createRolesController().update
+  authenticationMiddleware(),
+  authorizationMiddleware('roles:update'),
+  rolesController().update
 );
 
 router.delete(
   '/roles/:id',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('roles:delete'),
-  createRolesController().delete
+  authenticationMiddleware(),
+  authorizationMiddleware('roles:delete'),
+  rolesController().delete
 );
 
 /* Permissions */
 
 router.get(
   '/permissions',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('permissions:read'),
-  createPermissionsController().index
+  authenticationMiddleware(),
+  authorizationMiddleware('permissions:read'),
+  permissionsController().index
 );
 
 router.get(
   '/permissions/:id',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('permissions:read'),
-  createPermissionsController().show
+  authenticationMiddleware(),
+  authorizationMiddleware('permissions:read'),
+  permissionsController().show
 );
 
 router.post(
   '/permissions',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('permissions:create'),
-  createPermissionsController().create
+  authenticationMiddleware(),
+  authorizationMiddleware('permissions:create'),
+  permissionsController().create
 );
 
 router.put(
   '/permissions/:id',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('permissions:update'),
-  createPermissionsController().update
+  authenticationMiddleware(),
+  authorizationMiddleware('permissions:update'),
+  permissionsController().update
 );
 
 router.delete(
   '/permissions/:id',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('permissions:delete'),
-  createPermissionsController().delete
+  authenticationMiddleware(),
+  authorizationMiddleware('permissions:delete'),
+  permissionsController().delete
 );
 
 /* Patients */
 
 router.get(
   '/patients',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('patients:read'),
-  createPatientsController().index
+  authenticationMiddleware(),
+  authorizationMiddleware('patients:read'),
+  patientsController().index
 );
 
 router.get(
   '/patients/:id',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('patients:read'),
-  createPatientsController().show
+  authenticationMiddleware(),
+  authorizationMiddleware('patients:read'),
+  patientsController().show
 );
 
 router.post(
   '/patients',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('patients:create'),
-  createPatientsController().create
+  authenticationMiddleware(),
+  authorizationMiddleware('patients:create'),
+  patientsController().create
 );
 
 router.put(
   '/patients/:id',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('patients:update'),
-  createPatientsController().update
+  authenticationMiddleware(),
+  authorizationMiddleware('patients:update'),
+  patientsController().update
 );
 
 router.delete(
   '/patients/:id',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('patients:delete'),
-  createPatientsController().delete
+  authenticationMiddleware(),
+  authorizationMiddleware('patients:delete'),
+  patientsController().delete
 );
 
 /* Exams */
 
 router.get(
   '/exams',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('exams:read'),
-  createExamsController().index
+  authenticationMiddleware(),
+  authorizationMiddleware('exams:read'),
+  examsController().index
 );
 
 router.get(
   '/exams/:id',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('exams:read'),
-  createExamsController().show
+  authenticationMiddleware(),
+  authorizationMiddleware('exams:read'),
+  examsController().show
 );
 
 router.post(
   '/exams',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('exams:create'),
-  createExamsController().create
+  authenticationMiddleware(),
+  authorizationMiddleware('exams:create'),
+  examsController().create
 );
 
 router.put(
   '/exams/:id',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('exams:update'),
-  createExamsController().update
+  authenticationMiddleware(),
+  authorizationMiddleware('exams:update'),
+  examsController().update
 );
 
 router.delete(
   '/exams/:id',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('exams:delete'),
-  createExamsController().delete
+  authenticationMiddleware(),
+  authorizationMiddleware('exams:delete'),
+  examsController().delete
 );
 
 /* Notifications */
 
 router.get(
   '/notifications',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('notifications:read'),
-  createNotificationsController().index
+  authenticationMiddleware(),
+  authorizationMiddleware('notifications:read'),
+  notificationsController().index
 );
 
 router.get(
   '/notifications/:id',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('notifications:read'),
-  createNotificationsController().show
+  authenticationMiddleware(),
+  authorizationMiddleware('notifications:read'),
+  notificationsController().show
 );
 
 router.post(
   '/notifications',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('notifications:create'),
-  createNotificationsController().create
+  authenticationMiddleware(),
+  authorizationMiddleware('notifications:create'),
+  notificationsController().create
 );
 
 router.put(
   '/notifications/:id',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('notifications:update'),
-  createNotificationsController().update
+  authenticationMiddleware(),
+  authorizationMiddleware('notifications:update'),
+  notificationsController().update
 );
 
 router.delete(
   '/notifications/:id',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('notifications:delete'),
-  createNotificationsController().delete
+  authenticationMiddleware(),
+  authorizationMiddleware('notifications:delete'),
+  notificationsController().delete
 );
 
 /* Treatments */
 
 router.get(
   '/treatments',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('treatments:read'),
-  createTreatmentsController().index
+  authenticationMiddleware(),
+  authorizationMiddleware('treatments:read'),
+  treatmentsController().index
 );
 
 router.get(
   '/treatments/:id',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('treatments:read'),
-  createTreatmentsController().show
+  authenticationMiddleware(),
+  authorizationMiddleware('treatments:read'),
+  treatmentsController().show
 );
 
 router.post(
   '/treatments',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('treatments:create'),
-  createTreatmentsController().create
+  authenticationMiddleware(),
+  authorizationMiddleware('treatments:create'),
+  treatmentsController().create
 );
 
 router.put(
   '/treatments/:id',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('treatments:update'),
-  createTreatmentsController().update
+  authenticationMiddleware(),
+  authorizationMiddleware('treatments:update'),
+  treatmentsController().update
 );
 
 router.delete(
   '/treatments/:id',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('treatments:delete'),
-  createTreatmentsController().delete
+  authenticationMiddleware(),
+  authorizationMiddleware('treatments:delete'),
+  treatmentsController().delete
 );
 
 /* Observations */
 
 router.get(
   '/observations',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('observations:read'),
-  createObservationsController().index
+  authenticationMiddleware(),
+  authorizationMiddleware('observations:read'),
+  observationsController().index
 );
 
 router.get(
   '/observations/:id',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('observations:read'),
-  createObservationsController().show
+  authenticationMiddleware(),
+  authorizationMiddleware('observations:read'),
+  observationsController().show
 );
 
 router.post(
   '/observations',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('observations:create'),
-  createObservationsController().create
+  authenticationMiddleware(),
+  authorizationMiddleware('observations:create'),
+  observationsController().create
 );
 
 router.put(
   '/observations/:id',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('observations:update'),
-  createObservationsController().update
+  authenticationMiddleware(),
+  authorizationMiddleware('observations:update'),
+  observationsController().update
 );
 
 router.delete(
   '/observations/:id',
-  createAuthenticationMiddleware(),
-  createAuthorizationMiddleware('observations:delete'),
-  createObservationsController().delete
+  authenticationMiddleware(),
+  authorizationMiddleware('observations:delete'),
+  observationsController().delete
 );

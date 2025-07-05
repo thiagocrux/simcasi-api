@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
 
 import {
-  createCreateSessionUseCase,
-  createDeleteSessionUseCase,
-  createGenerateNewAccessTokenUseCase,
-  createGetAllSessionsUseCase,
-  createGetSessionByIdUseCase,
+  createSessionUseCase,
+  deleteSessionUseCase,
+  generateNewAccessTokenUseCase,
+  getAllSessionsUseCase,
+  getSessionByIdUseCase,
 } from '../factories';
 
 export class SessionsController {
   public async index(request: Request, response: Response) {
-    const sessions = await createGetAllSessionsUseCase().execute(
+    const sessions = await getAllSessionsUseCase().execute(
       request.query?.order as string
     );
 
@@ -18,15 +18,13 @@ export class SessionsController {
   }
 
   public async show(request: Request, response: Response) {
-    const session = await createGetSessionByIdUseCase().execute(
-      request.params.id
-    );
+    const session = await getSessionByIdUseCase().execute(request.params.id);
 
     response.status(200).json(session);
   }
 
   public async create(request: Request, response: Response) {
-    const { accessToken, session } = await createCreateSessionUseCase().execute(
+    const { accessToken, session } = await createSessionUseCase().execute(
       request.body,
       { ipAddress: request.ip, userAgent: request.get('User-Agent') }
     );
@@ -47,12 +45,12 @@ export class SessionsController {
   }
 
   public async delete(request: Request, response: Response) {
-    await createDeleteSessionUseCase().execute(request.params.id);
+    await deleteSessionUseCase().execute(request.params.id);
     response.sendStatus(204);
   }
 
   public async refreshToken(request: Request, response: Response) {
-    const accessToken = await createGenerateNewAccessTokenUseCase().execute(
+    const accessToken = await generateNewAccessTokenUseCase().execute(
       request.body.session
     );
 

@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
 
 import {
-  createCreateTreatmentUseCase,
-  createDeleteTreatmentUseCase,
-  createGetAllTreatmentsUseCase,
-  createGetTreatmentByIdUseCase,
-  createUpdateTreatmentUseCase,
+  createTreatmentUseCase,
+  deleteTreatmentUseCase,
+  getAllTreatmentsUseCase,
+  getTreatmentByIdUseCase,
+  updateTreatmentUseCase,
 } from '../factories';
 
 export class TreatmentsController {
   public async index(request: Request, response: Response) {
-    const treatments = await createGetAllTreatmentsUseCase().execute(
+    const treatments = await getAllTreatmentsUseCase().execute(
       request.query?.order as string
     );
 
@@ -18,7 +18,7 @@ export class TreatmentsController {
   }
 
   public async show(request: Request, response: Response) {
-    const treatment = await createGetTreatmentByIdUseCase().execute(
+    const treatment = await getTreatmentByIdUseCase().execute(
       request.params.id
     );
 
@@ -26,14 +26,12 @@ export class TreatmentsController {
   }
 
   public async create(request: Request, response: Response) {
-    const treatment = await createCreateTreatmentUseCase().execute(
-      request.body
-    );
+    const treatment = await createTreatmentUseCase().execute(request.body);
     response.status(201).json(treatment);
   }
 
   public async update(request: Request, response: Response) {
-    const updatedTreatment = await createUpdateTreatmentUseCase().execute(
+    const updatedTreatment = await updateTreatmentUseCase().execute(
       request.params.id,
       request.body
     );
@@ -42,7 +40,7 @@ export class TreatmentsController {
   }
 
   public async delete(request: Request, response: Response) {
-    await createDeleteTreatmentUseCase().execute(request.params.id);
+    await deleteTreatmentUseCase().execute(request.params.id);
     response.sendStatus(204);
   }
 }

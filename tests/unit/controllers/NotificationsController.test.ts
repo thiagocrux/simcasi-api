@@ -25,7 +25,7 @@ describe('NotificationsController', () => {
   it('should retrieve all notifications using the default sort order', async () => {
     const executeMock = vi.fn().mockResolvedValue([mockNotificationDocument]);
 
-    vi.spyOn(factories, 'createGetAllNotificationsUseCase').mockReturnValue({
+    vi.spyOn(factories, 'getAllNotificationsUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -39,7 +39,7 @@ describe('NotificationsController', () => {
   it('should retrieve all notifications using a specified sort order', async () => {
     const executeMock = vi.fn().mockResolvedValue([mockNotificationDocument]);
 
-    vi.spyOn(factories, 'createGetAllNotificationsUseCase').mockReturnValue({
+    vi.spyOn(factories, 'getAllNotificationsUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -53,7 +53,7 @@ describe('NotificationsController', () => {
   it('should retrieve a notification by its id', async () => {
     const executeMock = vi.fn().mockResolvedValue(mockNotificationDocument);
 
-    vi.spyOn(factories, 'createGetNotificationByIdUseCase').mockReturnValue({
+    vi.spyOn(factories, 'getNotificationByIdUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -67,7 +67,7 @@ describe('NotificationsController', () => {
   it('should create and return a new notification', async () => {
     const executeMock = vi.fn().mockResolvedValue(mockNotificationDocument);
 
-    vi.spyOn(factories, 'createCreateNotificationUseCase').mockReturnValue({
+    vi.spyOn(factories, 'createNotificationUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -81,7 +81,7 @@ describe('NotificationsController', () => {
   it('should update and return an existing notification', async () => {
     const executeMock = vi.fn().mockResolvedValue(mockNotificationDocument);
 
-    vi.spyOn(factories, 'createUpdateNotificationUseCase').mockReturnValue({
+    vi.spyOn(factories, 'updateNotificationUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -103,7 +103,7 @@ describe('NotificationsController', () => {
   it('should delete a notification by its id and return no content', async () => {
     const executeMock = vi.fn().mockResolvedValue(undefined);
 
-    vi.spyOn(factories, 'createDeleteNotificationUseCase').mockReturnValue({
+    vi.spyOn(factories, 'deleteNotificationUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 

@@ -21,7 +21,6 @@ describe('AuthorizationMiddleware', () => {
     }));
 
     const mockRequest = {};
-
     const { IS_AUTHORIZATION_DISABLED } = await import('../../../src/config');
 
     const { AuthorizationMiddleware } = await import(

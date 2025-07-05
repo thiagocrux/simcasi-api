@@ -25,7 +25,7 @@ describe('RolesController', () => {
   it('should retrieve all roles using the default sort order', async () => {
     const executeMock = vi.fn().mockResolvedValue([mockRoleDocument]);
 
-    vi.spyOn(factories, 'createGetAllRolesUseCase').mockReturnValue({
+    vi.spyOn(factories, 'getAllRolesUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -39,7 +39,7 @@ describe('RolesController', () => {
   it('should retrieve all roles using a specified sort order', async () => {
     const executeMock = vi.fn().mockResolvedValue([mockRoleDocument]);
 
-    vi.spyOn(factories, 'createGetAllRolesUseCase').mockReturnValue({
+    vi.spyOn(factories, 'getAllRolesUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -53,7 +53,7 @@ describe('RolesController', () => {
   it('should retrieve a role by its id', async () => {
     const executeMock = vi.fn().mockResolvedValue(mockRoleDocument);
 
-    vi.spyOn(factories, 'createGetRoleByIdUseCase').mockReturnValue({
+    vi.spyOn(factories, 'getRoleByIdUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -67,7 +67,7 @@ describe('RolesController', () => {
   it('should create and return a new role', async () => {
     const executeMock = vi.fn().mockResolvedValue(mockRoleDocument);
 
-    vi.spyOn(factories, 'createCreateRoleUseCase').mockReturnValue({
+    vi.spyOn(factories, 'createRoleUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -81,7 +81,7 @@ describe('RolesController', () => {
   it('should update and return an existing role', async () => {
     const executeMock = vi.fn().mockResolvedValue(mockRoleDocument);
 
-    vi.spyOn(factories, 'createUpdateRoleUseCase').mockReturnValue({
+    vi.spyOn(factories, 'updateRoleUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -99,7 +99,7 @@ describe('RolesController', () => {
   it('should delete a role by its id and return no content', async () => {
     const executeMock = vi.fn().mockResolvedValue(undefined);
 
-    vi.spyOn(factories, 'createDeleteRoleUseCase').mockReturnValue({
+    vi.spyOn(factories, 'deleteRoleUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 

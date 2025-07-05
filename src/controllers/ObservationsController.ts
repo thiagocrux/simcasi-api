@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
 
 import {
-  createCreateObservationUseCase,
-  createDeleteObservationUseCase,
-  createGetAllObservationsUseCase,
-  createGetObservationByIdUseCase,
-  createUpdateObservationUseCase,
+  createObservationUseCase,
+  deleteObservationUseCase,
+  getAllObservationsUseCase,
+  getObservationByIdUseCase,
+  updateObservationUseCase,
 } from '../factories';
 
 export class ObservationsController {
   public async index(request: Request, response: Response) {
-    const observations = await createGetAllObservationsUseCase().execute(
+    const observations = await getAllObservationsUseCase().execute(
       request.query?.order as string
     );
 
@@ -18,7 +18,7 @@ export class ObservationsController {
   }
 
   public async show(request: Request, response: Response) {
-    const observation = await createGetObservationByIdUseCase().execute(
+    const observation = await getObservationByIdUseCase().execute(
       request.params.id
     );
 
@@ -26,14 +26,12 @@ export class ObservationsController {
   }
 
   public async create(request: Request, response: Response) {
-    const observation = await createCreateObservationUseCase().execute(
-      request.body
-    );
+    const observation = await createObservationUseCase().execute(request.body);
     response.status(201).json(observation);
   }
 
   public async update(request: Request, response: Response) {
-    const updatedObservation = await createUpdateObservationUseCase().execute(
+    const updatedObservation = await updateObservationUseCase().execute(
       request.params.id,
       request.body
     );
@@ -42,7 +40,7 @@ export class ObservationsController {
   }
 
   public async delete(request: Request, response: Response) {
-    await createDeleteObservationUseCase().execute(request.params.id);
+    await deleteObservationUseCase().execute(request.params.id);
     response.sendStatus(204);
   }
 }

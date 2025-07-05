@@ -26,7 +26,7 @@ describe('SessionsController', () => {
   it('should retrieve all sessions using the default sort order', async () => {
     const executeMock = vi.fn().mockResolvedValue([mockSessionDocument]);
 
-    vi.spyOn(factories, 'createGetAllSessionsUseCase').mockReturnValue({
+    vi.spyOn(factories, 'getAllSessionsUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -40,7 +40,7 @@ describe('SessionsController', () => {
   it('should retrieve all sessions using a specified sort order', async () => {
     const executeMock = vi.fn().mockResolvedValue([mockSessionDocument]);
 
-    vi.spyOn(factories, 'createGetAllSessionsUseCase').mockReturnValue({
+    vi.spyOn(factories, 'getAllSessionsUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -55,7 +55,7 @@ describe('SessionsController', () => {
   it('should retrieve a session by its id', async () => {
     const executeMock = vi.fn().mockResolvedValue(mockSessionDocument);
 
-    vi.spyOn(factories, 'createGetSessionByIdUseCase').mockReturnValue({
+    vi.spyOn(factories, 'getSessionByIdUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -72,7 +72,7 @@ describe('SessionsController', () => {
       session: mockSessionDocument,
     });
 
-    vi.spyOn(factories, 'createCreateSessionUseCase').mockReturnValue({
+    vi.spyOn(factories, 'createSessionUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -105,7 +105,7 @@ describe('SessionsController', () => {
   it('should delete a session by its id and return no content', async () => {
     const executeMock = vi.fn().mockResolvedValue(undefined);
 
-    vi.spyOn(factories, 'createDeleteSessionUseCase').mockReturnValue({
+    vi.spyOn(factories, 'deleteSessionUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -118,7 +118,7 @@ describe('SessionsController', () => {
   it('should refresh and return a new access token', async () => {
     const executeMock = vi.fn().mockResolvedValue('newMockAccessToken');
 
-    vi.spyOn(factories, 'createGenerateNewAccessTokenUseCase').mockReturnValue({
+    vi.spyOn(factories, 'generateNewAccessTokenUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 

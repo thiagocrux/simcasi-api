@@ -25,7 +25,7 @@ describe('PatientsController', () => {
   it('should retrieve all patients using the default sort order', async () => {
     const executeMock = vi.fn().mockResolvedValue([mockPatientDocument]);
 
-    vi.spyOn(factories, 'createGetAllPatientsUseCase').mockReturnValue({
+    vi.spyOn(factories, 'getAllPatientsUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -39,7 +39,7 @@ describe('PatientsController', () => {
   it('should retrieve all patients using a specified sort order', async () => {
     const executeMock = vi.fn().mockResolvedValue([mockPatientDocument]);
 
-    vi.spyOn(factories, 'createGetAllPatientsUseCase').mockReturnValue({
+    vi.spyOn(factories, 'getAllPatientsUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -53,7 +53,7 @@ describe('PatientsController', () => {
   it('should retrieve a patient by its id', async () => {
     const executeMock = vi.fn().mockResolvedValue(mockPatientDocument);
 
-    vi.spyOn(factories, 'createGetPatientByIdUseCase').mockReturnValue({
+    vi.spyOn(factories, 'getPatientByIdUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -67,7 +67,7 @@ describe('PatientsController', () => {
   it('should create and return a new patient', async () => {
     const executeMock = vi.fn().mockResolvedValue(mockPatientDocument);
 
-    vi.spyOn(factories, 'createCreatePatientUseCase').mockReturnValue({
+    vi.spyOn(factories, 'createPatientUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -81,7 +81,7 @@ describe('PatientsController', () => {
   it('should update and return an existing patient', async () => {
     const executeMock = vi.fn().mockResolvedValue(mockPatientDocument);
 
-    vi.spyOn(factories, 'createUpdatePatientUseCase').mockReturnValue({
+    vi.spyOn(factories, 'updatePatientUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -99,7 +99,7 @@ describe('PatientsController', () => {
   it('should delete a patient by its id and return no content', async () => {
     const executeMock = vi.fn().mockResolvedValue(undefined);
 
-    vi.spyOn(factories, 'createDeletePatientUseCase').mockReturnValue({
+    vi.spyOn(factories, 'deletePatientUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 

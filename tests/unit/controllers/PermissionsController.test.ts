@@ -25,7 +25,7 @@ describe('PermissionsController', () => {
   it('should retrieve all permissions using the default sort order', async () => {
     const executeMock = vi.fn().mockResolvedValue([mockPermissionDocument]);
 
-    vi.spyOn(factories, 'createGetAllPermissionsUseCase').mockReturnValue({
+    vi.spyOn(factories, 'getAllPermissionsUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -39,7 +39,7 @@ describe('PermissionsController', () => {
   it('should retrieve all permissions using a specified sort order', async () => {
     const executeMock = vi.fn().mockResolvedValue([mockPermissionDocument]);
 
-    vi.spyOn(factories, 'createGetAllPermissionsUseCase').mockReturnValue({
+    vi.spyOn(factories, 'getAllPermissionsUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -53,7 +53,7 @@ describe('PermissionsController', () => {
   it('should retrieve a permission by its id', async () => {
     const executeMock = vi.fn().mockResolvedValue(mockPermissionDocument);
 
-    vi.spyOn(factories, 'createGetPermissionByIdUseCase').mockReturnValue({
+    vi.spyOn(factories, 'getPermissionByIdUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -67,7 +67,7 @@ describe('PermissionsController', () => {
   it('should create and return a new permission', async () => {
     const executeMock = vi.fn().mockResolvedValue(mockPermissionDocument);
 
-    vi.spyOn(factories, 'createCreatePermissionUseCase').mockReturnValue({
+    vi.spyOn(factories, 'createPermissionUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -81,7 +81,7 @@ describe('PermissionsController', () => {
   it('should update and return an existing permission', async () => {
     const executeMock = vi.fn().mockResolvedValue(mockPermissionDocument);
 
-    vi.spyOn(factories, 'createUpdatePermissionUseCase').mockReturnValue({
+    vi.spyOn(factories, 'updatePermissionUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -103,7 +103,7 @@ describe('PermissionsController', () => {
   it('should delete a permission by its id and return no content', async () => {
     const executeMock = vi.fn().mockResolvedValue(undefined);
 
-    vi.spyOn(factories, 'createDeletePermissionUseCase').mockReturnValue({
+    vi.spyOn(factories, 'deletePermissionUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 

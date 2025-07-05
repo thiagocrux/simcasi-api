@@ -25,7 +25,7 @@ describe('ObservationsController', () => {
   it('should retrieve all observations using the default sort order', async () => {
     const executeMock = vi.fn().mockResolvedValue([mockObservationDocument]);
 
-    vi.spyOn(factories, 'createGetAllObservationsUseCase').mockReturnValue({
+    vi.spyOn(factories, 'getAllObservationsUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -39,7 +39,7 @@ describe('ObservationsController', () => {
   it('should retrieve all observations using a specified sort order', async () => {
     const executeMock = vi.fn().mockResolvedValue([mockObservationDocument]);
 
-    vi.spyOn(factories, 'createGetAllObservationsUseCase').mockReturnValue({
+    vi.spyOn(factories, 'getAllObservationsUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -53,7 +53,7 @@ describe('ObservationsController', () => {
   it('should retrieve an observation by its id', async () => {
     const executeMock = vi.fn().mockResolvedValue(mockObservationDocument);
 
-    vi.spyOn(factories, 'createGetObservationByIdUseCase').mockReturnValue({
+    vi.spyOn(factories, 'getObservationByIdUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -67,7 +67,7 @@ describe('ObservationsController', () => {
   it('should create and return a new observation', async () => {
     const executeMock = vi.fn().mockResolvedValue(mockObservationDocument);
 
-    vi.spyOn(factories, 'createCreateObservationUseCase').mockReturnValue({
+    vi.spyOn(factories, 'createObservationUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -81,7 +81,7 @@ describe('ObservationsController', () => {
   it('should update and return an existing observation', async () => {
     const executeMock = vi.fn().mockResolvedValue(mockObservationDocument);
 
-    vi.spyOn(factories, 'createUpdateObservationUseCase').mockReturnValue({
+    vi.spyOn(factories, 'updateObservationUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
@@ -103,7 +103,7 @@ describe('ObservationsController', () => {
   it('should delete an observation by its id and return no content', async () => {
     const executeMock = vi.fn().mockResolvedValue(undefined);
 
-    vi.spyOn(factories, 'createDeleteObservationUseCase').mockReturnValue({
+    vi.spyOn(factories, 'deleteObservationUseCase').mockReturnValue({
       execute: executeMock,
     } as any);
 
