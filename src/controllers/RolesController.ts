@@ -1,16 +1,24 @@
 import { Request, Response } from 'express';
 
 import {
-  createRoleUseCase,
-  deleteRoleUseCase,
-  getAllRolesUseCase,
-  getRoleByIdUseCase,
-  updateRoleUseCase,
-} from '../factories';
+  CreateRoleUseCase,
+  DeleteRoleUseCase,
+  GetAllRolesUseCase,
+  GetRoleByIdUseCase,
+  UpdateRoleUseCase,
+} from '../types';
 
 export class RolesController {
+  constructor(
+    private readonly createRoleUseCase: CreateRoleUseCase,
+    private readonly deleteRoleUseCase: DeleteRoleUseCase,
+    private readonly getAllRolesUseCase: GetAllRolesUseCase,
+    private readonly getRoleByIdUseCase: GetRoleByIdUseCase,
+    private readonly updateRoleUseCase: UpdateRoleUseCase
+  ) {}
+
   public async index(request: Request, response: Response) {
-    const roles = await getAllRolesUseCase().execute(
+    const roles = await this.getAllRolesUseCase.execute(
       request.query?.order as string
     );
 
@@ -18,17 +26,17 @@ export class RolesController {
   }
 
   public async show(request: Request, response: Response) {
-    const role = await getRoleByIdUseCase().execute(request.params.id);
+    const role = await this.getRoleByIdUseCase.execute(request.params.id);
     response.status(200).json(role);
   }
 
   public async create(request: Request, response: Response) {
-    const role = await createRoleUseCase().execute(request.body);
+    const role = await this.createRoleUseCase.execute(request.body);
     response.status(201).json(role);
   }
 
   public async update(request: Request, response: Response) {
-    const updatedRole = await updateRoleUseCase().execute(
+    const updatedRole = await this.updateRoleUseCase.execute(
       request.params.id,
       request.body
     );
@@ -37,7 +45,7 @@ export class RolesController {
   }
 
   public async delete(request: Request, response: Response) {
-    await deleteRoleUseCase().execute(request.params.id);
+    await this.deleteRoleUseCase.execute(request.params.id);
     response.sendStatus(204);
   }
 }

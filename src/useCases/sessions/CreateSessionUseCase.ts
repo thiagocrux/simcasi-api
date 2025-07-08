@@ -66,6 +66,6 @@ export class CreateSessionUseCase {
       }
     );
 
-    return { accessToken, session: session._id };
+    return { accessToken, session: session._id.toString() };
   }
 }

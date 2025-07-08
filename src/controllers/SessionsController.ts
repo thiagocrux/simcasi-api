@@ -1,16 +1,24 @@
 import { Request, Response } from 'express';
 
 import {
-  createSessionUseCase,
-  deleteSessionUseCase,
-  generateNewAccessTokenUseCase,
-  getAllSessionsUseCase,
-  getSessionByIdUseCase,
-} from '../factories';
+  CreateSessionUseCase,
+  DeleteSessionUseCase,
+  GenerateNewAccessTokenUseCase,
+  GetAllSessionsUseCase,
+  GetSessionByIdUseCase,
+} from '../types';
 
 export class SessionsController {
+  constructor(
+    private readonly createSessionUseCase: CreateSessionUseCase,
+    private readonly deleteSessionUseCase: DeleteSessionUseCase,
+    private readonly generateNewAccessTokenUseCase: GenerateNewAccessTokenUseCase,
+    private readonly getAllSessionsUseCase: GetAllSessionsUseCase,
+    private readonly getSessionByIdUseCase: GetSessionByIdUseCase
+  ) {}
+
   public async index(request: Request, response: Response) {
-    const sessions = await getAllSessionsUseCase().execute(
+    const sessions = await this.getAllSessionsUseCase.execute(
       request.query?.order as string
     );
 
@@ -18,15 +26,18 @@ export class SessionsController {
   }
 
   public async show(request: Request, response: Response) {
-    const session = await getSessionByIdUseCase().execute(request.params.id);
+    const session = await this.getSessionByIdUseCase.execute(request.params.id);
 
     response.status(200).json(session);
   }
 
   public async create(request: Request, response: Response) {
-    const { accessToken, session } = await createSessionUseCase().execute(
+    const { accessToken, session } = await this.createSessionUseCase.execute(
       request.body,
-      { ipAddress: request.ip, userAgent: request.get('User-Agent') }
+      {
+        ipAddress: request.ip || null,
+        userAgent: request.get('User-Agent') || null,
+      }
     );
 
     response.cookie('accessToken', accessToken, {
@@ -45,12 +56,12 @@ export class SessionsController {
   }
 
   public async delete(request: Request, response: Response) {
-    await deleteSessionUseCase().execute(request.params.id);
+    await this.deleteSessionUseCase.execute(request.params.id);
     response.sendStatus(204);
   }
 
   public async refreshToken(request: Request, response: Response) {
-    const accessToken = await generateNewAccessTokenUseCase().execute(
+    const accessToken = await this.generateNewAccessTokenUseCase.execute(
       request.body.session
     );
 

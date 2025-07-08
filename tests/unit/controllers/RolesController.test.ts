@@ -1,12 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { RolesController } from '../../../src/controllers';
 import * as factories from '../../../src/factories';
 import { mockRoleDocument } from '../../mocks';
 
 describe('RolesController', () => {
-  let controller: RolesController;
   let mockRequest: any;
   let mockResponse: any;
 
@@ -18,8 +16,6 @@ describe('RolesController', () => {
       json: vi.fn().mockReturnThis(),
       sendStatus: vi.fn().mockReturnThis(),
     };
-
-    controller = new RolesController();
   });
 
   it('should retrieve all roles using the default sort order', async () => {
@@ -30,7 +26,7 @@ describe('RolesController', () => {
     } as any);
 
     mockRequest = { query: {} };
-    await controller.index(mockRequest, mockResponse);
+    await factories.rolesController().index(mockRequest, mockResponse);
     expect(executeMock).toHaveBeenCalledWith(undefined);
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockResponse.json).toHaveBeenCalledWith([mockRoleDocument]);
@@ -44,7 +40,7 @@ describe('RolesController', () => {
     } as any);
 
     mockRequest = { query: { order: 'desc' } };
-    await controller.index(mockRequest, mockResponse);
+    await factories.rolesController().index(mockRequest, mockResponse);
     expect(executeMock).toHaveBeenCalledWith('desc');
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockResponse.json).toHaveBeenCalledWith([mockRoleDocument]);
@@ -58,7 +54,7 @@ describe('RolesController', () => {
     } as any);
 
     mockRequest = { params: { id: '1' } };
-    await controller.show(mockRequest, mockResponse);
+    await factories.rolesController().show(mockRequest, mockResponse);
     expect(executeMock).toHaveBeenCalledWith('1');
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockResponse.json).toHaveBeenCalledWith(mockRoleDocument);
@@ -72,7 +68,7 @@ describe('RolesController', () => {
     } as any);
 
     mockRequest = { body: { name: 'New Role' } };
-    await controller.create(mockRequest, mockResponse);
+    await factories.rolesController().create(mockRequest, mockResponse);
     expect(executeMock).toHaveBeenCalledWith({ name: 'New Role' });
     expect(mockResponse.status).toHaveBeenCalledWith(201);
     expect(mockResponse.json).toHaveBeenCalledWith(mockRoleDocument);
@@ -90,7 +86,7 @@ describe('RolesController', () => {
       body: { name: 'Updated Role' },
     };
 
-    await controller.update(mockRequest, mockResponse);
+    await factories.rolesController().update(mockRequest, mockResponse);
     expect(executeMock).toHaveBeenCalledWith('1', { name: 'Updated Role' });
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockResponse.json).toHaveBeenCalledWith(mockRoleDocument);
@@ -104,7 +100,7 @@ describe('RolesController', () => {
     } as any);
 
     mockRequest = { params: { id: '1' } };
-    await controller.delete(mockRequest, mockResponse);
+    await factories.rolesController().delete(mockRequest, mockResponse);
     expect(executeMock).toHaveBeenCalledWith('1');
     expect(mockResponse.sendStatus).toHaveBeenCalledWith(204);
   });

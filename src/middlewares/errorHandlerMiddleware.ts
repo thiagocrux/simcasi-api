@@ -16,7 +16,20 @@ export function errorHandlerMiddleware(
     return next(error);
   }
 
-  logger.error({ ...error });
   const statusCode = error.statusCode || 500;
-  response.status(statusCode).json({ error });
+
+  logger.error({
+    message: error.message,
+    name: error.name,
+    stack: error.stack,
+    statusCode,
+  });
+
+  response.status(statusCode).json({
+    error: {
+      message: error.message,
+      name: error.name,
+      statusCode,
+    },
+  });
 }

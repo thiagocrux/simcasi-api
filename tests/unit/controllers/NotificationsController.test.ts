@@ -1,12 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { NotificationsController } from '../../../src/controllers';
 import * as factories from '../../../src/factories';
 import { mockNotificationDocument } from '../../mocks';
 
 describe('NotificationsController', () => {
-  let controller: NotificationsController;
   let mockRequest: any;
   let mockResponse: any;
 
@@ -18,8 +16,6 @@ describe('NotificationsController', () => {
       json: vi.fn().mockReturnThis(),
       sendStatus: vi.fn().mockReturnThis(),
     };
-
-    controller = new NotificationsController();
   });
 
   it('should retrieve all notifications using the default sort order', async () => {
@@ -30,7 +26,7 @@ describe('NotificationsController', () => {
     } as any);
 
     mockRequest = { query: {} };
-    await controller.index(mockRequest, mockResponse);
+    await factories.notificationsController().index(mockRequest, mockResponse);
     expect(executeMock).toHaveBeenCalledWith(undefined);
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockResponse.json).toHaveBeenCalledWith([mockNotificationDocument]);
@@ -44,7 +40,7 @@ describe('NotificationsController', () => {
     } as any);
 
     mockRequest = { query: { order: 'desc' } };
-    await controller.index(mockRequest, mockResponse);
+    await factories.notificationsController().index(mockRequest, mockResponse);
     expect(executeMock).toHaveBeenCalledWith('desc');
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockResponse.json).toHaveBeenCalledWith([mockNotificationDocument]);
@@ -58,7 +54,7 @@ describe('NotificationsController', () => {
     } as any);
 
     mockRequest = { params: { id: '1' } };
-    await controller.show(mockRequest, mockResponse);
+    await factories.notificationsController().show(mockRequest, mockResponse);
     expect(executeMock).toHaveBeenCalledWith('1');
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockResponse.json).toHaveBeenCalledWith(mockNotificationDocument);
@@ -72,7 +68,7 @@ describe('NotificationsController', () => {
     } as any);
 
     mockRequest = { body: { name: 'New Notification' } };
-    await controller.create(mockRequest, mockResponse);
+    await factories.notificationsController().create(mockRequest, mockResponse);
     expect(executeMock).toHaveBeenCalledWith({ name: 'New Notification' });
     expect(mockResponse.status).toHaveBeenCalledWith(201);
     expect(mockResponse.json).toHaveBeenCalledWith(mockNotificationDocument);
@@ -90,7 +86,7 @@ describe('NotificationsController', () => {
       body: { name: 'Updated Notification' },
     };
 
-    await controller.update(mockRequest, mockResponse);
+    await factories.notificationsController().update(mockRequest, mockResponse);
 
     expect(executeMock).toHaveBeenCalledWith('1', {
       name: 'Updated Notification',
@@ -108,7 +104,7 @@ describe('NotificationsController', () => {
     } as any);
 
     mockRequest = { params: { id: '1' } };
-    await controller.delete(mockRequest, mockResponse);
+    await factories.notificationsController().delete(mockRequest, mockResponse);
     expect(executeMock).toHaveBeenCalledWith('1');
     expect(mockResponse.sendStatus).toHaveBeenCalledWith(204);
   });

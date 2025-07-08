@@ -1,12 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { SessionsController } from '../../../src/controllers';
 import * as factories from '../../../src/factories';
 import { mockSessionDocument } from '../../mocks';
 
 describe('SessionsController', () => {
-  let controller: SessionsController;
   let mockRequest: any;
   let mockResponse: any;
 
@@ -19,8 +17,6 @@ describe('SessionsController', () => {
       sendStatus: vi.fn().mockReturnThis(),
       cookie: vi.fn().mockReturnThis(),
     };
-
-    controller = new SessionsController();
   });
 
   it('should retrieve all sessions using the default sort order', async () => {
@@ -31,7 +27,7 @@ describe('SessionsController', () => {
     } as any);
 
     mockRequest = { query: {} };
-    await controller.index(mockRequest, mockResponse);
+    await factories.sessionsController().index(mockRequest, mockResponse);
     expect(executeMock).toHaveBeenCalledWith(undefined);
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockResponse.json).toHaveBeenCalledWith([mockSessionDocument]);
@@ -46,7 +42,7 @@ describe('SessionsController', () => {
 
     mockRequest = { query: { order: 'desc' } };
 
-    await controller.index(mockRequest, mockResponse);
+    await factories.sessionsController().index(mockRequest, mockResponse);
     expect(executeMock).toHaveBeenCalledWith('desc');
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockResponse.json).toHaveBeenCalledWith([mockSessionDocument]);
@@ -60,7 +56,7 @@ describe('SessionsController', () => {
     } as any);
 
     mockRequest = { params: { id: '1' } };
-    await controller.show(mockRequest, mockResponse);
+    await factories.sessionsController().show(mockRequest, mockResponse);
     expect(executeMock).toHaveBeenCalledWith('1');
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockResponse.json).toHaveBeenCalledWith(mockSessionDocument);
@@ -87,7 +83,7 @@ describe('SessionsController', () => {
       }),
     };
 
-    await controller.create(mockRequest, mockResponse);
+    await factories.sessionsController().create(mockRequest, mockResponse);
 
     expect(executeMock).toHaveBeenCalledWith(mockRequest.body, {
       ipAddress: '127.0.0.1',
@@ -110,7 +106,7 @@ describe('SessionsController', () => {
     } as any);
 
     mockRequest = { params: { id: '1' } };
-    await controller.delete(mockRequest, mockResponse);
+    await factories.sessionsController().delete(mockRequest, mockResponse);
     expect(executeMock).toHaveBeenCalledWith('1');
     expect(mockResponse.sendStatus).toHaveBeenCalledWith(204);
   });
@@ -126,7 +122,9 @@ describe('SessionsController', () => {
       body: { session: 'mockSessionId' },
     };
 
-    await controller.refreshToken(mockRequest, mockResponse);
+    await factories
+      .sessionsController()
+      .refreshToken(mockRequest, mockResponse);
     expect(executeMock).toHaveBeenCalledWith('mockSessionId');
 
     expect(mockResponse.cookie).toHaveBeenCalledWith(
@@ -144,5 +142,92 @@ describe('SessionsController', () => {
     expect(mockResponse.json).toHaveBeenCalledWith({
       accessToken: 'newMockAccessToken',
     });
+  });
+
+  it('should create a session with null ipAddress when request.ip is undefined', async () => {
+    const executeMock = vi.fn().mockResolvedValue({
+      accessToken: 'mockAccessToken',
+      session: mockSessionDocument,
+    });
+
+    vi.spyOn(factories, 'createSessionUseCase').mockReturnValue({
+      execute: executeMock,
+    } as any);
+
+    mockRequest = {
+      body: {
+        name: 'New Session',
+      },
+      ip: undefined,
+      get: vi.fn((header: string) => {
+        if (header === 'User-Agent') return 'Vitest';
+        return undefined;
+      }),
+    };
+
+    await factories.sessionsController().create(mockRequest, mockResponse);
+
+    expect(executeMock).toHaveBeenCalledWith(mockRequest.body, {
+      ipAddress: null,
+      userAgent: 'Vitest',
+    });
+
+    expect(mockResponse.status).toHaveBeenCalledWith(201);
+  });
+
+  it('should create a session with null userAgent when User-Agent header is undefined', async () => {
+    const executeMock = vi.fn().mockResolvedValue({
+      accessToken: 'mockAccessToken',
+      session: mockSessionDocument,
+    });
+
+    vi.spyOn(factories, 'createSessionUseCase').mockReturnValue({
+      execute: executeMock,
+    } as any);
+
+    mockRequest = {
+      body: {
+        name: 'New Session',
+      },
+      ip: '127.0.0.1',
+      get: vi.fn(() => undefined),
+    };
+
+    await factories.sessionsController().create(mockRequest, mockResponse);
+
+    expect(executeMock).toHaveBeenCalledWith(mockRequest.body, {
+      ipAddress: '127.0.0.1',
+      userAgent: null,
+    });
+
+    expect(mockResponse.status).toHaveBeenCalledWith(201);
+  });
+
+  it('should create a session with null ipAddress and userAgent when both are undefined', async () => {
+    const executeMock = vi.fn().mockResolvedValue({
+      accessToken: 'mockAccessToken',
+      session: mockSessionDocument,
+    });
+
+    vi.spyOn(factories, 'createSessionUseCase').mockReturnValue({
+      execute: executeMock,
+    } as any);
+
+    mockRequest = {
+      body: {
+        name: 'New Session',
+      },
+      ip: undefined,
+      get: vi.fn(() => undefined),
+    };
+
+    await factories.sessionsController().create(mockRequest, mockResponse);
+
+    expect(executeMock).toHaveBeenCalledWith(mockRequest.body, {
+      ipAddress: null,
+      userAgent: null,
+    });
+
+    expect(mockResponse.status).toHaveBeenCalledWith(201);
   });
 });

@@ -1,16 +1,24 @@
 import { Request, Response } from 'express';
 
 import {
-  createPermissionUseCase,
-  deletePermissionUseCase,
-  getAllPermissionsUseCase,
-  getPermissionByIdUseCase,
-  updatePermissionUseCase,
-} from '../factories';
+  CreatePermissionUseCase,
+  DeletePermissionUseCase,
+  GetAllPermissionsUseCase,
+  GetPermissionByIdUseCase,
+  UpdatePermissionUseCase,
+} from '../types';
 
 export class PermissionsController {
+  constructor(
+    private readonly createPermissionUseCase: CreatePermissionUseCase,
+    private readonly deletePermissionUseCase: DeletePermissionUseCase,
+    private readonly getAllPermissionsUseCase: GetAllPermissionsUseCase,
+    private readonly getPermissionByIdUseCase: GetPermissionByIdUseCase,
+    private readonly updatePermissionUseCase: UpdatePermissionUseCase
+  ) {}
+
   public async index(request: Request, response: Response) {
-    const permissions = await getAllPermissionsUseCase().execute(
+    const permissions = await this.getAllPermissionsUseCase.execute(
       request.query?.order as string
     );
 
@@ -18,7 +26,7 @@ export class PermissionsController {
   }
 
   public async show(request: Request, response: Response) {
-    const permission = await getPermissionByIdUseCase().execute(
+    const permission = await this.getPermissionByIdUseCase.execute(
       request.params.id
     );
 
@@ -26,13 +34,12 @@ export class PermissionsController {
   }
 
   public async create(request: Request, response: Response) {
-    const permission = await createPermissionUseCase().execute(request.body);
-
+    const permission = await this.createPermissionUseCase.execute(request.body);
     response.status(201).json(permission);
   }
 
   public async update(request: Request, response: Response) {
-    const updatedPermission = await updatePermissionUseCase().execute(
+    const updatedPermission = await this.updatePermissionUseCase.execute(
       request.params.id,
       request.body
     );
@@ -41,7 +48,7 @@ export class PermissionsController {
   }
 
   public async delete(request: Request, response: Response) {
-    await deletePermissionUseCase().execute(request.params.id);
+    await this.deletePermissionUseCase.execute(request.params.id);
     response.sendStatus(204);
   }
 }

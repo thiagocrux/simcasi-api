@@ -2,5 +2,6 @@ import { ExamsRepository } from '../../../repositories';
 import { GetAllExamsUseCase } from '../../../useCases';
 
 export function getAllExamsUseCase() {
-  return new GetAllExamsUseCase(ExamsRepository);
+  const examsRepository = new ExamsRepository();
+  return new GetAllExamsUseCase(examsRepository);
 }

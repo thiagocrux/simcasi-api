@@ -1,12 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { ObservationsController } from '../../../src/controllers';
 import * as factories from '../../../src/factories';
 import { mockObservationDocument } from '../../mocks';
 
 describe('ObservationsController', () => {
-  let controller: ObservationsController;
   let mockRequest: any;
   let mockResponse: any;
 
@@ -18,8 +16,6 @@ describe('ObservationsController', () => {
       json: vi.fn().mockReturnThis(),
       sendStatus: vi.fn().mockReturnThis(),
     };
-
-    controller = new ObservationsController();
   });
 
   it('should retrieve all observations using the default sort order', async () => {
@@ -30,7 +26,7 @@ describe('ObservationsController', () => {
     } as any);
 
     mockRequest = { query: {} };
-    await controller.index(mockRequest, mockResponse);
+    await factories.observationsController().index(mockRequest, mockResponse);
     expect(executeMock).toHaveBeenCalledWith(undefined);
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockResponse.json).toHaveBeenCalledWith([mockObservationDocument]);
@@ -44,7 +40,7 @@ describe('ObservationsController', () => {
     } as any);
 
     mockRequest = { query: { order: 'desc' } };
-    await controller.index(mockRequest, mockResponse);
+    await factories.observationsController().index(mockRequest, mockResponse);
     expect(executeMock).toHaveBeenCalledWith('desc');
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockResponse.json).toHaveBeenCalledWith([mockObservationDocument]);
@@ -58,7 +54,7 @@ describe('ObservationsController', () => {
     } as any);
 
     mockRequest = { params: { id: '1' } };
-    await controller.show(mockRequest, mockResponse);
+    await factories.observationsController().show(mockRequest, mockResponse);
     expect(executeMock).toHaveBeenCalledWith('1');
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockResponse.json).toHaveBeenCalledWith(mockObservationDocument);
@@ -72,7 +68,7 @@ describe('ObservationsController', () => {
     } as any);
 
     mockRequest = { body: { name: 'New Observation' } };
-    await controller.create(mockRequest, mockResponse);
+    await factories.observationsController().create(mockRequest, mockResponse);
     expect(executeMock).toHaveBeenCalledWith({ name: 'New Observation' });
     expect(mockResponse.status).toHaveBeenCalledWith(201);
     expect(mockResponse.json).toHaveBeenCalledWith(mockObservationDocument);
@@ -90,7 +86,7 @@ describe('ObservationsController', () => {
       body: { name: 'Updated Observation' },
     };
 
-    await controller.update(mockRequest, mockResponse);
+    await factories.observationsController().update(mockRequest, mockResponse);
 
     expect(executeMock).toHaveBeenCalledWith('1', {
       name: 'Updated Observation',
@@ -108,7 +104,7 @@ describe('ObservationsController', () => {
     } as any);
 
     mockRequest = { params: { id: '1' } };
-    await controller.delete(mockRequest, mockResponse);
+    await factories.observationsController().delete(mockRequest, mockResponse);
     expect(executeMock).toHaveBeenCalledWith('1');
     expect(mockResponse.sendStatus).toHaveBeenCalledWith(204);
   });

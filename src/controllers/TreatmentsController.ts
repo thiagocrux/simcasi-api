@@ -1,16 +1,24 @@
 import { Request, Response } from 'express';
 
 import {
-  createTreatmentUseCase,
-  deleteTreatmentUseCase,
-  getAllTreatmentsUseCase,
-  getTreatmentByIdUseCase,
-  updateTreatmentUseCase,
-} from '../factories';
+  CreateTreatmentUseCase,
+  DeleteTreatmentUseCase,
+  GetAllTreatmentsUseCase,
+  GetTreatmentByIdUseCase,
+  UpdateTreatmentUseCase,
+} from '../types';
 
 export class TreatmentsController {
+  constructor(
+    private readonly createTreatmentUseCase: CreateTreatmentUseCase,
+    private readonly deleteTreatmentUseCase: DeleteTreatmentUseCase,
+    private readonly getAllTreatmentsUseCase: GetAllTreatmentsUseCase,
+    private readonly getTreatmentByIdUseCase: GetTreatmentByIdUseCase,
+    private readonly updateTreatmentUseCase: UpdateTreatmentUseCase
+  ) {}
+
   public async index(request: Request, response: Response) {
-    const treatments = await getAllTreatmentsUseCase().execute(
+    const treatments = await this.getAllTreatmentsUseCase.execute(
       request.query?.order as string
     );
 
@@ -18,7 +26,7 @@ export class TreatmentsController {
   }
 
   public async show(request: Request, response: Response) {
-    const treatment = await getTreatmentByIdUseCase().execute(
+    const treatment = await this.getTreatmentByIdUseCase.execute(
       request.params.id
     );
 
@@ -26,12 +34,12 @@ export class TreatmentsController {
   }
 
   public async create(request: Request, response: Response) {
-    const treatment = await createTreatmentUseCase().execute(request.body);
+    const treatment = await this.createTreatmentUseCase.execute(request.body);
     response.status(201).json(treatment);
   }
 
   public async update(request: Request, response: Response) {
-    const updatedTreatment = await updateTreatmentUseCase().execute(
+    const updatedTreatment = await this.updateTreatmentUseCase.execute(
       request.params.id,
       request.body
     );
@@ -40,7 +48,7 @@ export class TreatmentsController {
   }
 
   public async delete(request: Request, response: Response) {
-    await deleteTreatmentUseCase().execute(request.params.id);
+    await this.deleteTreatmentUseCase.execute(request.params.id);
     response.sendStatus(204);
   }
 }

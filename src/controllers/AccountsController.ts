@@ -1,16 +1,24 @@
 import { Request, Response } from 'express';
 
 import {
-  createAccountUseCase,
-  deleteAccountUseCase,
-  getAccountByIdUseCase,
-  getAllAccountsUseCase,
-  updateAccountUseCase,
-} from '../factories';
+  CreateAccountUseCase,
+  DeleteAccountUseCase,
+  GetAccountByIdUseCase,
+  GetAllAccountsUseCase,
+  UpdateAccountUseCase,
+} from '../types';
 
 export class AccountsController {
+  constructor(
+    private readonly createAccountUseCase: CreateAccountUseCase,
+    private readonly deleteAccountUseCase: DeleteAccountUseCase,
+    private readonly getAccountByIdUseCase: GetAccountByIdUseCase,
+    private readonly getAllAccountsUseCase: GetAllAccountsUseCase,
+    private readonly updateAccountUseCase: UpdateAccountUseCase
+  ) {}
+
   public async index(request: Request, response: Response) {
-    const accounts = await getAllAccountsUseCase().execute(
+    const accounts = await this.getAllAccountsUseCase.execute(
       request.query?.order as string
     );
 
@@ -18,18 +26,18 @@ export class AccountsController {
   }
 
   public async show(request: Request, response: Response) {
-    const account = await getAccountByIdUseCase().execute(request.params.id);
+    const account = await this.getAccountByIdUseCase.execute(request.params.id);
 
     response.status(200).json(account);
   }
 
   public async create(request: Request, response: Response) {
-    const account = await createAccountUseCase().execute(request.body);
+    const account = await this.createAccountUseCase.execute(request.body);
     response.status(201).json(account);
   }
 
   public async update(request: Request, response: Response) {
-    const updatedAccount = await updateAccountUseCase().execute(
+    const updatedAccount = await this.updateAccountUseCase.execute(
       request.params.id,
       request.body
     );
@@ -38,7 +46,7 @@ export class AccountsController {
   }
 
   public async delete(request: Request, response: Response) {
-    await deleteAccountUseCase().execute(request.params.id);
+    await this.deleteAccountUseCase.execute(request.params.id);
     response.sendStatus(204);
   }
 }

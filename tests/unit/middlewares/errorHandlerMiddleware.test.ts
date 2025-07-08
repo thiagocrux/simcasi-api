@@ -22,7 +22,11 @@ describe('errorHandlerMiddleware', () => {
     expect(res.status).toHaveBeenCalledWith(error.statusCode || 404);
 
     expect(res.json).toHaveBeenCalledWith({
-      error: error,
+      error: {
+        message: 'The subject could not be found.',
+        name: 'NotFoundError',
+        statusCode: 404,
+      },
     });
 
     expect(next).not.toHaveBeenCalled();
@@ -60,5 +64,29 @@ describe('errorHandlerMiddleware', () => {
     expect(next).toHaveBeenCalledWith(error);
     expect(res.status).not.toHaveBeenCalled();
     expect(res.json).not.toHaveBeenCalled();
+  });
+
+  it('should default to status code 500 if error.statusCode is not set', () => {
+    const error = new Error('Unexpected error');
+    const req = {} as any;
+
+    const res = {
+      status: vi.fn().mockReturnThis(),
+      json: vi.fn(),
+      headersSent: false,
+    } as any;
+
+    const next = vi.fn();
+
+    errorHandlerMiddleware(error as any, req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({
+      error: {
+        message: 'Unexpected error',
+        name: 'Error',
+        statusCode: 500,
+      },
+    });
   });
 });

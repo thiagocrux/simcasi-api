@@ -1,12 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { TreatmentsController } from '../../../src/controllers';
 import * as factories from '../../../src/factories';
 import { mockTreatmentDocument } from '../../mocks';
 
 describe('TreatmentsController', () => {
-  let controller: TreatmentsController;
   let mockRequest: any;
   let mockResponse: any;
 
@@ -18,8 +16,6 @@ describe('TreatmentsController', () => {
       json: vi.fn().mockReturnThis(),
       sendStatus: vi.fn().mockReturnThis(),
     };
-
-    controller = new TreatmentsController();
   });
 
   it('should retrieve all treatments using the default sort order', async () => {
@@ -30,7 +26,7 @@ describe('TreatmentsController', () => {
     } as any);
 
     mockRequest = { query: {} };
-    await controller.index(mockRequest, mockResponse);
+    await factories.treatmentsController().index(mockRequest, mockResponse);
     expect(executeMock).toHaveBeenCalledWith(undefined);
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockResponse.json).toHaveBeenCalledWith([mockTreatmentDocument]);
@@ -44,7 +40,7 @@ describe('TreatmentsController', () => {
     } as any);
 
     mockRequest = { query: { order: 'desc' } };
-    await controller.index(mockRequest, mockResponse);
+    await factories.treatmentsController().index(mockRequest, mockResponse);
     expect(executeMock).toHaveBeenCalledWith('desc');
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockResponse.json).toHaveBeenCalledWith([mockTreatmentDocument]);
@@ -58,7 +54,7 @@ describe('TreatmentsController', () => {
     } as any);
 
     mockRequest = { params: { id: '1' } };
-    await controller.show(mockRequest, mockResponse);
+    await factories.treatmentsController().show(mockRequest, mockResponse);
     expect(executeMock).toHaveBeenCalledWith('1');
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockResponse.json).toHaveBeenCalledWith(mockTreatmentDocument);
@@ -72,7 +68,7 @@ describe('TreatmentsController', () => {
     } as any);
 
     mockRequest = { body: { name: 'New Treatment' } };
-    await controller.create(mockRequest, mockResponse);
+    await factories.treatmentsController().create(mockRequest, mockResponse);
     expect(executeMock).toHaveBeenCalledWith({ name: 'New Treatment' });
     expect(mockResponse.status).toHaveBeenCalledWith(201);
     expect(mockResponse.json).toHaveBeenCalledWith(mockTreatmentDocument);
@@ -90,7 +86,7 @@ describe('TreatmentsController', () => {
       body: { name: 'Updated Treatment' },
     };
 
-    await controller.update(mockRequest, mockResponse);
+    await factories.treatmentsController().update(mockRequest, mockResponse);
 
     expect(executeMock).toHaveBeenCalledWith('1', {
       name: 'Updated Treatment',
@@ -108,7 +104,7 @@ describe('TreatmentsController', () => {
     } as any);
 
     mockRequest = { params: { id: '1' } };
-    await controller.delete(mockRequest, mockResponse);
+    await factories.treatmentsController().delete(mockRequest, mockResponse);
     expect(executeMock).toHaveBeenCalledWith('1');
     expect(mockResponse.sendStatus).toHaveBeenCalledWith(204);
   });

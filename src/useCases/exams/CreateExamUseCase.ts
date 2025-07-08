@@ -1,10 +1,11 @@
 import { CreateExamSchema } from '../../schemas';
+import { NotFoundError } from '../../utils';
+
 import {
   CreateExamDTO,
   ExamsRepository,
   PatientsRepository,
 } from '../../types';
-import { NotFoundError } from '../../utils';
 
 export class CreateExamUseCase {
   constructor(

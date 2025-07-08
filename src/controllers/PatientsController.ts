@@ -1,16 +1,24 @@
 import { Request, Response } from 'express';
 
 import {
-  createPatientUseCase,
-  deletePatientUseCase,
-  getAllPatientsUseCase,
-  getPatientByIdUseCase,
-  updatePatientUseCase,
-} from '../factories';
+  CreatePatientUseCase,
+  DeletePatientUseCase,
+  GetAllPatientsUseCase,
+  GetPatientByIdUseCase,
+  UpdatePatientUseCase,
+} from '../types';
 
 export class PatientsController {
+  constructor(
+    private readonly createPatientUseCase: CreatePatientUseCase,
+    private readonly deletePatientUseCase: DeletePatientUseCase,
+    private readonly getAllPatientsUseCase: GetAllPatientsUseCase,
+    private readonly getPatientByIdUseCase: GetPatientByIdUseCase,
+    private readonly updatePatientUseCase: UpdatePatientUseCase
+  ) {}
+
   public async index(request: Request, response: Response) {
-    const patients = await getAllPatientsUseCase().execute(
+    const patients = await this.getAllPatientsUseCase.execute(
       request.query?.order as string
     );
 
@@ -18,18 +26,17 @@ export class PatientsController {
   }
 
   public async show(request: Request, response: Response) {
-    const patient = await getPatientByIdUseCase().execute(request.params.id);
-
+    const patient = await this.getPatientByIdUseCase.execute(request.params.id);
     response.status(200).json(patient);
   }
 
   public async create(request: Request, response: Response) {
-    const patient = await createPatientUseCase().execute(request.body);
+    const patient = await this.createPatientUseCase.execute(request.body);
     response.status(201).json(patient);
   }
 
   public async update(request: Request, response: Response) {
-    const updatedPatient = await updatePatientUseCase().execute(
+    const updatedPatient = await this.updatePatientUseCase.execute(
       request.params.id,
       request.body
     );
@@ -38,7 +45,7 @@ export class PatientsController {
   }
 
   public async delete(request: Request, response: Response) {
-    await deletePatientUseCase().execute(request.params.id);
+    await this.deletePatientUseCase.execute(request.params.id);
     response.sendStatus(204);
   }
 }
