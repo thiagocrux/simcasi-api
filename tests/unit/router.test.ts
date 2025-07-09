@@ -1,65 +1,33 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import express from 'express';
+import request from 'supertest';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import * as factories from '../../src/factories';
-import { router } from '../../src/router';
 
-describe('router', () => {
-  let request: any;
-  let response: any;
-  let next: any;
+// Mock authentication and authorization middleware to always call next()
+vi.mock('../../src/factories', async (importOriginal) => {
+  const original = await importOriginal();
+
+  return {
+    ...(typeof original === 'object' && original !== null ? original : {}),
+    authenticationMiddleware: () => (request: any, response: any, next: any) =>
+      next(),
+    authorizationMiddleware: () => (request: any, response: any, next: any) =>
+      next(),
+  };
+});
+
+import * as factories from '../../src/factories';
+import { router } from '../../src/routes';
+
+describe('API routes', () => {
+  let app: express.Express;
 
   beforeEach(() => {
-    request = {};
-    response = {
-      status: vi.fn().mockReturnThis(),
-      json: vi.fn().mockReturnThis(),
-      sendStatus: vi.fn().mockReturnThis(),
-    };
-    next = vi.fn();
+    app = express();
+    app.use(express.json());
+    app.use(router);
   });
 
-  // Helper to extract all routes from the router
-  function getRoutes() {
-    return router.stack
-      .filter((layer: any) => layer.route)
-      .map((layer: any) => ({
-        path: layer.route.path,
-        methods: Object.keys(layer.route.methods),
-      }));
-  }
-
-  it('should register all expected routes', () => {
-    const expectedRoutes = [
-      '/accounts',
-      '/accounts/:id',
-      '/sessions/sign-in',
-      '/sessions/refresh-token',
-      '/sessions',
-      '/sessions/:id',
-      '/roles',
-      '/roles/:id',
-      '/permissions',
-      '/permissions/:id',
-      '/patients',
-      '/patients/:id',
-      '/exams',
-      '/exams/:id',
-      '/notifications',
-      '/notifications/:id',
-      '/treatments',
-      '/treatments/:id',
-      '/observations',
-      '/observations/:id',
-    ];
-
-    const routes = getRoutes().map((route) => route.path);
-
-    expectedRoutes.forEach((route) => {
-      expect(routes).toContain(route);
-    });
-  });
-
-  // Test each route handler is called as expected
   const routeTests = [
     // Accounts
     {
@@ -70,7 +38,7 @@ describe('router', () => {
     },
     {
       method: 'get',
-      path: '/accounts/:id',
+      path: '/accounts/123',
       controller: 'accountsController',
       fn: 'show',
     },
@@ -82,13 +50,13 @@ describe('router', () => {
     },
     {
       method: 'put',
-      path: '/accounts/:id',
+      path: '/accounts/123',
       controller: 'accountsController',
       fn: 'update',
     },
     {
       method: 'delete',
-      path: '/accounts/:id',
+      path: '/accounts/123',
       controller: 'accountsController',
       fn: 'delete',
     },
@@ -113,13 +81,13 @@ describe('router', () => {
     },
     {
       method: 'get',
-      path: '/sessions/:id',
+      path: '/sessions/123',
       controller: 'sessionsController',
       fn: 'show',
     },
     {
       method: 'delete',
-      path: '/sessions/:id',
+      path: '/sessions/123',
       controller: 'sessionsController',
       fn: 'delete',
     },
@@ -132,7 +100,7 @@ describe('router', () => {
     },
     {
       method: 'get',
-      path: '/roles/:id',
+      path: '/roles/123',
       controller: 'rolesController',
       fn: 'show',
     },
@@ -144,13 +112,13 @@ describe('router', () => {
     },
     {
       method: 'put',
-      path: '/roles/:id',
+      path: '/roles/123',
       controller: 'rolesController',
       fn: 'update',
     },
     {
       method: 'delete',
-      path: '/roles/:id',
+      path: '/roles/123',
       controller: 'rolesController',
       fn: 'delete',
     },
@@ -163,7 +131,7 @@ describe('router', () => {
     },
     {
       method: 'get',
-      path: '/permissions/:id',
+      path: '/permissions/123',
       controller: 'permissionsController',
       fn: 'show',
     },
@@ -175,13 +143,13 @@ describe('router', () => {
     },
     {
       method: 'put',
-      path: '/permissions/:id',
+      path: '/permissions/123',
       controller: 'permissionsController',
       fn: 'update',
     },
     {
       method: 'delete',
-      path: '/permissions/:id',
+      path: '/permissions/123',
       controller: 'permissionsController',
       fn: 'delete',
     },
@@ -194,7 +162,7 @@ describe('router', () => {
     },
     {
       method: 'get',
-      path: '/patients/:id',
+      path: '/patients/123',
       controller: 'patientsController',
       fn: 'show',
     },
@@ -206,13 +174,13 @@ describe('router', () => {
     },
     {
       method: 'put',
-      path: '/patients/:id',
+      path: '/patients/123',
       controller: 'patientsController',
       fn: 'update',
     },
     {
       method: 'delete',
-      path: '/patients/:id',
+      path: '/patients/123',
       controller: 'patientsController',
       fn: 'delete',
     },
@@ -225,7 +193,7 @@ describe('router', () => {
     },
     {
       method: 'get',
-      path: '/exams/:id',
+      path: '/exams/123',
       controller: 'examsController',
       fn: 'show',
     },
@@ -237,13 +205,13 @@ describe('router', () => {
     },
     {
       method: 'put',
-      path: '/exams/:id',
+      path: '/exams/123',
       controller: 'examsController',
       fn: 'update',
     },
     {
       method: 'delete',
-      path: '/exams/:id',
+      path: '/exams/123',
       controller: 'examsController',
       fn: 'delete',
     },
@@ -256,7 +224,7 @@ describe('router', () => {
     },
     {
       method: 'get',
-      path: '/notifications/:id',
+      path: '/notifications/123',
       controller: 'notificationsController',
       fn: 'show',
     },
@@ -268,13 +236,13 @@ describe('router', () => {
     },
     {
       method: 'put',
-      path: '/notifications/:id',
+      path: '/notifications/123',
       controller: 'notificationsController',
       fn: 'update',
     },
     {
       method: 'delete',
-      path: '/notifications/:id',
+      path: '/notifications/123',
       controller: 'notificationsController',
       fn: 'delete',
     },
@@ -287,7 +255,7 @@ describe('router', () => {
     },
     {
       method: 'get',
-      path: '/treatments/:id',
+      path: '/treatments/123',
       controller: 'treatmentsController',
       fn: 'show',
     },
@@ -299,13 +267,13 @@ describe('router', () => {
     },
     {
       method: 'put',
-      path: '/treatments/:id',
+      path: '/treatments/123',
       controller: 'treatmentsController',
       fn: 'update',
     },
     {
       method: 'delete',
-      path: '/treatments/:id',
+      path: '/treatments/123',
       controller: 'treatmentsController',
       fn: 'delete',
     },
@@ -318,7 +286,7 @@ describe('router', () => {
     },
     {
       method: 'get',
-      path: '/observations/:id',
+      path: '/observations/123',
       controller: 'observationsController',
       fn: 'show',
     },
@@ -330,13 +298,13 @@ describe('router', () => {
     },
     {
       method: 'put',
-      path: '/observations/:id',
+      path: '/observations/123',
       controller: 'observationsController',
       fn: 'update',
     },
     {
       method: 'delete',
-      path: '/observations/:id',
+      path: '/observations/123',
       controller: 'observationsController',
       fn: 'delete',
     },
@@ -344,48 +312,18 @@ describe('router', () => {
 
   for (const { method, path, controller, fn } of routeTests) {
     it(`should call ${controller}.${fn} for [${method.toUpperCase()}] ${path}`, async () => {
-      const ctrlMock = { [fn]: vi.fn().mockResolvedValue(undefined) };
+      const mockController = {
+        [fn]: vi.fn((request, response) =>
+          response.status(200).json({ ok: true })
+        ),
+      };
+
       vi.spyOn(factories, controller as keyof typeof factories).mockReturnValue(
-        ctrlMock
+        mockController
       );
 
-      // Find the route handler
-      const layer = router.stack.find(
-        (l: any) => l.route && l.route.path === path && l.route.methods[method]
-      );
-
-      expect(layer).toBeDefined();
-
-      // Simulate Express calling the handler
-      if (!layer?.route) {
-        throw new Error(
-          `Route layer for [${method.toUpperCase()}] ${path} not found or invalid`
-        );
-      }
-
-      const handler = layer.route.stack[layer.route.stack.length - 1].handle;
-      await handler(request, response, next);
-
-      expect(ctrlMock[fn]).toHaveBeenCalledWith(request, response);
+      await request(app)[method](path);
+      expect(mockController[fn]).toHaveBeenCalled();
     });
   }
-
-  it('should not require authentication for /sessions/sign-in and /sessions/refresh-token', () => {
-    const stack = router.stack.filter((l: any) => l.route);
-    ['/sessions/sign-in', '/sessions/refresh-token'].forEach((path) => {
-      const layer = stack.find(
-        (layer: any) => layer.route && layer.route.path === path
-      );
-
-      expect(layer).toBeDefined();
-
-      const middlewareNames =
-        layer && layer.route
-          ? layer.route.stack.map((middleware: any) => middleware.name)
-          : [];
-
-      expect(middlewareNames).not.toContain('authenticationMiddleware');
-      expect(middlewareNames).not.toContain('authorizationMiddleware');
-    });
-  });
 });

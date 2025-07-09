@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 
 import { env } from './config';
 import { corsMiddleware, errorHandlerMiddleware } from './middlewares';
-import { router } from './router';
+import { router } from './routes';
 import { logger } from './utils';
 
 const app = express();

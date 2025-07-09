@@ -34,7 +34,7 @@ vi.mock('../../src/middlewares', () => ({
   errorHandlerMiddleware: vi.fn(),
 }));
 
-vi.mock('../../src/router', () => ({
+vi.mock('../../src/routes', () => ({
   router: vi.fn(),
 }));
 
