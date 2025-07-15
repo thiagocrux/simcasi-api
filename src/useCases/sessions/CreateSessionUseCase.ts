@@ -11,6 +11,21 @@ import { env, JWT_DURATION, SESSION_DURATION } from '../../config';
 import { CreateSessionSchema } from '../../schemas';
 import { AccountsRepository, SessionsRepository } from '../../types';
 
+export interface CreateSessionParams {
+  email: string;
+  password: string;
+}
+
+export interface DeviceInfo {
+  ipAddress: string | null;
+  userAgent: string | null;
+}
+
+export interface CreateSessionResult {
+  accessToken: string;
+  session: string;
+}
+
 export class CreateSessionUseCase {
   constructor(
     private readonly sessionsRepository: SessionsRepository,
@@ -18,9 +33,9 @@ export class CreateSessionUseCase {
   ) {}
 
   async execute(
-    { email, password }: { email: string; password: string },
-    { ipAddress, userAgent }: { ipAddress?: string; userAgent?: string }
-  ) {
+    { email, password }: CreateSessionParams,
+    { ipAddress = null, userAgent = null }: DeviceInfo
+  ): Promise<CreateSessionResult> {
     CreateSessionSchema.parse({
       email,
       password,
@@ -58,7 +73,7 @@ export class CreateSessionUseCase {
       deviceInfo,
     });
 
-    const accessToken = jwt.sign(
+    const generatedAccessToken = jwt.sign(
       { sub: account._id, rid: account.role, sid: session._id },
       env.jwtSecret,
       {
@@ -66,6 +81,9 @@ export class CreateSessionUseCase {
       }
     );
 
-    return { accessToken, session: session._id.toString() };
+    return {
+      accessToken: generatedAccessToken,
+      session: session._id.toString(),
+    };
   }
 }

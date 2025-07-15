@@ -1,4 +1,3 @@
-import { CreateSessionDTO } from '../..';
 import { SessionDocument } from '../../../models';
 
 /**
@@ -13,12 +12,12 @@ export interface CreateSessionUseCase {
    * @throws NotFoundError when account does not exist
    */
   execute(
-    body: CreateSessionDTO,
+    body: { email: string; password: string },
     {
       ipAddress,
       userAgent,
     }: { ipAddress: string | null; userAgent: string | null }
-  ): Promise<{ accessToken: string; session: string }>;
+  ): Promise<{ accessToken: string | null; session: string | null }>;
 }
 
 /**

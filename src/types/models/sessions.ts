@@ -8,8 +8,8 @@ export interface Session {
   issuedAt: Date;
   expiresAt: Date;
   deviceInfo: {
-    ipAddress?: string;
-    userAgent?: string;
+    ipAddress: string | null;
+    userAgent: string | null;
   };
 }
 

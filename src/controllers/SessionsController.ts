@@ -46,7 +46,7 @@ export class SessionsController {
       secure: true,
     });
 
-    response.cookie('session', session.toString(), {
+    response.cookie('session', session?.toString(), {
       httpOnly: true,
       sameSite: 'lax',
       secure: true,
