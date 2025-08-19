@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
 
-import { WithObjectId, WithTimestamps, WithVersion } from './common';
+import { CommonProperties } from './common';
 
 export interface Observation {
   observations: string | null;
@@ -13,6 +13,4 @@ export interface UpdateObservationDTO extends Partial<Observation> {}
 
 export interface ObservationFilter
   extends Partial<Observation>,
-    Partial<WithObjectId>,
-    Partial<WithVersion>,
-    Partial<WithTimestamps> {}
+    Partial<CommonProperties> {}

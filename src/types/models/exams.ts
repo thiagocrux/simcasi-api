@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
 
-import { WithObjectId, WithTimestamps, WithVersion } from './common';
+import { CommonProperties } from './common';
 
 export interface Exam {
   treponemalTestType: string;
@@ -18,9 +18,4 @@ export interface Exam {
 
 export interface CreateExamDTO extends Exam {}
 export interface UpdateExamDTO extends Partial<Exam> {}
-
-export interface ExamFilter
-  extends Partial<Exam>,
-    Partial<WithObjectId>,
-    Partial<WithVersion>,
-    Partial<WithTimestamps> {}
+export interface ExamFilter extends Partial<Exam>, Partial<CommonProperties> {}

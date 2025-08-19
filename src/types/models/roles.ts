@@ -1,4 +1,4 @@
-import { WithObjectId, WithTimestamps, WithVersion } from './common';
+import { CommonProperties } from './common';
 import { PermissionCodes } from './permissions';
 
 export type AccountRole = 'admin' | 'user' | 'viewer';
@@ -11,9 +11,4 @@ export interface Role {
 
 export interface CreateRoleDTO extends Role {}
 export interface UpdateRoleDTO extends Partial<Role> {}
-
-export interface RoleFilter
-  extends Partial<Role>,
-    Partial<WithObjectId>,
-    Partial<WithVersion>,
-    Partial<WithTimestamps> {}
+export interface RoleFilter extends Partial<Role>, Partial<CommonProperties> {}

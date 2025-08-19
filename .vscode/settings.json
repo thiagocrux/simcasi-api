@@ -4,6 +4,5 @@
   "editor.codeActionsOnSave": {
     "source.organizeImports": "always",
     "source.sortImports": "always"
-  },
-  "remote.autoForwardPortsFallback": 0
+  }
 }

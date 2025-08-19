@@ -1,4 +1,4 @@
-import { WithObjectId, WithTimestamps, WithVersion } from './common';
+import { CommonProperties } from './common';
 
 export type PermissionCodes =
   | 'accounts:create'
@@ -43,6 +43,4 @@ export interface UpdatePermissionDTO extends Partial<Permission> {}
 
 export interface PermissionFilter
   extends Partial<Permission>,
-    Partial<WithObjectId>,
-    Partial<WithVersion>,
-    Partial<WithTimestamps> {}
+    Partial<CommonProperties> {}

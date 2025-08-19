@@ -1,5 +1,6 @@
 import { Types } from 'mongoose';
-import { WithObjectId, WithTimestamps, WithVersion } from './common';
+
+import { CommonProperties } from './common';
 import { AccountRole } from './roles';
 
 export interface Account {
@@ -17,6 +18,4 @@ export interface UpdateAccountDTO extends Partial<Account> {}
 
 export interface AccountFilter
   extends Partial<Account>,
-    Partial<WithObjectId>,
-    Partial<WithVersion>,
-    Partial<WithTimestamps> {}
+    Partial<CommonProperties> {}

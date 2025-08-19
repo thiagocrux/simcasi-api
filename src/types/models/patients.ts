@@ -1,4 +1,4 @@
-import { WithObjectId, WithTimestamps, WithVersion } from './common';
+import { CommonProperties } from './common';
 
 export interface Patient {
   susCardNumber: string;
@@ -32,6 +32,4 @@ export interface UpdatePatientDTO extends Partial<Patient> {}
 
 export interface PatientFilter
   extends Partial<Patient>,
-    Partial<WithObjectId>,
-    Partial<WithVersion>,
-    Partial<WithTimestamps> {}
+    Partial<CommonProperties> {}

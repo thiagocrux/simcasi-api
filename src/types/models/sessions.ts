@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
 
-import { WithObjectId, WithTimestamps, WithVersion } from './common';
+import { CommonProperties } from './common';
 
 export interface Session {
   accountId: Types.ObjectId;
@@ -21,6 +21,4 @@ export interface UpdateSessionDTO extends Partial<Session> {}
 
 export interface SessionFilter
   extends Partial<Session>,
-    Partial<WithObjectId>,
-    Partial<WithVersion>,
-    Partial<WithTimestamps> {}
+    Partial<CommonProperties> {}

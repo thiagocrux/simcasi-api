@@ -1,14 +1,8 @@
 import { Types } from 'mongoose';
 
-export interface WithObjectId {
+export interface CommonProperties {
   _id: Types.ObjectId | string;
-}
-
-export interface WithVersion {
-  __v: number;
-}
-
-export interface WithTimestamps {
   createdAt: Date;
   updatedAt: Date;
+  __v: number;
 }
