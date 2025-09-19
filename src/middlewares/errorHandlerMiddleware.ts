@@ -18,16 +18,20 @@ export function errorHandlerMiddleware(
 
   const statusCode = error.statusCode || 500;
 
+  const formattedMessage = ['ZodError'].includes(error.name)
+    ? JSON.parse(error.message)
+    : error.message;
+
   logger.error({
-    message: error.message,
+    message: formattedMessage,
     name: error.name,
-    stack: error.stack,
     statusCode,
+    stack: error.stack ? error.stack.split('\n') : undefined,
   });
 
   response.status(statusCode).json({
     error: {
-      message: error.message,
+      message: formattedMessage,
       name: error.name,
       statusCode,
     },
