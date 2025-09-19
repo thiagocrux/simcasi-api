@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 
 import { env, JWT_DURATION } from '../../config';
 import { AccountsRepository, SessionsRepository } from '../../types';
-import { ExpiredSessionError, NotFoundError } from '../../utils';
+import { ExpiredSessionError, logger, NotFoundError } from '../../utils';
 
 export class GenerateNewAccessTokenUseCase {
   constructor(
@@ -42,6 +42,10 @@ export class GenerateNewAccessTokenUseCase {
         expiresIn: JWT_DURATION,
       }
     );
+
+    logger.info('New access token generated!', {
+      accessToken,
+    });
 
     return accessToken;
   }
