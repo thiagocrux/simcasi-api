@@ -15,7 +15,6 @@ describe('SessionsController', () => {
       status: vi.fn().mockReturnThis(),
       json: vi.fn().mockReturnThis(),
       sendStatus: vi.fn().mockReturnThis(),
-      cookie: vi.fn().mockReturnThis(),
     };
   });
 
@@ -125,18 +124,8 @@ describe('SessionsController', () => {
     await factories
       .sessionsController()
       .refreshToken(mockRequest, mockResponse);
+
     expect(executeMock).toHaveBeenCalledWith('mockSessionId');
-
-    expect(mockResponse.cookie).toHaveBeenCalledWith(
-      'accessToken',
-      'newMockAccessToken',
-      {
-        httpOnly: true,
-        sameSite: 'lax',
-        secure: true,
-      }
-    );
-
     expect(mockResponse.status).toHaveBeenCalledWith(201);
 
     expect(mockResponse.json).toHaveBeenCalledWith({

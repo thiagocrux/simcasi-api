@@ -40,18 +40,6 @@ export class SessionsController {
       }
     );
 
-    response.cookie('accessToken', accessToken, {
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: true,
-    });
-
-    response.cookie('session', session?.toString(), {
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: true,
-    });
-
     response.status(201).json({ accessToken, session });
   }
 
@@ -64,12 +52,6 @@ export class SessionsController {
     const accessToken = await this.generateNewAccessTokenUseCase.execute(
       request.body.session
     );
-
-    response.cookie('accessToken', accessToken, {
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: true,
-    });
 
     response.status(201).json({ accessToken });
   }
