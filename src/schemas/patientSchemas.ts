@@ -17,7 +17,10 @@ export const CreatePatientSchema = z.object({
   schooling: z.string(),
   phone: z
     .string()
-    .regex(REGEX.phone, MESSAGES.invalidPhoneFormat)
+    .refine((value) => {
+      if (!value) return true;
+      return REGEX.phone.test(value);
+    }, MESSAGES.invalidPhoneFormat)
     .nullable()
     .optional(),
   email: z.string().nullable().optional(),
