@@ -32,6 +32,7 @@ vi.mock('../../src/config', () => ({
 vi.mock('../../src/middlewares', () => ({
   corsMiddleware: vi.fn(),
   errorHandlerMiddleware: vi.fn(),
+  setupHttpLoggingMiddleware: vi.fn(), // Add this missing export
 }));
 
 vi.mock('../../src/routes', () => ({

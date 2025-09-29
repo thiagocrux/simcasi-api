@@ -2,11 +2,17 @@ import express from 'express';
 import mongoose from 'mongoose';
 
 import { env } from './config';
-import { corsMiddleware, errorHandlerMiddleware } from './middlewares';
 import { router } from './routes';
 import { logger } from './utils';
 
+import {
+  corsMiddleware,
+  errorHandlerMiddleware,
+  setupHttpLoggingMiddleware,
+} from './middlewares';
+
 const app = express();
+setupHttpLoggingMiddleware(app);
 
 mongoose
   .connect(process.env.DATABASE_URL || '')
@@ -18,7 +24,6 @@ mongoose
 
     app.listen(env.appPort, () => {
       logger.info(`Database running on ${env.databaseURL}`);
-
       logger.info(
         `Server running in ${env.environment} mode on http://${env.appHostname}:${env.appPort}`
       );
