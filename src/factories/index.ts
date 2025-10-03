@@ -16,16 +16,19 @@ export { getAllAccountsUseCase } from './useCases/accounts/getAllAccountsUseCase
 export { updateAccountUseCase } from './useCases/accounts/updateAccountUseCase';
 export { createExamUseCase } from './useCases/exams/createExamUseCase';
 export { deleteExamUseCase } from './useCases/exams/deleteExamUseCase';
+export { getAllExamsByPatientUseCase } from './useCases/exams/getAllExamsByPatientUseCase';
 export { getAllExamsUseCase } from './useCases/exams/getAllExamsUseCase';
 export { getExamByIdUseCase } from './useCases/exams/getExamByIdUseCase';
 export { updateExamUseCase } from './useCases/exams/updateExamUseCase';
 export { createNotificationUseCase } from './useCases/notifications/createNotificationUseCase';
 export { deleteNotificationUseCase } from './useCases/notifications/deleteNotificationUseCase';
+export { getAllNotificationsByPatientUseCase } from './useCases/notifications/getAllNotificationsByPatientUseCase';
 export { getAllNotificationsUseCase } from './useCases/notifications/getAllNotificationsUseCase';
 export { getNotificationByIdUseCase } from './useCases/notifications/getNotificationByIdUseCase';
 export { updateNotificationUseCase } from './useCases/notifications/updateNotificationUseCase';
 export { createObservationUseCase } from './useCases/observations/createObservationUseCase';
 export { deleteObservationUseCase } from './useCases/observations/deleteObservationUseCase';
+export { getAllObservationsByPatientUseCase } from './useCases/observations/getAllObservationsByPatientUseCase';
 export { getAllObservationsUseCase } from './useCases/observations/getAllObservationsUseCase';
 export { getObservationByIdUseCase } from './useCases/observations/getObservationByIdUseCase';
 export { updateObservationUseCase } from './useCases/observations/updateObservationUseCase';
@@ -51,6 +54,7 @@ export { getAllSessionsUseCase } from './useCases/sessions/getAllSessionsUseCase
 export { getSessionByIdUseCase } from './useCases/sessions/getSessionByIdUseCase';
 export { createTreatmentUseCase } from './useCases/treatments/createTreatmentUseCase';
 export { deleteTreatmentUseCase } from './useCases/treatments/deleteTreatmentUseCase';
+export { getAllTreatmentsByPatientUseCase } from './useCases/treatments/getAllTreatmentsByPatientUseCase';
 export { getAllTreatmentsUseCase } from './useCases/treatments/getAllTreatmentsUseCase';
 export { getTreatmentByIdUseCase } from './useCases/treatments/getTreatmentByIdUseCase';
 export { updateTreatmentUseCase } from './useCases/treatments/updateTreatmentUseCase';
