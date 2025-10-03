@@ -15,6 +15,14 @@ export class ObservationsRepository {
     return observations;
   }
 
+  public async findAllByPatient(patientId: string, order: 'asc' | 'desc') {
+    const observations = await Observation.find({ patient: patientId }).sort({
+      updatedAt: order === 'desc' ? -1 : 1,
+    });
+
+    return observations;
+  }
+
   public async find(filter: ObservationFilter) {
     const observation = await Observation.findOne(filter);
     return observation;

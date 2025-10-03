@@ -15,6 +15,14 @@ export class TreatmentsRepository {
     return treatments;
   }
 
+  public async findAllByPatient(patientId: string, order: 'asc' | 'desc') {
+    const treatments = await Treatment.find({ patient: patientId }).sort({
+      updatedAt: order === 'desc' ? -1 : 1,
+    });
+
+    return treatments;
+  }
+
   public async find(filter: TreatmentFilter) {
     const treatment = await Treatment.findOne(filter);
     return treatment;

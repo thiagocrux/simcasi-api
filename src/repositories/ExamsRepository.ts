@@ -10,6 +10,14 @@ export class ExamsRepository {
     return exams;
   }
 
+  public async findAllByPatient(patientId: string, order: 'asc' | 'desc') {
+    const exams = await Exam.find({ patient: patientId }).sort({
+      updatedAt: order === 'desc' ? -1 : 1,
+    });
+
+    return exams;
+  }
+
   public async find(filter: ExamFilter) {
     const exam = await Exam.findOne(filter);
     return exam;
