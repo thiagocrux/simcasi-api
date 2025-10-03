@@ -16,6 +16,14 @@ examsRouter.get(
 );
 
 examsRouter.get(
+  '/patient/:patientId',
+  authenticationMiddleware(),
+  authorizationMiddleware('exams:read'),
+  async (request, response) =>
+    examsController().indexByPatient(request, response)
+);
+
+examsRouter.get(
   '/:id',
   authenticationMiddleware(),
   authorizationMiddleware('exams:read'),

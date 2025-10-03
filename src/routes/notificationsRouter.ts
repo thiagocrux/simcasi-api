@@ -16,6 +16,15 @@ notificationsRouter.get(
     notificationsController().index(request, response)
 );
 
+// Route for getting notifications by patient - MUST come before /:id
+notificationsRouter.get(
+  '/patient/:patientId',
+  authenticationMiddleware(),
+  authorizationMiddleware('notifications:read'),
+  async (request, response) =>
+    notificationsController().indexByPatient(request, response)
+);
+
 notificationsRouter.get(
   '/:id',
   authenticationMiddleware(),

@@ -15,6 +15,15 @@ observationsRouter.get(
   async (request, response) => observationsController().index(request, response)
 );
 
+// Route for getting observations by patient - MUST come before /:id
+observationsRouter.get(
+  '/patient/:patientId',
+  authenticationMiddleware(),
+  authorizationMiddleware('observations:read'),
+  async (request, response) =>
+    observationsController().indexByPatient(request, response)
+);
+
 observationsRouter.get(
   '/:id',
   authenticationMiddleware(),

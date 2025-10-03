@@ -15,6 +15,15 @@ treatmentsRouter.get(
   async (request, response) => treatmentsController().index(request, response)
 );
 
+// Route for getting treatments by patient - MUST come before /:id
+treatmentsRouter.get(
+  '/patient/:patientId',
+  authenticationMiddleware(),
+  authorizationMiddleware('treatments:read'),
+  async (request, response) =>
+    treatmentsController().indexByPatient(request, response)
+);
+
 treatmentsRouter.get(
   '/:id',
   authenticationMiddleware(),
