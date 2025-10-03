@@ -66,6 +66,50 @@ describe('NotificationsRepository', () => {
     ]);
   });
 
+  it('should retrieve all notifications by patient in descending order', async () => {
+    (Notification.find as any).mockReturnValueOnce({
+      sort: vi
+        .fn()
+        .mockResolvedValueOnce([
+          { ...mockNotificationDocument, _id: 'other' },
+          mockNotificationDocument,
+        ]),
+    });
+
+    const result = await notificationsRepository.findAllByPatient(
+      'patient123',
+      'desc'
+    );
+    expect(Notification.find).toHaveBeenCalledWith({ patient: 'patient123' });
+
+    expect(result).toEqual([
+      { ...mockNotificationDocument, _id: 'other' },
+      mockNotificationDocument,
+    ]);
+  });
+
+  it('should retrieve all notifications by patient in ascending order', async () => {
+    (Notification.find as any).mockReturnValueOnce({
+      sort: vi
+        .fn()
+        .mockResolvedValueOnce([
+          mockNotificationDocument,
+          { ...mockNotificationDocument, _id: 'other' },
+        ]),
+    });
+
+    const result = await notificationsRepository.findAllByPatient(
+      'patient123',
+      'asc'
+    );
+    expect(Notification.find).toHaveBeenCalledWith({ patient: 'patient123' });
+
+    expect(result).toEqual([
+      mockNotificationDocument,
+      { ...mockNotificationDocument, _id: 'other' },
+    ]);
+  });
+
   it('should find a notification by filter', async () => {
     (Notification.findOne as any).mockResolvedValueOnce(
       mockNotificationDocument

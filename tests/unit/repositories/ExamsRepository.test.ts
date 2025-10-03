@@ -66,6 +66,44 @@ describe('ExamsRepository', () => {
     ]);
   });
 
+  it('should retrieve all exams by patient in descending order', async () => {
+    (Exam.find as any).mockReturnValueOnce({
+      sort: vi
+        .fn()
+        .mockResolvedValueOnce([
+          { ...mockExamDocument, _id: 'other' },
+          mockExamDocument,
+        ]),
+    });
+
+    const result = await examsRepository.findAllByPatient('patient123', 'desc');
+    expect(Exam.find).toHaveBeenCalledWith({ patient: 'patient123' });
+
+    expect(result).toEqual([
+      { ...mockExamDocument, _id: 'other' },
+      mockExamDocument,
+    ]);
+  });
+
+  it('should retrieve all exams by patient in ascending order', async () => {
+    (Exam.find as any).mockReturnValueOnce({
+      sort: vi
+        .fn()
+        .mockResolvedValueOnce([
+          mockExamDocument,
+          { ...mockExamDocument, _id: 'other' },
+        ]),
+    });
+
+    const result = await examsRepository.findAllByPatient('patient123', 'asc');
+    expect(Exam.find).toHaveBeenCalledWith({ patient: 'patient123' });
+
+    expect(result).toEqual([
+      mockExamDocument,
+      { ...mockExamDocument, _id: 'other' },
+    ]);
+  });
+
   it('should find an exam by filter', async () => {
     (Exam.findOne as any).mockResolvedValueOnce(mockExamDocument);
 

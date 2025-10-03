@@ -46,6 +46,37 @@ describe('ExamsController', () => {
     expect(mockResponse.json).toHaveBeenCalledWith([mockExamDocument]);
   });
 
+  it('should retrieve all exams by patient using the default sort order', async () => {
+    const executeMock = vi.fn().mockResolvedValue([mockExamDocument]);
+
+    vi.spyOn(factories, 'getAllExamsByPatientUseCase').mockReturnValue({
+      execute: executeMock,
+    } as any);
+
+    mockRequest = { params: { patientId: 'patient123' }, query: {} };
+    await factories.examsController().indexByPatient(mockRequest, mockResponse);
+    expect(executeMock).toHaveBeenCalledWith('patient123', undefined);
+    expect(mockResponse.status).toHaveBeenCalledWith(200);
+    expect(mockResponse.json).toHaveBeenCalledWith([mockExamDocument]);
+  });
+
+  it('should retrieve all exams by patient using a specified sort order', async () => {
+    const executeMock = vi.fn().mockResolvedValue([mockExamDocument]);
+
+    vi.spyOn(factories, 'getAllExamsByPatientUseCase').mockReturnValue({
+      execute: executeMock,
+    } as any);
+
+    mockRequest = {
+      params: { patientId: 'patient123' },
+      query: { order: 'desc' },
+    };
+    await factories.examsController().indexByPatient(mockRequest, mockResponse);
+    expect(executeMock).toHaveBeenCalledWith('patient123', 'desc');
+    expect(mockResponse.status).toHaveBeenCalledWith(200);
+    expect(mockResponse.json).toHaveBeenCalledWith([mockExamDocument]);
+  });
+
   it('should retrieve an exam by its id', async () => {
     const executeMock = vi.fn().mockResolvedValue(mockExamDocument);
 

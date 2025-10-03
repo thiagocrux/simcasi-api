@@ -66,6 +66,50 @@ describe('TreatmentsRepository', () => {
     ]);
   });
 
+  it('should retrieve all treatments by patient in descending order', async () => {
+    (Treatment.find as any).mockReturnValueOnce({
+      sort: vi
+        .fn()
+        .mockResolvedValueOnce([
+          { ...mockTreatmentDocument, _id: 'other' },
+          mockTreatmentDocument,
+        ]),
+    });
+
+    const result = await treatmentsRepository.findAllByPatient(
+      'patient123',
+      'desc'
+    );
+    expect(Treatment.find).toHaveBeenCalledWith({ patient: 'patient123' });
+
+    expect(result).toEqual([
+      { ...mockTreatmentDocument, _id: 'other' },
+      mockTreatmentDocument,
+    ]);
+  });
+
+  it('should retrieve all treatments by patient in ascending order', async () => {
+    (Treatment.find as any).mockReturnValueOnce({
+      sort: vi
+        .fn()
+        .mockResolvedValueOnce([
+          mockTreatmentDocument,
+          { ...mockTreatmentDocument, _id: 'other' },
+        ]),
+    });
+
+    const result = await treatmentsRepository.findAllByPatient(
+      'patient123',
+      'asc'
+    );
+    expect(Treatment.find).toHaveBeenCalledWith({ patient: 'patient123' });
+
+    expect(result).toEqual([
+      mockTreatmentDocument,
+      { ...mockTreatmentDocument, _id: 'other' },
+    ]);
+  });
+
   it('should find a treatment by filter', async () => {
     (Treatment.findOne as any).mockResolvedValueOnce(mockTreatmentDocument);
 

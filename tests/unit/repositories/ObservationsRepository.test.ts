@@ -66,6 +66,50 @@ describe('ObservationsRepository', () => {
     ]);
   });
 
+  it('should retrieve all observations by patient in descending order', async () => {
+    (Observation.find as any).mockReturnValueOnce({
+      sort: vi
+        .fn()
+        .mockResolvedValueOnce([
+          { ...mockObservationDocument, _id: 'other' },
+          mockObservationDocument,
+        ]),
+    });
+
+    const result = await observationsRepository.findAllByPatient(
+      'patient123',
+      'desc'
+    );
+    expect(Observation.find).toHaveBeenCalledWith({ patient: 'patient123' });
+
+    expect(result).toEqual([
+      { ...mockObservationDocument, _id: 'other' },
+      mockObservationDocument,
+    ]);
+  });
+
+  it('should retrieve all observations by patient in ascending order', async () => {
+    (Observation.find as any).mockReturnValueOnce({
+      sort: vi
+        .fn()
+        .mockResolvedValueOnce([
+          mockObservationDocument,
+          { ...mockObservationDocument, _id: 'other' },
+        ]),
+    });
+
+    const result = await observationsRepository.findAllByPatient(
+      'patient123',
+      'asc'
+    );
+    expect(Observation.find).toHaveBeenCalledWith({ patient: 'patient123' });
+
+    expect(result).toEqual([
+      mockObservationDocument,
+      { ...mockObservationDocument, _id: 'other' },
+    ]);
+  });
+
   it('should find an observation by filter', async () => {
     (Observation.findOne as any).mockResolvedValueOnce(mockObservationDocument);
 
