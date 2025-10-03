@@ -8,6 +8,10 @@ import { NotificationDocument } from '../../../models';
 
 export interface NotificationsRepository {
   findAll(order: 'asc' | 'desc'): Promise<NotificationDocument[]>;
+  findAllByPatient(
+    patientId: string,
+    order: 'asc' | 'desc'
+  ): Promise<NotificationDocument[]>;
   find(filter: NotificationFilter): Promise<NotificationDocument | null>;
   create(body: CreateNotificationDTO): Promise<NotificationDocument>;
   update(

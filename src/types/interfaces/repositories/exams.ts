@@ -3,6 +3,10 @@ import { ExamDocument } from '../../../models';
 
 export interface ExamsRepository {
   findAll(order: 'asc' | 'desc'): Promise<ExamDocument[]>;
+  findAllByPatient(
+    patientId: string,
+    order: 'asc' | 'desc'
+  ): Promise<ExamDocument[]>;
   find(filter: ExamFilter): Promise<ExamDocument | null>;
   create(body: CreateExamDTO): Promise<ExamDocument>;
   update(filter: ExamFilter, body: UpdateExamDTO): Promise<ExamDocument | null>;

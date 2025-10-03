@@ -3,6 +3,10 @@ import { TreatmentDocument } from '../../../models';
 
 export interface TreatmentsRepository {
   findAll(order: 'asc' | 'desc'): Promise<TreatmentDocument[]>;
+  findAllByPatient(
+    patientId: string,
+    order: 'asc' | 'desc'
+  ): Promise<TreatmentDocument[]>;
   find(filter: TreatmentFilter): Promise<TreatmentDocument | null>;
   create(body: CreateTreatmentDTO): Promise<TreatmentDocument>;
   update(
