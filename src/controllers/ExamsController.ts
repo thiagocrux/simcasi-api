@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 
+import { GetAllExamsByPatientUseCase } from '../useCases';
+
 import {
   CreateExamUseCase,
   DeleteExamUseCase,
@@ -11,6 +13,7 @@ import {
 export class ExamsController {
   constructor(
     private readonly getAllExamsUseCase: GetAllExamsUseCase,
+    private readonly getAllExamsByPatientUseCase: GetAllExamsByPatientUseCase,
     private readonly getExamByIdUseCase: GetExamByIdUseCase,
     private readonly createExamUseCase: CreateExamUseCase,
     private readonly updateExamUseCase: UpdateExamUseCase,
@@ -19,6 +22,15 @@ export class ExamsController {
 
   public async index(request: Request, response: Response) {
     const exams = await this.getAllExamsUseCase.execute(
+      request.query?.order as string
+    );
+
+    response.status(200).json(exams);
+  }
+
+  public async indexByPatient(request: Request, response: Response) {
+    const exams = await this.getAllExamsByPatientUseCase.execute(
+      request.params?.patientId as string,
       request.query?.order as string
     );
 

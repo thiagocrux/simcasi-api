@@ -3,6 +3,7 @@ import { NotificationsController } from '../../controllers';
 import {
   createNotificationUseCase,
   deleteNotificationUseCase,
+  getAllNotificationsByPatientUseCase,
   getAllNotificationsUseCase,
   getNotificationByIdUseCase,
   updateNotificationUseCase,
@@ -13,6 +14,7 @@ export function notificationsController() {
     createNotificationUseCase(),
     deleteNotificationUseCase(),
     getAllNotificationsUseCase(),
+    getAllNotificationsByPatientUseCase(),
     getNotificationByIdUseCase(),
     updateNotificationUseCase()
   );

@@ -3,6 +3,7 @@ import { TreatmentsController } from '../../controllers';
 import {
   createTreatmentUseCase,
   deleteTreatmentUseCase,
+  getAllTreatmentsByPatientUseCase,
   getAllTreatmentsUseCase,
   getTreatmentByIdUseCase,
   updateTreatmentUseCase,
@@ -13,6 +14,7 @@ export function treatmentsController() {
     createTreatmentUseCase(),
     deleteTreatmentUseCase(),
     getAllTreatmentsUseCase(),
+    getAllTreatmentsByPatientUseCase(),
     getTreatmentByIdUseCase(),
     updateTreatmentUseCase()
   );

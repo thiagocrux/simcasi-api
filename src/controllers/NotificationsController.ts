@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 
+import { GetAllNotificationsByPatientUseCase } from '../useCases';
+
 import {
   CreateNotificationUseCase,
   DeleteNotificationUseCase,
@@ -13,6 +15,7 @@ export class NotificationsController {
     private readonly createNotificationUseCase: CreateNotificationUseCase,
     private readonly deleteNotificationUseCase: DeleteNotificationUseCase,
     private readonly getAllNotificationsUseCase: GetAllNotificationsUseCase,
+    private readonly getAllNotificationsByPatientUseCase: GetAllNotificationsByPatientUseCase,
     private readonly getNotificationByIdUseCase: GetNotificationByIdUseCase,
     private readonly updateNotificationUseCase: UpdateNotificationUseCase
   ) {}
@@ -21,6 +24,16 @@ export class NotificationsController {
     const notifications = await this.getAllNotificationsUseCase.execute(
       request.query?.order as string
     );
+
+    response.status(200).json(notifications);
+  }
+
+  public async indexByPatient(request: Request, response: Response) {
+    const notifications =
+      await this.getAllNotificationsByPatientUseCase.execute(
+        request.params?.patientId as string,
+        request.query?.order as string
+      );
 
     response.status(200).json(notifications);
   }

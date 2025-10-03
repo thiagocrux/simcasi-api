@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 
+import { GetAllTreatmentsByPatientUseCase } from '../useCases';
+
 import {
   CreateTreatmentUseCase,
   DeleteTreatmentUseCase,
@@ -13,12 +15,22 @@ export class TreatmentsController {
     private readonly createTreatmentUseCase: CreateTreatmentUseCase,
     private readonly deleteTreatmentUseCase: DeleteTreatmentUseCase,
     private readonly getAllTreatmentsUseCase: GetAllTreatmentsUseCase,
+    private readonly getAllTreatmentsByPatientUseCase: GetAllTreatmentsByPatientUseCase,
     private readonly getTreatmentByIdUseCase: GetTreatmentByIdUseCase,
     private readonly updateTreatmentUseCase: UpdateTreatmentUseCase
   ) {}
 
   public async index(request: Request, response: Response) {
     const treatments = await this.getAllTreatmentsUseCase.execute(
+      request.query?.order as string
+    );
+
+    response.status(200).json(treatments);
+  }
+
+  public async indexByPatient(request: Request, response: Response) {
+    const treatments = await this.getAllTreatmentsByPatientUseCase.execute(
+      request.params?.patientId as string,
       request.query?.order as string
     );
 

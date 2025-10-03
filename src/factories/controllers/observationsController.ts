@@ -3,6 +3,7 @@ import { ObservationsController } from '../../controllers';
 import {
   createObservationUseCase,
   deleteObservationUseCase,
+  getAllObservationsByPatientUseCase,
   getAllObservationsUseCase,
   getObservationByIdUseCase,
   updateObservationUseCase,
@@ -13,6 +14,7 @@ export function observationsController() {
     createObservationUseCase(),
     deleteObservationUseCase(),
     getAllObservationsUseCase(),
+    getAllObservationsByPatientUseCase(),
     getObservationByIdUseCase(),
     updateObservationUseCase()
   );
